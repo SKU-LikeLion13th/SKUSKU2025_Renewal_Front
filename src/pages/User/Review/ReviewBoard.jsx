@@ -1,6 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const ReviewBoard = ({ quizzes }) => {
+  const navigate = useNavigate();
   const headers = ["번호", "제목", "제출여부", "나의점수"];
   const flexValues = ["1", "6", "2", "2"];
 
@@ -24,7 +26,11 @@ const ReviewBoard = ({ quizzes }) => {
             <div className="flex justify-center px-1 text-[13.5px]" style={{ flex: flexValues[0] }}>
               {quiz.Id}
             </div>
-            <div className="flex justify-start px-1 text-[13.5px]" style={{ flex: flexValues[1] }}>
+            <div 
+              className="flex justify-start px-1 text-[13.5px]"
+              style={{ flex: flexValues[1] }}
+              onClick={() => navigate(`/quiz/${quiz.Id}`)}
+            >
               {quiz.title}
             </div>
             <div className={`flex justify-center px-1 text-[13.5px] ${quiz.IsSubmit === "제출" ? "text-[#3B79FF] font-bold" : ""}`} style={{ flex: flexValues[2] }}>
