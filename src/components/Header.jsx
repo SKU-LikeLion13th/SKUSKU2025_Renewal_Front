@@ -6,7 +6,7 @@ export default function Header() {
   return (
     <div
       className={`fixed z-10 top-0 w-full ${
-        isHovered ? "bg-white min-h-[230px]" : ""
+        isHovered ? "bg-white min-h-[280px]" : ""
       } transition-all duration-300 `}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -34,6 +34,9 @@ export default function Header() {
               {isHovered && (
                 <div className="absolute w-full space-y-6 mt-12">
                   <div className="text-[16px] text-[#121212] text-center fontRegular">
+                    13기
+                  </div>
+                  <div className="text-[16px] text-[#121212] text-center fontRegular">
                     12기
                   </div>
                   <div className="text-[16px] text-[#121212] text-center fontRegular">
@@ -50,6 +53,9 @@ export default function Header() {
               TEAM
               {isHovered && (
                 <div className="absolute w-full space-y-6 mt-12">
+                  <div className="text-[16px] text-[#121212] text-center fontRegular">
+                    13기
+                  </div>
                   <div className="text-[16px] text-[#121212] text-center fontRegular">
                     12기
                   </div>
