@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import Review from "../pages/User/Review/Review";
 import Quiz from "../pages/User/Quiz/Quiz";
 import Main from "../pages/User/Main/Main";
+import AssignmentMain from "../pages/User/Assignment/AssignmentMain";
 
 const User = () => {
   return (
@@ -9,6 +10,7 @@ const User = () => {
       <Route path="/" element={<Main />} />
       <Route path="review" element={<Review />} />
       <Route path="/quiz/:quizId" element={<Quiz />} />
+      <Route path="/assignment" element={<AssignmentMain />} />
     </Routes>
   );
 };
