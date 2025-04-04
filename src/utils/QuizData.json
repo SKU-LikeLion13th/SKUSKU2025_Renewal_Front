@@ -17,14 +17,14 @@
           "controller-service-model",
           "view-service-interface"
         ],
-        "file": null
+        "file": ["likeLion", "likeLion"]
       },
       {
         "questionId": 2,
         "quizType": "ESSAY_QUESTION",
         "content": "http 메소드 4가지 적기",
         "AnswerChoiceList": [],
-        "file": null
+        "file": ["likeLion", "likeLion"]
       },
       {
         "questionId": 3,

@@ -36,7 +36,7 @@ export default function Review() {
 
   return (
     <div className='flex mx-auto min-h-screen'>
-      <div className='flex flex-col w-9/12 mt-30 mx-auto justify-start lg:w-8/12'>
+      <div className='flex flex-col w-9/12 mt-50 mx-auto justify-start lg:w-8/12'>
         <ReviewTitle />
 
         <div className='flex w-full mt-14 justify-start'>
