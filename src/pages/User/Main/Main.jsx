@@ -3,6 +3,7 @@ import Main1 from "./Main1";
 import Main2 from "./Main2";
 import Main3 from "./Main3";
 import Main4 from "./Main4";
+import Main5 from "./Main5";
 
 export default function Main() {
   return (
@@ -18,6 +19,9 @@ export default function Main() {
       </div>
       <div className="section">
         <Main4 />
+      </div>
+      <div className="section">
+        <Main5 />
       </div>
     </div>
   );
