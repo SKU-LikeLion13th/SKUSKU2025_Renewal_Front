@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 const ReviewBoard = ({ quizzes }) => {
   const navigate = useNavigate();
   const headers = ["번호", "제목", "제출여부", "나의점수"];
-  const flexValues = ["1", "6", "2", "2"];
+  const flexValues = ["1", "7", "1", "1"];
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -12,7 +12,7 @@ const ReviewBoard = ({ quizzes }) => {
         {headers.map((header, index) => (
           <div
             key={index}
-            className="flex fontBold justify-center px-1"
+            className="flex justify-center px-1 fontBold"
             style={{ flex: flexValues[index] }}
           >
             {header}
