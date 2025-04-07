@@ -4,6 +4,8 @@ import QuizData from "../../../utils/QuizData.json";
 import ReviewTitle from "../../../components/Review/ReviewTitle";
 import ReviewLocation from "../Review/ReviewLocation";
 import QuizTitle from "../../../components/Quiz/QuizTitle";
+import QuizContent from "./QuizContent";
+import Images from "../../../utils/images";
 
 export default function Quiz() {
   const { quizId } = useParams();
@@ -21,14 +23,19 @@ export default function Quiz() {
   }
 
   return (
-    <div className="flex mx-auto min-h-screen">
-      <div className="flex flex-col w-9/12 mt-30 mx-auto justify-start lg:w-8/12">
+    <div className="flex min-h-screen mx-auto">
+      <div className="flex flex-col justify-start w-9/12 mx-auto mt-50 lg:w-8/12">
         <ReviewTitle />
-        <div className="flex w-full mt-14 justify-start">
+
+        <div className="flex justify-start w-full mt-14">
           <ReviewLocation />
         </div>
-        {/* QuizTitle에 quiz 전달 */}
+
+        {/* QuizTitle */}
         <QuizTitle quiz={quiz} />
+
+        {/* 퀴즈 문제 */}
+        <QuizContent quiz={quiz} />
       </div>
     </div>
   );
