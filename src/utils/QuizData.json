@@ -24,7 +24,7 @@
         "quizType": "ESSAY_QUESTION",
         "content": "http 메소드 4가지 적기",
         "AnswerChoiceList": [],
-        "file": ["likeLion", "likeLion"]
+        "file": ["likeLion"]
       },
       {
         "questionId": 3,
