@@ -5,9 +5,9 @@ export default function Header() {
 
   return (
     <div
-      className={`fixed z-10 top-0 w-full ${
-        isHovered ? "bg-white min-h-[280px]" : ""
-      } transition-all duration-300 `}
+      className={`fixed z-10 top-0 w-full transition-all duration-300
+    ${isHovered ? "bg-white min-h-[280px]" : " backdrop-blur-md"}
+  `}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
