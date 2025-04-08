@@ -4,43 +4,43 @@ export default function Project() {
   const sampleProjects = [
     {
       id: 1,
-      title: "멋쟁이사자처럼 홈페이지",
-      subTitle: "멋쟁이사자처럼 SKU 홈페이지 리뉴얼 프로젝트",
+      title: "퍼즐 물품대여 서비스",
+      subTitle: "성결대학교 모든 동아리원들의 편의성 확대",
       classTh: "12",
       url: "",
     },
     {
       id: 2,
-      title: "캠퍼스마켓",
-      subTitle: "대학생들을 위한 중고거래 플랫폼",
+      title: "2024 보궐선거",
+      subTitle: "입후보자 확인 및 투표 독려",
       classTh: "12",
       url: "https://example.com/project2",
     },
     {
       id: 3,
-      title: "스터디 매칭 서비스",
-      subTitle: "함께 공부할 팀원을 찾는 매칭 서비스",
+      title: "새로운 안녕, 올라 HOLA!",
+      subTitle: "2024 신입생 오리엔테이션",
       classTh: "11",
       url: "https://example.com/project3",
     },
     {
       id: 4,
-      title: "대학생활 도우미",
-      subTitle: "대학 생활에 필요한 정보 제공 서비스",
+      title: "2024 총선거",
+      subTitle: "입후보자 확인 및 투표 독려",
       classTh: "11",
       url: "https://example.com/project4",
     },
     {
       id: 5,
-      title: "식단 관리 앱",
-      subTitle: "건강한 식단 관리를 위한 모바일 앱",
+      title: "글Lover",
+      subTitle: "2023 글천절",
       classTh: "12",
       url: "https://example.com/project5",
     },
     {
       id: 6,
-      title: "학사 일정 관리",
-      subTitle: "대학 학사 일정 및 과제 관리 시스템",
+      title: "파동",
+      subTitle: "2023 영암체전",
       classTh: "11",
       url: "https://example.com/project6",
     },
@@ -77,13 +77,13 @@ export default function Project() {
 
   return (
     <div className="min-h-screen mx-auto bg-black">
-      <div className="w-10/12 mx-auto pt-28">
+      <div className="w-4/5 mx-auto pt-50">
         <div className="pb-4 mx-auto text-center font-extrabold md:w-fit md:pb-12 md:pr-20 md:border-b-2 md:text-start md:mx-0">
-          <div className="text-4xl text-[#3B79FF]">LIKELION</div>
+          <div className="text-[40px] text-[#3B79FF]">LIKELION</div>
           <div className="text-[55px] text-white">PROJECTS</div>
         </div>
 
-        <div className="grid w-10/12 grid-cols-1 gap-8 mx-auto mt-8 text-white md:gap-16 sm:grid-cols-2 sm:w-full lg:grid-cols-4">
+        <div className="grid w-10/12 grid-cols-1 gap-8 mx-auto mt-8 text-white md:gap-19 sm:grid-cols-2 sm:w-full lg:grid-cols-4">
           {filteredProjects.map((project, index) => (
             <div
               key={index}
@@ -91,9 +91,9 @@ export default function Project() {
               onClick={() => openProject(project.url)}>
               <div className="relative">
                 <img
-                  src="https://mblogthumb-phinf.pstatic.net/MjAyMDA5MTZfNDgg/MDAxNjAwMjMwMDEwNjkx.YBGeDIJhaxDs24u-6tPELpBmIiKIM-cyxZNF1kFmK_0g.cokHWdn3stiLtjQ81VIo9FTKKgjlXGNyvkj6NQKxlewg.PNG.designmage/5.png?type=w800"
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRqxIlBDHBkj7hJIaYtajS6YqelRKh_dAh-Q&s"
                   alt={project.title}
-                  className="w-full rounded-lg shadow-lg group-hover:opacity-30 transition-opacity duration-500"
+                  className="w-full h-[190px] rounded-md shadow-lg group-hover:opacity-30 transition-opacity duration-500"
                 />
                 <div className="absolute inset-0 flex items-center justify-center transition-opacity duration-500 opacity-0 group-hover:opacity-100">
                   <span className="px-4 py-2 text-lg text-white bg-blue-500 rounded-lg font-bold">
@@ -102,10 +102,10 @@ export default function Project() {
                 </div>
               </div>
               <div className="p-2">
-                <div className="my-1 text-sm xl:my-2 font-bold min-[500px]:text-lg lg:text-xl xl:text-2xl">
+                <div className="my-1 text-sm xl:my-2 font-bold min-[500px]:text-lg lg:text-xl xl:text-[23px]">
                   {project.title}
                 </div>
-                <div className="text-xs sm:text-sm xl:text-lg">
+                <div className="text-[#A2A2A2] text-xs sm:text-sm xl:text-lg">
                   {project.subTitle}
                 </div>
               </div>
