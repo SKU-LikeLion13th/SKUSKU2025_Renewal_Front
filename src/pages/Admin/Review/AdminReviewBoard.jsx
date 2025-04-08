@@ -1,8 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
+import AdminQuiz from "../Quiz/AdminQuiz";
 
 const AdminReviewBoard = () => {
   const headers = ["번호", "제목", "수정", "선택"];
   const flexValues = ["1", "7", "1", "1"];
+  const navigate = useNavigate();
 
   // 체크 여부 상태
   const [isChecked, setIsChecked] = useState(false);
@@ -48,7 +51,11 @@ const AdminReviewBoard = () => {
         </div>
 
         <div className="flex justify-between w-full mt-10 text-[14px] fontLight">
-          <div className="flex bg-[#3B79FF] text-white px-4 py-1.5 rounded-[5.95px]">문제 등록</div>
+          <div 
+            className="flex bg-[#3B79FF] text-white px-4 py-1.5 rounded-[5.95px]"
+            onClick={() => navigate('/admin/adminQuiz')}>문제 등록
+          </div>
+          
           <div className="flex">
             <div className="flex bg-[#E9E9E9] text-[#838383] px-4 py-1.5 rounded-[5.95px]">전체 선택</div>
             <div
