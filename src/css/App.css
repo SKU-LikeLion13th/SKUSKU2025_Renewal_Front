@@ -3,3 +3,7 @@
 #root {
   font-family: 'Pretendard-Regular';
 }
+
+.text-stroke {
+  -webkit-text-stroke: 0.7px #4f4f4f;
+}
