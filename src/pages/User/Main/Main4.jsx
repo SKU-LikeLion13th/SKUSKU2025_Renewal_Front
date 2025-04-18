@@ -38,7 +38,7 @@ export default function Main4() {
       title: "백엔드",
       subtitle: "BACK-END",
       color: "#0ACF83",
-      image: "/assets/images/Main/Main4_github.png",
+      image: "/assets/images/Main/Main4_spring.png",
       curri: "/assets/images/Main/back_.png",
       description: (
         <>
@@ -149,7 +149,9 @@ export default function Main4() {
               </div>
             </div>
             <img
-              className="text-[16px] w-[700px]"
+              className={`text-[16px]  ${
+                selectedTrack === "backend" ? "w-[900px]" : "w-[700px]"
+              }`}
               src={trackDetails[selectedTrack].curri}
               alt=""
             />
