@@ -12,7 +12,7 @@ export default function Header() {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="flex py-5 px-12 items-center justify-between mx-auto relative shadow-[0px_0.5px_0px_0px_rgba(217,217,217,1)]">
+      <div className="flex py-5 px-12 items-center justify-between mx-auto relative z-10 shadow-[0px_0.5px_0px_0px_rgba(217,217,217,1)]">
         {/* 왼쪽 */}
         <div className="flex space-x-12">
           <Link to={"/"}>

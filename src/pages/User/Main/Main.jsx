@@ -11,9 +11,7 @@ export default function Main() {
       <div className="section">
         <Main1 />
       </div>
-      <div className="section">
-        <Main2 />
-      </div>
+      <div className="section">{/* <Main2 /> */}</div>
       <div className="section">
         <Main3 />
       </div>
