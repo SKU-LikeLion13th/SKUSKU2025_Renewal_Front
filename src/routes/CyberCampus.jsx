@@ -1,10 +1,10 @@
 import { Routes, Route, Outlet } from "react-router-dom";
-import CyberCampusLecture from "../pages/User/CyberCampus/CyberCampusLecture";
+import CCLecture from "../pages/User/CyberCampus/CCLecture";
 
 export default function CyberCampus() {
   return (
     <Routes>
-      <Route path="lecture" element={<CyberCampusLecture />} />
+      <Route path="lecture" element={<CCLecture />} />
     </Routes>
   );
 }

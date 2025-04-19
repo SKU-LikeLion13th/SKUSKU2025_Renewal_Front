@@ -36,7 +36,10 @@ export default function ProjectSlider() {
       .then((response) => {
         setProjects(response.data);
       })
-      .catch((error) => console.error("Error fetching data:", error));
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        console.error("Response:", error.response);
+      });
   }, []);
 
   const settings = {
