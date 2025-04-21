@@ -1,19 +1,32 @@
-import React from "react";
+import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const CyberCampusLecture = () => {
-  const data = [
-    { id: 1, title: "4월 3일 강의자료", date: "2025-04-03" },
-    { id: 2, title: "4월 3일 강의자료 2", date: "2025-04-03" },
-    // 나머지는 빈 항목
-  ];
-
+  const { track } = useParams(); // URL에 있는 트랙 값 (예: BACKEND)
+  const [data, setData] = useState([]);
   const itemsPerPage = 10;
+
+  useEffect(() => {
+    const fetchLectureData = async () => {
+      try {
+        const response = await axios.get(`/lecture/all/${track}`);
+        setData(response.data);
+      } catch (error) {
+        console.error("강의자료 불러오기 실패:", error);
+        setData([]);
+      }
+    };
+
+    fetchLectureData();
+  }, [track]);
+
   const totalItems = data.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   return (
     <div className="max-w-5xl mx-auto mt-44 pb-10 px-4">
-      <h1 className="text-4xl fontBold mb-20">BACK-END 자료실</h1>
+      <h1 className="text-4xl fontBold mb-20">{track} 자료실</h1>
       <div className="text-sm text-gray-500 mb-6">
         홈 &gt; 사이버캠퍼스 &gt; 자료실
       </div>
@@ -27,23 +40,17 @@ const CyberCampusLecture = () => {
           </tr>
         </thead>
         <tbody>
-          {[...Array(15)].map((_, i) => {
-            const item = data[i]; // index로 직접 접근
-            return (
-              <tr
-                key={i}
-                className={item ? "hover:bg-blue-50 cursor-pointer" : ""}
-              >
-                <td className="py-2 border-b-[0.5px]">{i + 1}</td>
-                <td className="py-2 border-b-[0.5px] text-left pl-4">
-                  {item ? item.title : ""}
-                </td>
-                <td className="py-2 border-b-[0.5px]">
-                  {item ? item.date : ""}
-                </td>
-              </tr>
-            );
-          })}
+          {data.map((item, i) => (
+            <tr key={item.id} className="hover:bg-blue-50 cursor-pointer">
+              <td className="py-2 border-b-[0.5px]">{i + 1}</td>
+              <td className="py-2 border-b-[0.5px] text-left pl-4">
+                <Link to={`/CyberCampus/lecture-detail/${item.id}`}>
+                  {item.title}
+                </Link>
+              </td>
+              <td className="py-2 border-b-[0.5px]">{item.createDate}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
 

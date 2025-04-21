@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import GoogleLoginBtn from "./GoogleLoginBtn";
+import CCBtn from "./CCBtn";
 
 export default function Header() {
   const [isHovered, setIsHovered] = useState(false);
@@ -12,7 +14,7 @@ export default function Header() {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="flex py-5 px-12 items-center justify-between mx-auto relative z-10 shadow-[0px_0.5px_0px_0px_rgba(217,217,217,1)]">
+      <div className="flex py-5 px-12 items-center justify-between mx-auto relative z-10 shadow-[0px_0.5px_0px_0px_rgba(217,217,217,1)] ">
         {/* 왼쪽 */}
         <div className="flex space-x-12">
           <Link to={"/"}>
@@ -67,7 +69,7 @@ export default function Header() {
           {/* hover 시에만 보여지는 버튼들 */}
           <div
             className={`transition-opacity duration-300 space-x-4 ${
-              isHovered ? "flex opacity-100" : "hidden opacity-0"
+              isHovered ? "flex opacity-100 " : "hidden opacity-0"
             }`}
           >
             <button className="text-[13px] px-6 py-1 flex items-center rounded-3xl text-[#fff] bg-[#212121] ">
@@ -83,35 +85,9 @@ export default function Header() {
               <img src="/assets/images/chat.png" className="w-7" alt="" />
             </a>
           </div>
-          <div
-            className={`flex text-white items-center px-4 py-2 rounded-sm  ${
-              isHovered ? "bg-[#8DB7FF] hover:bg-[#2D5ABB]" : "bg-[#2D5ABB] "
-            }`}
-          >
-            <img
-              src="/assets/images/campus.png"
-              alt=""
-              width={"16px"}
-              className="mr-2"
-            />
-            <p className="text-[14px]">CYBERCAMPUS</p>
-          </div>
 
-          <div
-            className={`flex items-center px-4 py-2 rounded-sm ${
-              isHovered
-                ? "border border-[#000] text-[#000] bg-white"
-                : "bg-white/50 text-white"
-            }`}
-          >
-            <img
-              src="/assets/images/googleLogin.png"
-              alt=""
-              width={"16px"}
-              className="mr-2"
-            />
-            <p className="text-[13px]">구글계정으로 계속하기</p>
-          </div>
+          <CCBtn isHovered={isHovered} />
+          <GoogleLoginBtn isHovered={isHovered} />
         </div>
       </div>
     </div>

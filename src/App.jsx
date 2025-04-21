@@ -7,6 +7,7 @@ import Header from "./components/Header";
 import HeaderMobile from "./components/HeaderMobile";
 import Footer from "./components/Footer";
 import CyberCampus from "./routes/CyberCampus";
+import Admin from "./routes/Admin";
 
 function App() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1000);
@@ -29,6 +30,7 @@ function App() {
         <Routes>
           <Route path="/*" element={<User />} />
           <Route path="/CyberCampus/*" element={<CyberCampus />} />
+          <Route path="/Admin/*" element={<Admin />} />
         </Routes>
         {/* <Footer /> */}
       </div>
