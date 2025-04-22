@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 import User from "./routes/User";
+import Admin from "./routes/Admin";
 import "./css/App.css";
 import Header from "./components/Header";
 import HeaderMobile from "./components/HeaderMobile";

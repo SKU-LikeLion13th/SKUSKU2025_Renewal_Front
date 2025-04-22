@@ -1,12 +1,16 @@
-import { Routes, Route } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import AdminMain from "../pages/Admin/AdminMain";
+import AdminReview from "../pages/Admin/Review/AdminReview";
+import AdminQuiz from "../pages/Admin/Quiz/AdminQuiz";
 
-export default function Admin() {
+const Admin = () => {
   return (
-    <div>
-      <Routes>
-        <Route path="/main" element={<AdminMain />} />
-      </Routes>
-    </div>
+    <Routes>
+      <Route path="/main" element={<AdminMain />} />
+      <Route path="/adminReview" element={<AdminReview />} />
+      <Route path="/adminQuiz" element={<AdminQuiz />} />
+    </Routes>
   );
-}
+};
+
+export default Admin;
