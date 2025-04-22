@@ -58,8 +58,8 @@ export default function AdminQuizContent() {
           </label>
 
           <label className='flex items-center py-2 pl-5 fontRegular'>
-            <input type="radio" name='quizType' value='객관식' className='w-5' />
-            <input type='text' placeholder='보기를 입력해 주세요.' className="flex ml-2.5 w-[180px] text-[19px] text-[#121212] px-2 py-1"/ >
+            <input type="radio" name='quizType' value='객관식' className="w-5" />
+            <input type="text" placeholder='보기를 입력해 주세요.' className="flex ml-2.5 w-[180px] text-[19px] text-[#121212] px-2 py-1"/ >
             <img src="/assets/images/delete.png" alt="close" className='flex ml-2.5 w-4.5 h-4.5' />
           </label>
         </div>
