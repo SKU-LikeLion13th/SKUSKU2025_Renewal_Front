@@ -1,27 +1,62 @@
-import React from 'react'
-import ReviewLocation from '../../../components/ReviewLocation'
-import ReviewBoard from '../../../components/ReviewBoard'
+import React, { useState, useEffect } from 'react';
+import ReviewLocation from './ReviewLocation';
+import ReviewBoard from './ReviewBoard';
+import ReviewSearch from './ReviewSearch';
+import ReviewTitle from './ReviewTitle';
+import quizData from '../../../utils/QuizData.json';
 
 export default function Review() {
-  
+  const postsPerPage = 15;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [quizzes, setQuizzes] = useState([]);
+
+  useEffect(() => {
+    setQuizzes(quizData);
+  }, []);
+
+  const totalPosts = quizzes.length;
+  const totalPages = Math.ceil(totalPosts / postsPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    if (pageNumber >= 1 && pageNumber <= totalPages) {
+      setCurrentPage(pageNumber);
+    }
+  };
+
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+  };
+
+  const filteredQuizzes = quizzes.filter((quiz) =>
+    quiz.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const currentPosts = filteredQuizzes.slice((currentPage - 1) * postsPerPage, currentPage * postsPerPage);
+
   return (
-    <div className='flex mx-auto min-h-screen'>
-      <div className='flex flex-col w-8/12 mt-30 mx-auto justify-start'>
-        {/* Title */}
-        <div className='flex fontBold text-[35px]'>
-          파트별 복습공간
-        </div>
-        
-        {/* Location */}
-        <div className='flex w-full mt-14 justify-start'>
+    <div className='flex min-h-screen mx-auto'>
+      <div className='flex flex-col justify-start w-9/12 mx-auto mt-50 lg:w-8/12'>
+        <ReviewTitle />
+
+        <div className='flex justify-start w-full mt-14'>
           <ReviewLocation />
         </div>
 
-        {/* Content */}
-        <div className='flex w-full mt-14 justify-center'>
-          <ReviewBoard />
+        <div className='flex justify-center w-full mt-14'>
+          <ReviewBoard quizzes={currentPosts} />
+        </div>
+
+        <div className='flex w-full'>
+          <ReviewSearch 
+            totalPosts={filteredQuizzes.length} 
+            totalPages={Math.ceil(filteredQuizzes.length / postsPerPage)} 
+            currentPage={currentPage} 
+            onPageChange={handlePageChange} 
+            onSearch={handleSearch}
+          />
         </div>
       </div>
     </div>
-  )
+  );
 }
