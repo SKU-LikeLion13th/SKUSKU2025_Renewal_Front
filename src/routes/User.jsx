@@ -4,6 +4,7 @@ import Quiz from "../pages/User/Quiz/Quiz";
 import Main from "../pages/User/Main/Main";
 import AssignmentMain from "../pages/User/Assignment/AssignmentMain";
 import Project from "../pages/User/Project/Project";
+import TeamPage from "../pages/User/Team/TeamPage";
 
 const User = () => {
   return (
@@ -13,6 +14,7 @@ const User = () => {
       <Route path="/quiz/:quizId" element={<Quiz />} />
       <Route path="/assignment" element={<AssignmentMain />} />
       <Route path="/project" element={<Project />} />
+      <Route path="/team" element={<TeamPage />} />
     </Routes>
   );
 };

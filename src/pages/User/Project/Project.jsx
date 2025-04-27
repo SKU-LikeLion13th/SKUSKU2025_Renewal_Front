@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ProjectTabs from "./ProjectTabs"; // 탭 컴포넌트 임포트
 
 export default function Project() {
   const sampleProjects = [
@@ -20,48 +21,38 @@ export default function Project() {
       id: 3,
       title: "새로운 안녕, 올라 HOLA!",
       subTitle: "2024 신입생 오리엔테이션",
-      classTh: "11",
+      classTh: "13",
       url: "https://example.com/project3",
     },
     {
       id: 4,
       title: "2024 총선거",
       subTitle: "입후보자 확인 및 투표 독려",
-      classTh: "11",
+      classTh: "12",
       url: "https://example.com/project4",
     },
     {
       id: 5,
       title: "글Lover",
       subTitle: "2023 글천절",
-      classTh: "12",
+      classTh: "13",
       url: "https://example.com/project5",
     },
     {
       id: 6,
-      title: "파동",
-      subTitle: "2023 영암체전",
-      classTh: "11",
+      title: "페이지",
+      subTitle: "성결대학교 동아리원들의 편의를 위한 웹",
+      classTh: "13",
       url: "https://example.com/project6",
     },
   ];
 
-  const [projects, setProjects] = useState(sampleProjects);
+  const [projects] = useState(sampleProjects);
   const [filteredProjects, setFilteredProjects] = useState(sampleProjects);
-
-  /* 프로젝트 불러오기 코드 - 주석 처리됨
-      const fetchProjects = async () => {
-        try {
-          const response = await API.get('/project/all');
-          setProjects(response.data);
-          setFilteredProjects(response.data);
-        } catch (error) {
-          console.error('프로젝트를 가져오는 중 오류 발생:', error);
-        }
-      };
-      */
+  const [activeTab, setActiveTab] = useState("all");
 
   const handleTabClick = (tabValue) => {
+    setActiveTab(tabValue);
     if (tabValue === "all") {
       setFilteredProjects(projects);
     } else {
@@ -72,17 +63,31 @@ export default function Project() {
   };
 
   const openProject = (url) => {
-    window.open(url, "_blank");
+    if (url) {
+      window.open(url, "_blank");
+    }
   };
 
   return (
     <div className="min-h-screen mx-auto bg-black">
       <div className="w-4/5 mx-auto pt-50">
+        {/* 제목 */}
         <div className="pb-4 mx-auto text-center font-extrabold md:w-fit md:pb-12 md:pr-20 md:border-b-2 md:text-start md:mx-0">
           <div className="text-[40px] text-[#3B79FF]">LIKELION</div>
           <div className="text-[55px] text-white">PROJECTS</div>
+          <div className="text-white text-lg mt-2 font-medium">
+            총{" "}
+            <span className="text-[#3B79FF] font-bold">
+              {filteredProjects.length}건
+            </span>
+            의 프로젝트가 있습니다.
+          </div>
         </div>
 
+        {/* 탭 컴포넌트 */}
+        <ProjectTabs activeTab={activeTab} onTabClick={handleTabClick} />
+
+        {/* 프로젝트 리스트 */}
         <div className="grid w-10/12 grid-cols-1 gap-8 mx-auto mt-8 text-white md:gap-19 sm:grid-cols-2 sm:w-full lg:grid-cols-4">
           {filteredProjects.map((project, index) => (
             <div
