@@ -8,6 +8,7 @@ import Header from "./components/Header";
 import HeaderMobile from "./components/HeaderMobile";
 import Footer from "./components/Footer";
 import CyberCampus from "./routes/CyberCampus";
+
 function App() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1000);
 
