@@ -12,6 +12,10 @@ const images = {
   introimg3 : `${PATH}assets/images/CCIntro/introimg3.png`,
   part2bg: `${PATH}assets/images/CCIntro/part2bg.png`,
   folder: `${PATH}assets/images/CCIntro/folder.png`,
+  part3bg1: `${PATH}assets/images/CCIntro/part3bg1.png`,
+  part3bg2: `${PATH}assets/images/CCIntro/part3bg2.png`,
+  chart: `${PATH}assets/images/CCIntro/chart.png`,
+  bell: `${PATH}assets/images/CCIntro/bell.png`,
 };
 
 export default images;
