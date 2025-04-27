@@ -18,12 +18,14 @@ const IntroPart1 = () => {
             </p>
           </div>
         </div>
-        <div className="image w-[50%] flex justify-center">
-          <img src={images.CCIntroImage} className="w-[92%]" />
+        <div className="image w-[50%] flex justify-start">
+          <img src={images.CCIntroImage} className="w-[95%]" />
         </div>
       </div>
-
-      <div className="text-center">Scroll Down</div>
+      <div className="flex flex-col items-center">
+        <p className="text-center text-xs fontLight text-[#666666]">Scroll Down</p>
+        <img src={images.mouse} className="w-6 mt-1"/>
+      </div>
     </div>
   );
 };

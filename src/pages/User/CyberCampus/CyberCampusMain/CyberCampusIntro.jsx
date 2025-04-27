@@ -6,7 +6,7 @@ import IntroPart3 from "./IntroPart3";
 const CyberCampusIntro = () => {
   return (
     <div className="text-center">
-      <div className="part1">
+      <div className="part1 mb-24">
         <IntroPart1 />
       </div>
       <div className="part2">

@@ -1,16 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 
-const TaskCard = ({id, title, subtitle}) => {
+const TaskCard = ({ id, title, subtitle, icon, hovercolor, defaultcolor }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const imgSizeClass = id === "02" ? "w-[18px] mb-1" : "w-8";
+
   return (
     <div>
-      <div className="w-46 h-58 bg-[#7f7f7f] rounded-[19px] p-5 flex flex-col">
-        <span className="text-white text-left mt-2">{id}</span>
+      <div
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className="w-46 h-58 rounded-[19px] p-7 flex flex-col transition-colors duration-200"
+        style={{
+          backgroundColor: isHovered ? hovercolor : defaultcolor,
+        }}
+      >
+        <span className="text-white text-left">{id}</span>
 
-        <div className="flex-1 flex items-end justify-start">
-          <p>이미지</p>
+        <div className="flex-1 flex items-end justify-start mb-4">
+          <img src={icon} alt={`${title} 아이콘`} className={imgSizeClass} />
         </div>
 
-        <button className="w-full text-left mb-2">
+        <button className="w-full text-left">
           <p className="text-white fontMedium">{title}</p>
           <p className="text-white fontMedium">{subtitle}</p>
         </button>
