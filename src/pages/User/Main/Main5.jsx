@@ -1,6 +1,8 @@
+import ProjectSlider from "./Slider/ProjectSlider";
+
 export default function Main5() {
   return (
-    <div className="bg-[#121212] py-[10%]">
+    <div className="bg-[#121212] py-[6%]">
       <div className="">
         {/* projects */}
         <div>
@@ -14,7 +16,9 @@ export default function Main5() {
           <div></div>
         </div>
         {/* 스르륵 */}
-        <div></div>
+        <div>
+          <ProjectSlider />
+        </div>
       </div>
     </div>
   );

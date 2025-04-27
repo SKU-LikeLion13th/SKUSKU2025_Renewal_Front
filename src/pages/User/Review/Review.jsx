@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ReviewLocation from './ReviewLocation';
 import ReviewBoard from './ReviewBoard';
 import ReviewSearch from './ReviewSearch';
-import ReviewTitle from '../../../components/Review/ReviewTitle';
+import ReviewTitle from './ReviewTitle';
 import quizData from '../../../utils/QuizData.json';
 
 export default function Review() {
@@ -35,15 +35,15 @@ export default function Review() {
   const currentPosts = filteredQuizzes.slice((currentPage - 1) * postsPerPage, currentPage * postsPerPage);
 
   return (
-    <div className='flex mx-auto min-h-screen'>
-      <div className='flex flex-col w-9/12 mt-50 mx-auto justify-start lg:w-8/12'>
+    <div className='flex min-h-screen mx-auto'>
+      <div className='flex flex-col justify-start w-9/12 mx-auto mt-50 lg:w-8/12'>
         <ReviewTitle />
 
-        <div className='flex w-full mt-14 justify-start'>
+        <div className='flex justify-start w-full mt-14'>
           <ReviewLocation />
         </div>
 
-        <div className='flex w-full mt-14 justify-center'>
+        <div className='flex justify-center w-full mt-14'>
           <ReviewBoard quizzes={currentPosts} />
         </div>
 

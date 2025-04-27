@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import QuizData from "../../../utils/QuizData.json";
-import ReviewTitle from "../../../components/Review/ReviewTitle";
+import ReviewTitle from "../Review/ReviewTitle";
 import ReviewLocation from "../Review/ReviewLocation";
-import QuizTitle from "../../../components/Quiz/QuizTitle";
+import QuizTitle from "./QuizTitle";
 import QuizContent from "./QuizContent";
-import Images from "../../../utils/images";
 
 export default function Quiz() {
   const { quizId } = useParams();
