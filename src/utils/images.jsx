@@ -6,7 +6,7 @@ const images = {
 
   //CCintro
   CCIntroImage : `${PATH}assets/images/CCIntro/CCIntroImage.png`,
-  mouse: `${PATH}assets/images/CCIntro/Mouse.png`,
+  mouse: `${PATH}assets/images/Mouse.png`,
   introimg1 : `${PATH}assets/images/CCIntro/introimg1.png`,
   introimg2 : `${PATH}assets/images/CCIntro/introimg2.png`,
   introimg3 : `${PATH}assets/images/CCIntro/introimg3.png`,
