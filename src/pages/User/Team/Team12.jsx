@@ -25,7 +25,7 @@ const leader = [
     name: "노승희",
     role: "대표",
     department: "미디어소프트웨어학과 20",
-    emoji: "👊",
+    emoji: "💡",
   },
   {
     name: "정택원",
@@ -40,9 +40,9 @@ const design = [
     name: "이원경",
     role: "파트장",
     department: "국어국문학과 22",
-    emoji: "🙈",
+    emoji: "💡",
   },
-  { name: "서민주", role: "운영진", department: "관광학과 22", emoji: "❤️" },
+  { name: "서민주", role: "운영진", department: "관광학과 22", emoji: "💡" },
 ];
 
 const frontend = [
@@ -50,19 +50,19 @@ const frontend = [
     name: "고창준",
     role: "파트장",
     department: "컴퓨터공학과 19",
-    emoji: "💻",
+    emoji: "💡",
   },
   {
     name: "김영현",
     role: "운영진",
     department: "컴퓨터공학과 19",
-    emoji: "👋",
+    emoji: "💡",
   },
   {
     name: "신민서",
     role: "운영진",
     department: "미디어소프트웨어학과 22",
-    emoji: "👍",
+    emoji: "💡",
   },
 ];
 
@@ -71,19 +71,19 @@ const backend = [
     name: "남민지",
     role: "파트장",
     department: "컴퓨터공학과 21",
-    emoji: "👋",
+    emoji: "💡",
   },
   {
     name: "문호주",
     role: "운영진",
     department: "컴퓨터공학과 19",
-    emoji: "🥱",
+    emoji: "💡",
   },
   {
     name: "한민규",
     role: "운영진",
     department: "컴퓨터공학과 21",
-    emoji: "😊",
+    emoji: "💡",
   },
 ];
 

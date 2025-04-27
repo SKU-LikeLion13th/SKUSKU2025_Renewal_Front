@@ -17,7 +17,7 @@ export default function Team13() {
 
 // 각 팀 멤버 데이터
 const leader = [
-  { name: "한민규", role: "대표", department: "컴퓨터공학과 21", emoji: "👊" },
+  { name: "한민규", role: "대표", department: "컴퓨터공학과 21", emoji: "💡" },
   {
     name: "신민서",
     role: "부대표",
@@ -27,8 +27,8 @@ const leader = [
 ];
 
 const design = [
-  { name: "서민주", role: "파트장", department: "관광학과 22", emoji: "🙈" },
-  { name: "오한솔", role: "운영진", department: "관광학과 22", emoji: "❤️" },
+  { name: "서민주", role: "파트장", department: "관광학과 22", emoji: "💡" },
+  { name: "오한솔", role: "운영진", department: "관광학과 22", emoji: "💡" },
 ];
 
 const frontend = [
@@ -36,19 +36,19 @@ const frontend = [
     name: "최유정",
     role: "파트장",
     department: "미디어소프트웨어학과 21",
-    emoji: "💻",
+    emoji: "💡",
   },
   {
     name: "이호연",
     role: "운영진",
     department: "미디어소프트웨어학과 21",
-    emoji: "👋",
+    emoji: "💡",
   },
   {
     name: "구혜원",
     role: "운영진",
     department: "미디어소프트웨어학과 22",
-    emoji: "👍",
+    emoji: "💡",
   },
 ];
 
@@ -57,18 +57,18 @@ const backend = [
     name: "박준범",
     role: "파트장",
     department: "컴퓨터공학과 21",
-    emoji: "👋",
+    emoji: "💡",
   },
   {
     name: "권오현",
     role: "운영진",
     department: "컴퓨터공학과 23",
-    emoji: "🥱",
+    emoji: "💡",
   },
   {
     name: "노주희",
     role: "운영진",
     department: "미디어소프트웨어학과 22",
-    emoji: "😊",
+    emoji: "💡",
   },
 ];
