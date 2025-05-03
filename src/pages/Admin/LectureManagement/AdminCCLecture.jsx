@@ -1,18 +1,20 @@
 import { Link, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import API from "../../../utils/axios";
+import LectureControls from "./LectureControls";
+import LectureTable from "./LectureTable";
 
 const AdminCCLecture = () => {
   const { track } = useParams();
   const trackParam = track.replace("-", "").toUpperCase();
+  const [allData, setAllData] = useState([]);
   const [data, setData] = useState([]);
+  const [selectedItems, setSelectedItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  console.log(track);
-
-  const itemsPerPage = 10;
-  const totalItems = data.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isAllSelected, setIsAllSelected] = useState(false);
+  const itemsPerPage = 15;
 
   useEffect(() => {
     const fetchLectures = async () => {
@@ -20,7 +22,7 @@ const AdminCCLecture = () => {
         const response = await API.get(`/lecture/all/${trackParam}`, {
           withCredentials: true,
         });
-        console.log(response.data);
+        setAllData(response.data);
         setData(response.data);
       } catch (err) {
         setError("강의 자료를 불러오는 데 실패했습니다.");
@@ -33,6 +35,63 @@ const AdminCCLecture = () => {
     fetchLectures();
   }, [trackParam]);
 
+  const toggleSelect = (id) => {
+    setSelectedItems((prev) => {
+      const newSelected = prev.includes(id)
+        ? prev.filter((item) => item !== id)
+        : [...prev, id];
+      setIsAllSelected(newSelected.length === data.length);
+      return newSelected;
+    });
+  };
+
+  const handleDelete = async () => {
+    try {
+      await Promise.all(
+        selectedItems.map((id) => API.delete(`/admin/lecture/${id}`))
+      );
+      const updated = data.filter((item) => !selectedItems.includes(item.id));
+      setData(updated);
+      setAllData(updated);
+      setSelectedItems([]);
+      alert("선택한 강의자료가 삭제되었습니다.");
+    } catch (error) {
+      console.error("삭제 중 오류 발생:", error);
+      alert("삭제 중 오류가 발생했습니다.");
+    }
+  };
+
+  const handleSelectAll = () => {
+    if (isAllSelected) {
+      setSelectedItems([]);
+    } else {
+      const allIds = data.map((item) => item.id);
+      setSelectedItems(allIds);
+    }
+    setIsAllSelected(!isAllSelected);
+  };
+
+  const handleSearch = (term) => {
+    const filtered = allData.filter((item) =>
+      item.title.toLowerCase().includes(term.toLowerCase())
+    );
+    setData(filtered);
+    setCurrentPage(1);
+  };
+
+  // 📌 페이지네이션 계산
+  const totalItems = data.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentItems = data.slice(startIndex, endIndex);
+
+  // 📌 빈 행 포함한 배열 만들기
+  const paddedItems = [
+    ...currentItems,
+    ...Array(itemsPerPage - currentItems.length).fill(null),
+  ];
+
   return (
     <div className="max-w-5xl mx-auto mt-44 pb-10 px-4">
       <h1 className="text-4xl fontBold mb-20">{track} 자료실</h1>
@@ -40,72 +99,48 @@ const AdminCCLecture = () => {
         홈 &gt; 사이버캠퍼스 &gt; 자료실
       </div>
 
-      <table className="w-full text-center border-t-[0.5px] border-black">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="py-2 border-b-[0.5px]">번호</th>
-            <th className="py-2 border-b-[0.5px]">제목</th>
-            <th className="py-2 border-b-[0.5px]">수정</th>
-            <th className="py-2 border-b-[0.5px]">선택</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((item, i) => (
-            <tr key={item.id} className="hover:bg-blue-50 cursor-pointer">
-              <td className="py-2 border-b-[0.5px]">{i + 1}</td>
-              <td className="py-2 border-b-[0.5px] text-left pl-4">
-                {item.title}
-              </td>
-              <td className="py-2 border-b-[0.5px]">수정</td>
-              <td className="py-2 border-b-[0.5px]">
-                <input type="checkbox" />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <LectureTable
+        track={track}
+        paddedItems={paddedItems}
+        startIndex={startIndex}
+        selectedItems={selectedItems}
+        toggleSelect={toggleSelect}
+      />
 
-      <div className="flex justify-between mt-6 text-sm">
+      <div className="flex justify-between mt-12 text-sm">
         <Link to={`/admin/LectureManagement/${track}/LectureUpload`}>
           <div className="bg-[#3B79FF] text-white px-3 py-2 rounded-lg ">
             자료 등록
           </div>
         </Link>
         <div className="flex">
-          <div className="bg-[#E9E9E9] text-[#838383] px-3 py-2 rounded-lg">
-            전체 선택
-          </div>
-          <div className="bg-[#6C6868] text-white px-3 py-2 rounded-lg ml-3">
+          <button
+            onClick={handleSelectAll}
+            className="bg-[#E9E9E9] text-[#838383] px-3 py-2 rounded-lg"
+          >
+            {isAllSelected ? "선택 해제" : "전체 선택"}
+          </button>
+          <button
+            onClick={handleDelete}
+            disabled={selectedItems.length === 0}
+            className={`px-3 py-2 rounded-lg ml-3 transition ${
+              selectedItems.length > 0
+                ? "bg-[#FF4D4D] text-white"
+                : "bg-[#6C6868] text-white opacity-50 cursor-not-allowed"
+            }`}
+          >
             선택 삭제
-          </div>
+          </button>
         </div>
       </div>
 
-      <div className="flex justify-between items-center mt-6 text-sm text-gray-700">
-        <div>
-          전체 게시물 수: {totalItems} &nbsp; 전체 페이지 수: {totalPages}
-        </div>
-        <div className="space-x-2">
-          {[...Array(totalPages)].map((_, i) => (
-            <button key={i} className="border px-3 py-1">
-              {i + 1}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="flex justify-end items-center mt-4 space-x-2 text-sm">
-        <select className="border px-2 py-1">
-          <option>제목</option>
-          <option>작성자</option>
-        </select>
-        <input
-          type="text"
-          placeholder="검색어를 입력하세요."
-          className="border px-2 py-1"
-        />
-        <button className="border px-3 py-1">검색</button>
-      </div>
+      <LectureControls
+        totalItems={totalItems}
+        totalPages={totalPages}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        onSearch={handleSearch}
+      />
     </div>
   );
 };

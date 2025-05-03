@@ -1,17 +1,32 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../../../utils/axios";
+import LectureControls from "../../Admin/LectureManagement/LectureControls";
+import LectureTable from "./LectureTable";
 
 const CyberCampusLecture = () => {
-  const { track } = useParams(); // URL에 있는 트랙 값 (예: BACKEND)
+  const { track } = useParams();
+  const trackParam = track.replace("-", "").toUpperCase();
+  const [allData, setAllData] = useState([]);
   const [data, setData] = useState([]);
   const itemsPerPage = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchKeyword, setSearchKeyword] = useState("");
 
   useEffect(() => {
     const fetchLectureData = async () => {
       try {
-        const response = await axios.get(`/lecture/all/${track}`);
+        const response = await API.get(`/lecture/all/${trackParam}`, {
+          withCredentials: true,
+        });
+        setAllData(response.data);
         setData(response.data);
+        if (Array.isArray(response.data)) {
+          setData(response.data);
+        } else {
+          console.error("예상치 못한 데이터 구조:", response.data);
+          setData([]);
+        }
       } catch (error) {
         console.error("강의자료 불러오기 실패:", error);
         setData([]);
@@ -19,10 +34,28 @@ const CyberCampusLecture = () => {
     };
 
     fetchLectureData();
-  }, [track]);
+  }, [trackParam]);
+
+  const handleSearch = (keyword) => {
+    setSearchKeyword(keyword);
+    const filtered = allData.filter((item) =>
+      item.title.toLowerCase().includes(keyword.toLowerCase())
+    );
+    setData(filtered);
+    setCurrentPage(1);
+  };
 
   const totalItems = data.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentData = data.slice(startIndex, endIndex);
+
+  const paddedItems = [
+    ...data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage),
+    ...Array(Math.max(15 - data.length, 0)).fill(null),
+  ];
 
   return (
     <div className="max-w-5xl mx-auto mt-44 pb-10 px-4">
@@ -31,54 +64,15 @@ const CyberCampusLecture = () => {
         홈 &gt; 사이버캠퍼스 &gt; 자료실
       </div>
 
-      <table className="w-full text-center border-t-[0.5px] border-black">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="py-2 border-b-[0.5px]">번호</th>
-            <th className="py-2 border-b-[0.5px]">제목</th>
-            <th className="py-2 border-b-[0.5px]">작성일</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((item, i) => (
-            <tr key={item.id} className="hover:bg-blue-50 cursor-pointer">
-              <td className="py-2 border-b-[0.5px]">{i + 1}</td>
-              <td className="py-2 border-b-[0.5px] text-left pl-4">
-                <Link to={`/CyberCampus/lecture-detail/${item.id}`}>
-                  {item.title}
-                </Link>
-              </td>
-              <td className="py-2 border-b-[0.5px]">{item.createDate}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <LectureTable data={paddedItems} />
 
-      <div className="flex justify-between items-center mt-6 text-sm text-gray-700">
-        <div>
-          전체 게시물 수: {totalItems} &nbsp; 전체 페이지 수: {totalPages}
-        </div>
-        <div className="space-x-2">
-          {[...Array(totalPages)].map((_, i) => (
-            <button key={i} className="border px-3 py-1">
-              {i + 1}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="flex justify-end items-center mt-4 space-x-2 text-sm">
-        <select className="border px-2 py-1">
-          <option>제목</option>
-          <option>작성자</option>
-        </select>
-        <input
-          type="text"
-          placeholder="검색어를 입력하세요."
-          className="border px-2 py-1"
-        />
-        <button className="border px-3 py-1">검색</button>
-      </div>
+      <LectureControls
+        totalItems={data.length}
+        totalPages={totalPages}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        onSearch={handleSearch}
+      />
     </div>
   );
 };

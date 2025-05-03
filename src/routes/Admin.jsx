@@ -6,6 +6,7 @@ import AdminAssignmentMain from "../pages/Admin/Assignment/AdminAssignmentMain";
 import AddAssignment from "../pages/Admin/Assignment/AddAssignment";
 import AdminCCLecture from "../pages/Admin/LectureManagement/AdminCCLecture";
 import AdminCCLectureUpload from "../pages/Admin/LectureManagement/AdminCCLectureUpload";
+import AdminCCLectureEdit from "../pages/Admin/LectureManagement/AdminCCLectureEdit";
 
 const Admin = () => {
   return (
@@ -19,6 +20,10 @@ const Admin = () => {
       <Route
         path="/LectureManagement/:track/LectureUpload"
         element={<AdminCCLectureUpload />}
+      />
+      <Route
+        path="/LectureManagement/:track/LectureEdit/:lectureId"
+        element={<AdminCCLectureEdit />}
       />
     </Routes>
   );
