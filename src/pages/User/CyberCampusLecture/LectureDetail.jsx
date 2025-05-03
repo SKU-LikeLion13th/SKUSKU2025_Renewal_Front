@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import API from "../../../utils/axios";
 
 const LectureDetail = () => {
   const { id } = useParams();
@@ -10,10 +10,14 @@ const LectureDetail = () => {
   useEffect(() => {
     const fetchLecture = async () => {
       try {
-        const response = await axios.get(`/lecture/${id}`);
+        const response = await API.get(`/lecture/${id}`);
         setLecture(response.data);
       } catch (err) {
-        setError("강의자료를 찾을 수 없습니다.");
+        if (err.response && err.response.status === 404) {
+          setError("해당 강의 자료를 찾을 수 없습니다.");
+        } else {
+          setError("강의 자료를 불러오는 데 문제가 발생했습니다.");
+        }
       }
     };
 
@@ -25,7 +29,12 @@ const LectureDetail = () => {
   }
 
   if (!lecture) {
-    return <div className="mt-44 text-center">로딩 중...</div>;
+    return (
+      <div className="mt-44 text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500"></div>
+        <p>로딩 중...</p>
+      </div>
+    );
   }
 
   return (
@@ -41,28 +50,19 @@ const LectureDetail = () => {
       {/* 강의 제목 */}
       <h2 className="text-xl fontSB mb-2">{lecture.title}</h2>
 
-      {/* 강의 설명 (내용 박스) */}
-      <h3 className="text-xl fontSB mb-4">강의 자료</h3>
-      <div className="bg-gray-50 border border-gray-300 p-4 mb-20">
-        {lecture.content && (
-          <>
-            <h3 className="text-xl fontSB mb-2">내용</h3>
-            <div className="bg-gray-50 border border-gray-300 p-6 mb-10">
-              {lecture.content}
-            </div>
-          </>
-        )}
+      <div className="bg-[#F9F9F9] border-t-[1.5px] mb-20 h-32">
+        {lecture.content && <div className="p-8">{lecture.content}</div>}
       </div>
 
       {/* 파일 다운로드 */}
       <h3 className="text-xl fontSB mb-4">파일 다운로드</h3>
-      <div className="bg-gray-50 border border-gray-300 p-4">
+      <div className="bg-[#F9F9F9] border-t-[1.5px] p-8">
         {lecture.joinLectureFiles?.map((file) => (
           <a
             key={file.fileName}
             href={`data:${file.fileType};base64,${file.file}`}
             download={file.fileName}
-            className="text-blue-600 underline flex items-center mb-2"
+            className="text-blue-500 underline flex items-center mb-2 text-[14px]"
           >
             <img
               src="https://cdn-icons-png.flaticon.com/512/337/337946.png"

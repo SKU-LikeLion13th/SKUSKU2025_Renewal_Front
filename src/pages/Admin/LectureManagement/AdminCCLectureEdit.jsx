@@ -1,97 +1,83 @@
-import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { useDropzone } from "react-dropzone";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import API from "../../../utils/axios";
+import { useDropzone } from "react-dropzone";
 
-const AdminCCLectureUpload = () => {
-  const { track } = useParams();
+const AdminCCLectureEdit = () => {
+  const { track, lectureId } = useParams();
+  const trackParam = track.replace("-", "").toUpperCase();
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [files, setFiles] = useState([]);
   const [error, setError] = useState(null);
 
-  const navigate = useNavigate();
-  console.log(`이동할 경로: /LectureManagement/${track}`);
+  useEffect(() => {
+    const fetchLectureDetail = async () => {
+      try {
+        const response = await API.get(`/lecture/${lectureId}`);
+        const lecture = response.data;
+        setTitle(lecture.title);
+        setContent(lecture.content);
+      } catch (err) {
+        console.error("상세 정보 불러오기 실패:", err);
+        setError("강의자료 정보를 불러오는 데 실패했습니다.");
+      }
+    };
 
-  // 제목 입력
-  const handleTitleChange = (e) => {
-    setTitle(e.target.value);
-  };
+    fetchLectureDetail();
+  }, [lectureId]);
 
-  // 내용
-  const handleContentChange = (e) => {
-    setContent(e.target.value);
-  };
+  const handleTitleChange = (e) => setTitle(e.target.value);
+  const handleContentChange = (e) => setContent(e.target.value);
 
-  // 드래그 앤 드롭 파일 처리
+  // 파일 업로드 처리
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles) => {
       setFiles(acceptedFiles);
     },
     multiple: true,
-    accept: ".pdf, .doc, .docx, .pptx, .xlsx, .jpg, .png, .zip",
+    accept: ".pdf, .doc, .docx, .pptx, .xlsx, .jpg, .png, .zip", // 허용된 파일 형식
   });
 
-  // 폼 제출 처리
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!title || !files.length === 0 || !content) {
-      alert("제목, 내용, 파일을 모두 입력해 주세요.");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("trackType", track.replace("-", "").toUpperCase());
-    formData.append("title", title);
-    formData.append("content", content);
-    files.forEach((file) => {
-      formData.append("files", file);
-    });
-    for (const [key, value] of formData.entries()) {
-      if (value instanceof File) {
-        console.log(
-          `${key}: ${value.name} (${value.type}, ${value.size} bytes)`
-        );
-      } else {
-        console.log(`${key}: ${value}`);
-      }
-    }
-
+  const handleUpdate = async () => {
     try {
-      const response = await API.post("/admin/lecture/add", formData, {
+      const formData = new FormData();
+      formData.append("id", lectureId);
+      formData.append("trackType", trackParam);
+      formData.append("title", title);
+      formData.append("content", content);
+
+      // 파일이 있는 경우 formData에 추가
+      if (files.length > 0) {
+        files.forEach((file) => {
+          formData.append("files", file); // 서버에서 files를 배열로 받을 수 있어야 함
+        });
+      }
+
+      // PUT 요청 보내기
+      await API.put(`/admin/lecture/update`, formData, {
         headers: {
-          credentials: "include",
+          "Content-Type": "multipart/form-data",
         },
-        withCredentials: true,
       });
 
-      if (response.status === 201) {
-        alert("강의자료가 성공적으로 추가되었습니다.");
-        navigate(`/admin/LectureManagement/${track}`);
-      } else {
-        console.error(err.response ? err.response.data : err);
-        throw new Error("강의자료를 추가하는 데 실패했습니다.");
-      }
+      alert("수정이 완료되었습니다.");
     } catch (err) {
-      console.error(err);
-      setError("강의자료를 추가하는 데 실패했습니다.");
+      console.error("수정 중 오류:", err);
+      setError("수정 중 오류가 발생했습니다.");
     }
   };
 
   return (
     <div className="max-w-5xl mx-auto mt-44 px-4 pb-20">
-      {/* 제목 */}
-      <h1 className="text-4xl fontBold mb-20">{track} 자료 등록</h1>
-
-      {/* 경로 */}
+      <h1 className="text-4xl fontBold mb-20">{track} 자료 수정</h1>
       <div className="text-sm text-gray-500 mb-12">
-        홈 &gt; 사이버캠퍼스 &gt; 자료실 &gt; 자료 등록
+        홈 &gt; 사이버캠퍼스 &gt; 자료실 &gt; 자료 수정
       </div>
-
       <div className="border w-full mb-12"></div>
 
-      {/* 강의 제목 */}
+      {/* 제목 */}
       <div className="mb-20">
         <h2 className="text-xl fontSB mb-8">자료 게시물 제목</h2>
         <input
@@ -103,7 +89,7 @@ const AdminCCLectureUpload = () => {
         />
       </div>
 
-      {/* 강의 설명 (내용 박스) */}
+      {/* 내용 */}
       <div className="mb-16">
         <h3 className="text-xl fontSB mb-8">게시물 내용</h3>
         <textarea
@@ -139,12 +125,14 @@ const AdminCCLectureUpload = () => {
             )}
           </div>
         </div>
+
+        {/* 수정 완료 버튼 */}
         <div className="flex items-center">
           <button
-            onClick={handleSubmit}
+            onClick={handleUpdate}
             className="px-6 py-2 bg-[#4881FF] text-white rounded-md"
           >
-            등록하기
+            수정 완료
           </button>
         </div>
       </div>
@@ -155,4 +143,4 @@ const AdminCCLectureUpload = () => {
   );
 };
 
-export default AdminCCLectureUpload;
+export default AdminCCLectureEdit;
