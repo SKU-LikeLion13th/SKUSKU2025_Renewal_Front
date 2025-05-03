@@ -3,7 +3,7 @@ export default function GoogleLoginBtn({ isHovered }) {
     const currentPath = location.pathname + location.search;
     localStorage.setItem("redirectAfterLogin", currentPath);
     window.location.href =
-      "http://backend.sku-sku.com/oauth2/authorization/google";
+      "https://backend.sku-sku.com/oauth2/authorization/google";
   };
 
   return (
