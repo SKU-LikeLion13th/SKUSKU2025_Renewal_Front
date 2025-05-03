@@ -8,6 +8,7 @@ import Header from "./components/Header";
 import HeaderMobile from "./components/HeaderMobile";
 import Footer from "./components/Footer";
 import CyberCampus from "./routes/CyberCampus";
+// import AuthProvider from "./utils/AuthContext";
 
 function App() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1000);
@@ -24,6 +25,7 @@ function App() {
   }, []);
 
   return (
+    // <AuthProvider>
     <Router>
       <div className="App">
         {isMobile ? <HeaderMobile /> : <Header />}
@@ -35,6 +37,7 @@ function App() {
         {/* <Footer /> */}
       </div>
     </Router>
+    // </AuthProvider>
   );
 }
 
