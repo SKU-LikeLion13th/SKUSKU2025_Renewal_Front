@@ -7,11 +7,13 @@ import Main5 from "./Main5";
 
 export default function Main() {
   return (
-    <div className="w-full">
+    <div className="w-full bg-black mt-15">
       <div className="section">
         <Main1 />
       </div>
-      <div className="section">{/* <Main2 /> */}</div>
+      <div className="section">
+        <Main2 />
+      </div>
       <div className="section">
         <Main3 />
       </div>
