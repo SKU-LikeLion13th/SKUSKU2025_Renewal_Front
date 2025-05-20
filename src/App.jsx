@@ -17,10 +17,10 @@ import CCHeader from "./components/CCHeader";
 
 function AppContent() {
   const location = useLocation();
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 1000);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1100);
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 1000);
+    const handleResize = () => setIsMobile(window.innerWidth < 1100);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
