@@ -1,97 +1,91 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useDropzone } from "react-dropzone";
 import API from "../../../utils/axios";
+import axios from "axios";
+import FileUploader from "../../../components/FileUploader";
 
 const AdminCCLectureUpload = () => {
   const { track } = useParams();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState([]); // 실제 파일 객체 저장
   const [error, setError] = useState(null);
 
+  const fileUploaderRef = useRef();
   const navigate = useNavigate();
-  console.log(`이동할 경로: /LectureManagement/${track}`);
 
-  // 제목 입력
-  const handleTitleChange = (e) => {
-    setTitle(e.target.value);
+  const handleTitleChange = (e) => setTitle(e.target.value);
+  const handleContentChange = (e) => setContent(e.target.value);
+
+  const handleUploadComplete = (selectedFiles) => {
+    setFiles(selectedFiles); // [{ file: File, name: string, type: string }]
   };
 
-  // 내용
-  const handleContentChange = (e) => {
-    setContent(e.target.value);
-  };
-
-  // 드래그 앤 드롭 파일 처리
-  const { getRootProps, getInputProps } = useDropzone({
-    onDrop: (acceptedFiles) => {
-      setFiles(acceptedFiles);
-    },
-    multiple: true,
-    accept: ".pdf, .doc, .docx, .pptx, .xlsx, .jpg, .png, .zip",
-  });
-
-  // 폼 제출 처리
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!title || !files.length === 0 || !content) {
+    if (!title || !content || files.length === 0) {
       alert("제목, 내용, 파일을 모두 입력해 주세요.");
       return;
     }
 
-    const formData = new FormData();
-    formData.append("trackType", track.replace("-", "").toUpperCase());
-    formData.append("title", title);
-    formData.append("content", content);
-    files.forEach((file) => {
-      formData.append("files", file);
-    });
-    for (const [key, value] of formData.entries()) {
-      if (value instanceof File) {
-        console.log(
-          `${key}: ${value.name} (${value.type}, ${value.size} bytes)`
-        );
-      } else {
-        console.log(`${key}: ${value}`);
-      }
-    }
-
     try {
-      const response = await API.post("/admin/lecture/add", formData, {
-        headers: {
-          credentials: "include",
-        },
+      // 1. presigned URL 요청
+      const presignedReqBody = files.map((fileObj) => ({
+        fileName: fileObj.file.name,
+        mimeType: fileObj.file.type,
+      }));
+
+      const presignedRes = await axios.post(
+        "https://backend.sku-sku.com/s3/presigned-urls",
+        presignedReqBody,
+        { withCredentials: true }
+      );
+
+      const presignedUrls = presignedRes.data;
+
+      // 2. 실제 파일 S3에 업로드
+      const uploadPromises = files.map((fileObj, idx) =>
+        axios.put(presignedUrls[idx].uploadUrl, fileObj.file, {
+          headers: { "Content-Type": fileObj.file.type },
+        })
+      );
+      await Promise.all(uploadPromises);
+
+      // 3. 강의 등록 요청
+      const payload = {
+        trackType: track.replace("-", "").toUpperCase(),
+        title,
+        content,
+        fileUrls: presignedUrls.map((urlObj) => urlObj.cdnUrl),
+      };
+
+      const res = await API.post("/admin/lecture/add", payload, {
+        headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
 
-      if (response.status === 201) {
+      if (res.status === 201) {
         alert("강의자료가 성공적으로 추가되었습니다.");
         navigate(`/admin/LectureManagement/${track}`);
       } else {
-        console.error(err.response ? err.response.data : err);
-        throw new Error("강의자료를 추가하는 데 실패했습니다.");
+        throw new Error("등록 실패");
       }
     } catch (err) {
       console.error(err);
-      setError("강의자료를 추가하는 데 실패했습니다.");
+      setError("등록 중 오류가 발생했습니다.");
+      alert("등록에 실패했습니다.");
     }
   };
 
   return (
     <div className="max-w-5xl mx-auto mt-44 px-4 pb-20">
-      {/* 제목 */}
       <h1 className="text-4xl fontBold mb-20">{track} 자료 등록</h1>
-
-      {/* 경로 */}
       <div className="text-sm text-gray-500 mb-12">
         홈 &gt; 사이버캠퍼스 &gt; 자료실 &gt; 자료 등록
       </div>
-
       <div className="border w-full mb-12"></div>
 
-      {/* 강의 제목 */}
       <div className="mb-20">
         <h2 className="text-xl fontSB mb-8">자료 게시물 제목</h2>
         <input
@@ -103,7 +97,6 @@ const AdminCCLectureUpload = () => {
         />
       </div>
 
-      {/* 강의 설명 (내용 박스) */}
       <div className="mb-16">
         <h3 className="text-xl fontSB mb-8">게시물 내용</h3>
         <textarea
@@ -114,42 +107,20 @@ const AdminCCLectureUpload = () => {
         />
       </div>
 
-      {/* 파일 업로드 (드래그 앤 드롭) */}
-      <div className="flex mb-6 items-center justify-between">
-        <div className="flex items-center">
-          <h3 className="text-lg fontSB mr-4">파일 업로드</h3>
-          <div
-            {...getRootProps()}
-            className="border px-5 py-2 border-gray-300 rounded-md cursor-pointer"
-          >
-            <input {...getInputProps()} />
-            {files.length > 0 ? (
-              <ul className="text-sm text-gray-700">
-                {files.map((file, index) => (
-                  <li key={index}>
-                    {file.name} ({(file.size / 1024).toFixed(1)} KB)
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-gray-500 text-sm">
-                <span className="fontBold underline mr-4">파일선택</span>또는
-                여기로 파일을 끌어오세요.
-              </p>
-            )}
-          </div>
-        </div>
-        <div className="flex items-center">
-          <button
-            onClick={handleSubmit}
-            className="px-6 py-2 bg-[#4881FF] text-white rounded-md"
-          >
-            등록하기
-          </button>
-        </div>
+      <div className="mb-8">
+        <h3 className="text-lg fontSB mb-4">파일 업로드</h3>
+        <FileUploader onUploadComplete={handleUploadComplete} error={error} />
       </div>
 
-      {/* 오류 메시지 */}
+      <div className="flex justify-end">
+        <button
+          onClick={handleSubmit}
+          className="px-6 py-2 bg-[#4881FF] text-white rounded-md"
+        >
+          등록하기
+        </button>
+      </div>
+
       {error && <div className="text-red-500 mt-4">{error}</div>}
     </div>
   );
