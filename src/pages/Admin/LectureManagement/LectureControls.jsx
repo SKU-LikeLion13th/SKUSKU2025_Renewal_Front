@@ -46,7 +46,7 @@ const LectureControls = ({
   };
 
   return (
-    <div className="flex justify-between items-center mt-32 text-sm text-gray-700 ">
+    <div className="flex justify-between items-center mt-32 text-sm text-gray-700">
       <div>
         전체 게시물 수: {totalItems} &nbsp; 전체 페이지 수: {totalPages}
         <input

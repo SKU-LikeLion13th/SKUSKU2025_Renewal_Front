@@ -49,18 +49,18 @@ export default function Main2() {
         <div className="absolute inset-0 bg-black opacity-80"></div>
       </div>
 
-      <div className="relative flex flex-col justify-center h-full text-white items-center sm:space-y-30 sm:pt-32 py-16">
+      <div className="relative flex flex-col justify-center h-full text-white items-center sm:space-y-30 sm:pt-32 py-16 space-y-3">
         {/* 3가지 방향성 */}
         <div className="text-center sm:block flex flex-row justify-center items-center gap-1">
-          <p className="sm:text-[21px] sm:fontEL text-[12px] fontLight">
+          <p className="sm:text-[21px] sm:fontEL text-[11px] fontEL">
             성결대학교 멋쟁이 사자처럼의
           </p>
-          <p className="sm:text-[40px] sm:fontSB text-[12px] fontSB">
+          <p className="sm:text-[40px] sm:fontSB text-[12px] fontBold">
             3가지 방향성
           </p>
         </div>
         {/* 모토 */}
-        <p className="sm:hidden text-[9px]">
+        <p className="sm:hidden text-[9px] fontEL">
           "내 아이디어를 내 손으로 실현한다."
         </p>
         {/* 박스 3개 */}
