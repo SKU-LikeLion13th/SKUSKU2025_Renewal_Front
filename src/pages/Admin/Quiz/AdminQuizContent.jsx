@@ -58,7 +58,7 @@ export default function AdminQuizContent() {
         answerChoiceList: [],
         answer: "",
         files: "",
-        explanation: ""  // 필요하다면 설명 input 추가해서 여기에 담기
+        explanation: ""
       };
   
       // 객관식일 때 보기와 답 저장
