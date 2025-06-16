@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import quizData from "../../../utils/QuizData.json";
-import Images from "../../../utils/images";
+import images from "../../../utils/Images";
+// import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function QuizContent() {
   const { quizId } = useParams();
   const [quiz, setQuiz] = useState(null);
   const [selectedAnswer, setSelectedAnswer] = useState(null); 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [uploadedFiles, setUploadedFiles] = useState({});
+  const [fileNames, setFileNames] = useState({});  // 업로드된 파일 이름 상태 추가
+  // const navigate = useNavigate();
 
   useEffect(() => {
     console.log("URL id:", quizId, typeof quizId);
     const selectedQuiz = quizData.find(q => q.Id === Number(quizId));
-    console.log("선택된 퀴즈 데이터:", selectedQuiz);
     setQuiz(selectedQuiz || null);
   }, [quizId]);
 
@@ -23,10 +27,24 @@ export default function QuizContent() {
     }));
   };
 
+  const handleFileUpload = (questionId, files) => {
+    const fileArray = Array.from(files);
+    const newFileNames = fileArray.map((file) => file.name); // 파일 이름 배열 생성
+    setUploadedFiles((prev) => ({
+      ...prev,
+      [questionId]: (prev[questionId] || []).concat(fileArray),
+    }));
+
+    setFileNames((prev) => ({
+      ...prev,
+      [questionId]: newFileNames.join(", "), // 파일 이름을 쉼표로 구분하여 상태에 저장
+    }));
+  };
+
   const goToNextQuestion = () => {
     setCurrentQuestionIndex((prev) => prev + 1);
   };
-  
+
   const goToPrevQuestion = () => {
     setCurrentQuestionIndex((prev) => prev - 1);
   };
@@ -34,6 +52,59 @@ export default function QuizContent() {
   const handleDivClick = (e) => {
     e.target.querySelector("input")?.focus();
   };
+
+  const submitQuizToServer = async () => {
+    if (!quiz) return;
+  
+    const formData = new FormData();
+    formData.append("title", quiz.title || "제목 없음");
+    formData.append("trackType", quiz.trackType || "BACKEND");
+  
+    const reviewQuizDTOList = quiz.questions.map((q) => {
+      const questionId = q.questionId;
+      const answer = selectedAnswer?.[questionId] || "";
+      const explanation = q.explanation || "";
+  
+      return {
+        quizType: q.quizType,
+        content: q.content,
+        answerChoiceList: q.AnswerChoiceList || [],
+        answer,
+        explanation,
+      };
+    });
+  
+    formData.append("reviewQuizDTOList", JSON.stringify(reviewQuizDTOList));
+  
+    for (const questionId in uploadedFiles) {
+      const files = uploadedFiles[questionId];
+      files.forEach((file) => {
+        formData.append(`files-${questionId}`, file);
+      });
+    }    
+  
+    try {
+      const response = await axios.post("/admin/reviewQuiz/add", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+  
+      if (response.status === 201) {
+        alert("퀴즈가 성공적으로 출제되었습니다!");
+        // navigate("/admin");
+      } else {
+        alert("퀴즈 출제 실패: " + response.status);
+      }
+    } catch (error) {
+      console.error("퀴즈 출제 중 에러 발생:", error);
+      alert("퀴즈 출제 중 오류가 발생했습니다.");
+    }
+  };
+
+  console.log(uploadedFiles);
+console.log(fileNames);
+
 
   if (!quiz) {
     return <div>퀴즈를 찾을 수 없습니다.</div>;
@@ -53,7 +124,6 @@ export default function QuizContent() {
 
           {currentQuestion.AnswerChoiceList.length > 0 && currentQuestion.quizType === "MULTIPLE_CHOICE" ? (
             <div className="flex items-start justify-between mt-2">
-              {/* 선택지 (왼쪽) */}
               <div className="flex flex-col mt-5">
                 {currentQuestion.AnswerChoiceList.map((choice, index) => (
                   <label key={index} className="flex items-center mb-2">
@@ -70,18 +140,72 @@ export default function QuizContent() {
                 ))}
               </div>
 
-              {/* 이미지 (오른쪽) */}
               <div className="flex flex-col gap-2 mb-10">
-                {Array.isArray(currentQuestion.file) && (
+                {Array.isArray(currentQuestion.file) &&
                   currentQuestion.file.map((fileName, index) => (
                     <img
                       key={index}
-                      src={Images[fileName]}
+                      src={images[fileName]}
                       alt={`question-${currentQuestion.questionId}-image-${index}`}
                       className="flex object-contain w-[100%] max-h-60"
                     />
-                  ))
-                )}
+                  ))}
+              </div>
+
+              {/* 파일 업로드 영역 */}
+              <div className="mt-4">
+                <label className="block mb-1 font-semibold">파일 업로드</label>
+                <div
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    handleFileUpload(currentQuestion.questionId, e.dataTransfer.files);
+                  }}
+                  onDragOver={(e) => e.preventDefault()}
+                  className="w-full p-4 text-center border-2 border-dashed rounded-md cursor-pointer bg-gray-50"
+                >
+                  {fileNames[currentQuestion.questionId] || "파일을 여기에 드래그하거나 클릭하여 업로드하세요."}
+
+                  {/* label을 밖에 두어야 합니다 */}
+                  <label
+                    htmlFor={`file-upload-${currentQuestion.questionId}`}
+                    className="cursor-pointer text-blue-500 underline ml-2 inline-block"
+                  >
+                    파일 선택
+                  </label>
+
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    onChange={(e) => handleFileUpload(currentQuestion.questionId, e.target.files)}
+                    className="hidden"
+                    id={`file-upload-${currentQuestion.questionId}`}
+                  />
+                </div>
+
+                {/* 업로드한 파일 리스트 및 삭제 기능 추가 */}
+                <div className="flex flex-col mt-2 gap-2">
+                  {(uploadedFiles[currentQuestion.questionId] || []).map((file, index) => (
+                    <div key={index} className="flex items-center justify-between bg-gray-100 p-2 rounded">
+                      <span className="truncate w-[80%]">{file.name}</span>
+                      <button
+                        className="text-red-500 text-sm ml-2"
+                        onClick={() => {
+                          setUploadedFiles((prev) => {
+                            const updated = [...(prev[currentQuestion.questionId] || [])];
+                            updated.splice(index, 1);
+                            return {
+                              ...prev,
+                              [currentQuestion.questionId]: updated,
+                            };
+                          });
+                        }}
+                      >
+                        삭제
+                      </button>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           ) : (
@@ -91,15 +215,17 @@ export default function QuizContent() {
                 className="w-full h-full p-4 overflow-hidden resize-none"
                 rows="1"
                 onInput={(e) => {
-                  e.target.style.height = "auto"; // 높이를 초기화
-                  e.target.style.height = `${e.target.scrollHeight}px`; // 입력된 내용에 맞게 높이 조절
+                  e.target.style.height = "auto";
+                  e.target.style.height = `${e.target.scrollHeight}px`;
                 }}
+                onChange={(e) =>
+                  handleAnswerChange(currentQuestion.questionId, e.target.value)
+                }
               />
             </div>
           )}
 
           <div className="flex w-full">
-            {/* 이전 버튼: 첫 번째 문제일 때는 안 보이도록 설정 */}
             {currentQuestionIndex > 0 && (
               <button
                 className="flex px-6 py-1.5 my-4 text-[13px] text-[#838383] bg-[#E9E9E9] rounded-[5.95px]"
@@ -109,7 +235,6 @@ export default function QuizContent() {
               </button>
             )}
 
-            {/* "다음" 버튼은 오른쪽 끝에 위치 */}
             <button
               className="flex px-6 py-1.5 my-4 text-[13px] text-white bg-[#4881FF] rounded-[5.95px] ml-auto"
               onClick={goToNextQuestion}
@@ -118,6 +243,16 @@ export default function QuizContent() {
               다음
             </button>
           </div>
+
+          {/* 퀴즈 출제 버튼 */}
+          {currentQuestionIndex === quiz.questions.length - 1 && (
+            <button
+              className="mt-4 px-6 py-2 text-white bg-green-600 rounded-[6px]"
+              onClick={submitQuizToServer}
+            >
+              퀴즈 출제
+            </button>
+          )}
         </div>
       ) : (
         <p>모든 질문을 완료했습니다.</p>
