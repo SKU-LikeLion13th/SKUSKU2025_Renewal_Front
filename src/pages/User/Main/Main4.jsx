@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 export default function Main4() {
   const [selectedTrack, setSelectedTrack] = useState(null);
-  const containerRef = useRef(null); // 상세 화면 영역 참조
+  const containerRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -68,8 +68,10 @@ export default function Main4() {
     <div className="bg-[#121212] py-[8%] flex flex-col items-center transition-all duration-500 ease-in-out">
       {/* 상단 타이틀 영역 */}
       <div className="flex flex-col text-center justify-center">
-        <p className="text-[#3B79FF] fontBold text-[30px]">TRACKS</p>
-        <p className="fontThin text-[#ffffff] mt-8">
+        <p className="text-[#3B79FF] fontBold sm:text-[30px] text-[20px]">
+          TRACKS
+        </p>
+        <p className="fontThin text-[#ffffff] sm:mt-8 mt-2 sm:text-[18px] text-[9px]">
           멋쟁이사자처럼에서 각 트랙별로 세분화된 교육과 경험을 제공합니다.
         </p>
         <p

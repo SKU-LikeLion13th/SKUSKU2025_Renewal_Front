@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import { useState, useEffect } from "react";
 
 import User from "./routes/User";
@@ -8,32 +13,49 @@ import Header from "./components/Header";
 import HeaderMobile from "./components/HeaderMobile";
 import Footer from "./components/Footer";
 import CyberCampus from "./routes/CyberCampus";
+import CCHeader from "./components/CCHeader";
 
-function App() {
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 1000);
+function AppContent() {
+  const location = useLocation();
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1100);
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 1000);
-    };
-
+    const handleResize = () => setIsMobile(window.innerWidth < 1100);
     window.addEventListener("resize", handleResize);
-
-    // 초기 체크 + cleanup
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const path = location.pathname.toLowerCase();
+  const isCyberCampusOrAdmin =
+    path.startsWith("/cybercampus") || path.startsWith("/admin");
+
+  return (
+    <div className="App">
+      {isCyberCampusOrAdmin ? (
+        isMobile ? (
+          <HeaderMobile />
+        ) : (
+          <CCHeader />
+        )
+      ) : isMobile ? (
+        <HeaderMobile />
+      ) : (
+        <Header />
+      )}
+
+      <Routes>
+        <Route path="/CyberCampus/*" element={<CyberCampus />} />
+        <Route path="/Admin/*" element={<Admin />} />
+        <Route path="/*" element={<User />} />
+      </Routes>
+    </div>
+  );
+}
+
+function App() {
   return (
     <Router>
-      <div className="App">
-        {isMobile ? <HeaderMobile /> : <Header />}
-        <Routes>
-          <Route path="/*" element={<User />} />
-          <Route path="/CyberCampus/*" element={<CyberCampus />} />
-          <Route path="/Admin/*" element={<Admin />} />
-        </Routes>
-        {/* <Footer /> */}
-      </div>
+      <AppContent />
     </Router>
   );
 }
