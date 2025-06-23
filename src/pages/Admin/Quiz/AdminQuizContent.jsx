@@ -1,10 +1,21 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import API from '../../../utils/axios';
 
 export default function AdminQuizContent() {
   const [questionCount, setQuestionCount] = useState(1);
   const [questionTypes, setQuestionTypes] = useState([]);
   const [files, setFiles] = useState({});
+  const navigate = useNavigate();
+
+  const fileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
 
   const handleQuestionCountChange = (e) => {
     const value = parseInt(e.target.value, 10);
@@ -36,81 +47,73 @@ export default function AdminQuizContent() {
   };  
 
   const handleSubmit = async () => {
-    const title = document.querySelector("input[placeholder='제목을 입력해주세요.']").value;
-  
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("trackType", "BACKEND");
-  
-    const reviewQuizDTOList = [];
-  
-    questionTypes.forEach((type, index) => {
-      const content = document.querySelectorAll("input[placeholder='문제를 입력해주세요.']")[index]?.value || "";
-  
-      const quizData = {
-        quizType:
-          type === '객관식'
-            ? 'MULTIPLE_CHOICE'
-            : type === '주관식'
-            ? 'ESSAY_QUESTION'
-            : 'FILE_UPLOAD',
-        content: content,
-        answerChoiceList: [],
-        answer: "",
-        files: "",
-        explanation: ""
-      };
-  
-      // 객관식일 때 보기와 답 저장
-      if (type === '객관식') {
-        const choiceInputs = document.querySelectorAll(`input[name="answer-${index}"]`);
-        const textInputs = Array.from(choiceInputs).map((input) =>
-          input.parentElement.querySelector('input[type="text"]').value
-        );
-  
-        const selectedAnswer = Array.from(choiceInputs).find((input) => input.checked);
-        const answer = selectedAnswer ? textInputs[Array.from(choiceInputs).indexOf(selectedAnswer)] : "";
-  
-        quizData.answerChoiceList = textInputs;
-        quizData.answer = answer;
-      }
-  
-      // 파일첨부일 때 파일명 저장 & FormData에 파일 추가
-      if (type === '파일첨부') {
-        const fileList = files[index];
-        if (Array.isArray(fileList) && fileList.length > 0) {
-          quizData.files = fileList[0].name;
-  
-          fileList.forEach((file) => {
-            formData.append(`files-${index}`, file);
-          });
-        }
-      }
-  
-      reviewQuizDTOList.push(quizData);
-    });
-  
-    // JSON 형태로 DTO 리스트 추가 (Blob 쓰지 말고 문자열 바로 append)
-    formData.append("reviewQuizDTOList", JSON.stringify(reviewQuizDTOList));
-  
-    try {
-      const response = await API.post("/admin/reviewQuiz/add", formData, {
-        headers: {
-          // 'Content-Type'은 FormData 쓸 때 **절대 명시하지 말 것**
-          // axios가 boundary 자동 설정함
-        }
-      });
-  
-      if (response.status === 201 || response.status === 200) {
-        alert("퀴즈가 성공적으로 등록되었습니다.");
-      } else {
-        alert(`오류 발생: ${response.statusText}`);
-      }
-    } catch (err) {
-      alert("요청 실패: " + (err.response?.data?.message || err.message));
-      console.error("상세 오류:", err);
+  const title = document.querySelector("input[placeholder='제목을 입력해주세요.']").value;
+
+  const reviewQuizDTOList = [];
+
+  for (let index = 0; index < questionTypes.length; index++) {
+    const type = questionTypes[index];
+    const content = document.querySelectorAll("input[placeholder='문제를 입력해주세요.']")[index]?.value || "";
+
+    const quizData = {
+      quizType:
+        type === '객관식'
+          ? 'MULTIPLE_CHOICE'
+          : type === '주관식'
+          ? 'ESSAY_QUESTION'
+          : 'FILE_UPLOAD',
+      content: content,
+      answerChoiceList: [],
+      answer: "",
+      files: [],
+      explanation: ""
+    };
+
+    if (type === '객관식') {
+      const choiceInputs = document.querySelectorAll(`input[name="answer-${index}"]`);
+      const textInputs = Array.from(choiceInputs).map((input) =>
+        input.parentElement.querySelector('input[type="text"]').value
+      );
+
+      const selectedAnswer = Array.from(choiceInputs).find((input) => input.checked);
+      const answer = selectedAnswer ? textInputs[Array.from(choiceInputs).indexOf(selectedAnswer)] : "";
+
+      quizData.answerChoiceList = textInputs;
+      quizData.answer = answer;
     }
-  };    
+
+    if (type === '파일첨부') {
+      const fileList = files[index];
+      if (Array.isArray(fileList) && fileList.length > 0) {
+        const base64Files = await Promise.all(fileList.map((file) => fileToBase64(file)));
+        quizData.files = base64Files;
+      }
+    }
+
+    reviewQuizDTOList.push(quizData);
+  }
+
+  const payload = {
+    title: title,
+    trackType: 'BACKEND',
+    reviewQuizDTOList: reviewQuizDTOList
+  };
+
+  try {
+    const response = await API.post("/admin/reviewQuiz/add", payload);
+
+    if (response.status === 201 || response.status === 200) {
+      alert("퀴즈가 성공적으로 등록되었습니다.");
+      navigate('/admin/adminreview');
+    } else {
+      alert(`오류 발생: ${response.statusText}`);
+    }
+  } catch (err) {
+    alert("요청 실패: " + (err.response?.data?.message || err.message));
+    console.error("상세 오류:", err);
+  }
+};
+   
   
   const renderQuestionBlock = (index) => (
     <div key={index} className='flex flex-col px-25 py-20 bg-[#F6F6F6] border-[#232323] border-[0.5px] rounded-[15px] w-full mt-20'>
