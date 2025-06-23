@@ -31,9 +31,9 @@ const AdminCCLectureUpload = () => {
 
     try {
       // 1. presigned URL 요청
-      const presignedReqBody = files.map((fileObj) => ({
-        fileName: fileObj.file.name,
-        mimeType: fileObj.file.type,
+      const presignedReqBody = files.map(({ file }) => ({
+        fileName: file.name,
+        mimeType: file.type,
       }));
 
       const presignedRes = await axios.post(
@@ -41,6 +41,7 @@ const AdminCCLectureUpload = () => {
         presignedReqBody,
         { withCredentials: true }
       );
+      console.log(presignedRes.data);
 
       const presignedUrls = presignedRes.data;
 
@@ -52,13 +53,28 @@ const AdminCCLectureUpload = () => {
       );
       await Promise.all(uploadPromises);
 
+      const fileInfoList = presignedUrls.map((urlObj, idx) => {
+        const { type } = files[idx].file;
+        const [mainType, ext] = type.split("/");
+        return {
+          fileUrl: urlObj.cdnUrl,
+          fileName: files[idx].file.name,
+          fileType: `${ext.toUpperCase()}`, // 확장자만 대문자
+          fileSize: files[idx].file.size,
+          fileKey: urlObj.fileKey || urlObj.key || null,
+        };
+      });
+
+      console.log(fileInfoList);
       // 3. 강의 등록 요청
       const payload = {
         trackType: track.replace("-", "").toUpperCase(),
         title,
         content,
-        fileUrls: presignedUrls.map((urlObj) => urlObj.cdnUrl),
+        files: fileInfoList,
       };
+
+      console.log(JSON.stringify(payload, null, 2));
 
       const res = await API.post("/admin/lecture/add", payload, {
         headers: { "Content-Type": "application/json" },
@@ -108,17 +124,16 @@ const AdminCCLectureUpload = () => {
       </div>
 
       <div className="mb-8">
-        <h3 className="text-lg fontSB mb-4">파일 업로드</h3>
-        <FileUploader onUploadComplete={handleUploadComplete} error={error} />
-      </div>
+        <FileUploader onUploadComplete={handleUploadComplete} />
 
-      <div className="flex justify-end">
-        <button
-          onClick={handleSubmit}
-          className="px-6 py-2 bg-[#4881FF] text-white rounded-md"
-        >
-          등록하기
-        </button>
+        <div className="mt-12 text-right">
+          <button
+            onClick={handleSubmit}
+            className="px-6 py-2 bg-[#4881FF] text-white rounded-md"
+          >
+            등록하기
+          </button>
+        </div>
       </div>
 
       {error && <div className="text-red-500 mt-4">{error}</div>}
