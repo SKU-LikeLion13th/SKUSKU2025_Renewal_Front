@@ -1,3 +1,9 @@
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
+
 export default function Main3() {
   const programs = [
     {
@@ -45,6 +51,30 @@ export default function Main3() {
     },
   ];
 
+  const programRefs = useRef([]);
+
+  useEffect(() => {
+    programRefs.current.forEach((el, i) => {
+      if (!el) return;
+      gsap.fromTo(
+        el,
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          delay: i * 0.1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+    });
+  }, []);
+
   return (
     <div>
       {/* 소개 문구 */}
@@ -65,9 +95,10 @@ export default function Main3() {
           {programs.map((program, idx) => (
             <div
               key={idx}
+              ref={(el) => (programRefs.current[idx] = el)}
               className={`flex flex-col sm:flex-row items-center ${
                 idx % 2 === 1 ? "sm:flex-row-reverse" : ""
-              } gap-6 sm:gap-32`}
+              } gap-6 sm:gap-32 opacity-0`}
             >
               <img
                 src={program.img}

@@ -59,7 +59,7 @@ export default function CCHeader() {
               <div
                 key={index}
                 className={`fontMedium text-[16px] ${
-                  isHovered ? "text-[#fff]" : "text-white"
+                  isHovered ? "text-[#fff]" : "text-[#121212]"
                 } cursor-pointer relative`}
               >
                 {item.path ? (
