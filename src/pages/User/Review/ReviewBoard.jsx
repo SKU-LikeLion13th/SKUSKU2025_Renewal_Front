@@ -1,10 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API from "../../../utils/axios";
 
-const ReviewBoard = ({ quizzes }) => {
+const ReviewBoard = () => {
   const navigate = useNavigate();
   const headers = ["번호", "제목", "제출여부", "나의점수"];
   const flexValues = ["1", "7", "1", "1"];
+  const [quizzes, setQuizzes] = useState([]);
+
+  useEffect(() => {
+    const fetchQuizzes = async () => {
+      try {
+        const response = await API.get("/reviewWeek");
+        console.log("받아온 데이터:", response.data);
+
+        const quizList = response.data.map((quiz, index) => ({
+          Id: index + 1,
+          title: quiz.title,
+          score: quiz.score,
+          total: quiz.total,
+          IsSubmit: quiz.isSubmit,
+          reviewWeekId: quiz.reviewWeekId,
+        }));
+        setQuizzes(quizList);
+      } catch (error) {
+        console.error("데이터 가져오기 실패:", error);
+      }
+    };
+
+    fetchQuizzes();
+  }, []);
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -22,14 +47,14 @@ const ReviewBoard = ({ quizzes }) => {
 
       <div className="flex w-full min-h-[590px] flex-col">
         {quizzes.map((quiz) => (
-          <div key={quiz.Id} className="flex w-full border-b border-b-[#E0E0E0] p-2">
+          <div key={quiz.reviewWeekId} className="flex w-full border-b border-b-[#E0E0E0] p-2">
             <div className="flex justify-center px-1 text-[13.5px]" style={{ flex: flexValues[0] }}>
               {quiz.Id}
             </div>
             <div 
-              className="flex justify-start px-1 text-[13.5px]"
+              className="flex justify-start px-1 text-[13.5px] cursor-pointer"
               style={{ flex: flexValues[1] }}
-              onClick={() => navigate(`/quiz/${quiz.Id}`)}
+              onClick={() => navigate(`/quiz/${quiz.reviewWeekId}`)}
             >
               {quiz.title}
             </div>
