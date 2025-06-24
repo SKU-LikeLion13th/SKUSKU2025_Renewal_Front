@@ -21,8 +21,13 @@ const LectureTable = ({ data }) => {
                     {item.title}
                   </Link>
                 </td>
-                <td className="py-2 border-b-[0.5px]">
+                {/* <td className="py-2 border-b-[0.5px]">
                   {new Date(item.createDate).toISOString().split("T")[0]}
+                </td> */}
+                <td className="py-2 border-b-[0.5px]">
+                  {item.createDate && !isNaN(new Date(item.createDate))
+                    ? new Date(item.createDate).toLocaleDateString("ko-KR")
+                    : "-"}
                 </td>
               </tr>
             );

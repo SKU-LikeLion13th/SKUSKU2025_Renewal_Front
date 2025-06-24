@@ -26,23 +26,11 @@ function AppContent() {
   }, []);
 
   const path = location.pathname.toLowerCase();
-  const isCyberCampusOrAdmin =
-    path.startsWith("/cybercampus") || path.startsWith("/admin");
+  const isCyberCampus = path.startsWith("/cybercampus");
 
   return (
     <div className="App">
-      {isCyberCampusOrAdmin ? (
-        isMobile ? (
-          <HeaderMobile />
-        ) : (
-          <CCHeader />
-        )
-      ) : isMobile ? (
-        <HeaderMobile />
-      ) : (
-        <Header />
-      )}
-
+      {isCyberCampus ? <CCHeader /> : isMobile ? <HeaderMobile /> : <Header />}
       <Routes>
         <Route path="/CyberCampus/*" element={<CyberCampus />} />
         <Route path="/Admin/*" element={<Admin />} />

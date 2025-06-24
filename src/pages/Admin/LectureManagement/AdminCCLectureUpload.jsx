@@ -30,7 +30,7 @@ const AdminCCLectureUpload = () => {
     }
 
     try {
-      // 1. presigned URL 요청
+      // presigned URL 요청
       const presignedReqBody = files.map(({ file }) => ({
         fileName: file.name,
         mimeType: file.type,
@@ -45,7 +45,7 @@ const AdminCCLectureUpload = () => {
 
       const presignedUrls = presignedRes.data;
 
-      // 2. 실제 파일 S3에 업로드
+      // presigned URL로 S3에 직접 업로드 (uploadUrl로 PUT요청)
       const uploadPromises = files.map((fileObj, idx) =>
         axios.put(presignedUrls[idx].uploadUrl, fileObj.file, {
           headers: { "Content-Type": fileObj.file.type },
@@ -53,6 +53,7 @@ const AdminCCLectureUpload = () => {
       );
       await Promise.all(uploadPromises);
 
+      // 업로드된 파일 정보로 게시물 등록
       const fileInfoList = presignedUrls.map((urlObj, idx) => {
         const { type } = files[idx].file;
         const [mainType, ext] = type.split("/");
@@ -66,7 +67,7 @@ const AdminCCLectureUpload = () => {
       });
 
       console.log(fileInfoList);
-      // 3. 강의 등록 요청
+      // 강의 등록 요청
       const payload = {
         trackType: track.replace("-", "").toUpperCase(),
         title,
@@ -76,6 +77,7 @@ const AdminCCLectureUpload = () => {
 
       console.log(JSON.stringify(payload, null, 2));
 
+      // 업로드 완
       const res = await API.post("/admin/lecture/add", payload, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
