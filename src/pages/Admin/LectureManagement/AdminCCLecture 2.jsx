@@ -45,18 +45,35 @@ const AdminCCLecture = () => {
     });
   };
 
+  // const handleDelete = async () => {
+  //   try {
+  //     await Promise.all(
+  //       selectedItems.map((id) => API.delete(`/admin/lecture/${id}`))
+  //     );
+  //     const updated = data.filter((item) => !selectedItems.includes(item.id));
+  //     setData(updated);
+  //     setAllData(updated);
+  //     setSelectedItems([]);
+  //     alert("선택한 강의자료가 삭제되었습니다.");
+  //   } catch (error) {
+  //     console.error("삭제 중 오류 발생:", error);
+  //     alert("삭제 중 오류가 발생했습니다.");
+  //   }
+  // };
+
   const handleDelete = async () => {
     try {
       await Promise.all(
         selectedItems.map((id) => API.delete(`/admin/lecture/${id}`))
       );
+
       const updated = data.filter((item) => !selectedItems.includes(item.id));
       setData(updated);
       setAllData(updated);
       setSelectedItems([]);
       alert("선택한 강의자료가 삭제되었습니다.");
     } catch (error) {
-      console.error("삭제 중 오류 발생:", error);
+      console.error("삭제 중 오류 발생:", error.response?.data || error);
       alert("삭제 중 오류가 발생했습니다.");
     }
   };
