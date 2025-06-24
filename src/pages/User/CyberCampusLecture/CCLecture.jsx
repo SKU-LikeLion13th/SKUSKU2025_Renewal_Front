@@ -4,7 +4,7 @@ import API from "../../../utils/axios";
 import LectureControls from "../../Admin/LectureManagement/LectureControls";
 import LectureTable from "./LectureTable";
 
-const CyberCampusLecture = () => {
+const CCLecture = () => {
   const { track } = useParams();
   const trackParam = track.replace("-", "").toUpperCase();
   const [allData, setAllData] = useState([]);
@@ -77,4 +77,4 @@ const CyberCampusLecture = () => {
   );
 };
 
-export default CyberCampusLecture;
+export default CCLecture;

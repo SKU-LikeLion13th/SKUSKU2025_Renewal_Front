@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+// import CCLecture from "../pages/User/CyberCampusLecture/CCLecture";
 import CCLecture from "../pages/User/CyberCampusLecture/CCLecture";
 import LectureDetail from "../pages/User/CyberCampusLecture/LectureDetail";
 import CyberCampusIntro from "../pages/User/CyberCampus/CyberCampusMain/CyberCampusIntro";
