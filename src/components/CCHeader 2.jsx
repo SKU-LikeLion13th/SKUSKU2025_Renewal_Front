@@ -38,14 +38,14 @@ export default function CCHeader() {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="flex md:py-5 py-3 md:px-12 px-6 items-center justify-between mx-auto relative z-10 shadow-[0px_0.5px_0px_0px_rgba(217,217,217,1)] ">
+      <div className="flex py-5 px-12 items-center justify-between mx-auto relative z-10 shadow-[0px_0.5px_0px_0px_rgba(217,217,217,1)] ">
         {/* 왼쪽 로고 + 메뉴 */}
         <div className="flex space-x-12">
           <Link to={"/"}>
-            <div className="flex items-center md:space-x-4 space-x-2">
-              <img src="/likelionLogo.png" alt="Logo" className="md:w-9 w-6" />
+            <div className="flex items-center space-x-4">
+              <img src="/likelionLogo.png" alt="Logo" className="w-9" />
               <p
-                className={`md:text-[21px] text-[16px] fontBlack ${
+                className={`text-[21px] fontBlack ${
                   isHovered ? "text-[#fff]" : "text-[#3B79FF]"
                 }`}
               >
@@ -54,13 +54,12 @@ export default function CCHeader() {
             </div>
           </Link>
 
-          {/* 메뉴 (모바일에서는 숨김) */}
-          <div className="hidden md:flex items-center space-x-4 sm:space-x-6 md:space-x-8 lg:space-x-12 xl:space-x-16">
+          <div className="flex items-center space-x-16">
             {menuItems.map((item, index) => (
               <div
                 key={index}
                 className={`fontMedium text-[16px] ${
-                  isHovered ? "text-[#fff]" : "text-white"
+                  isHovered ? "text-[#fff]" : "text-[#121212]"
                 } cursor-pointer relative`}
               >
                 {item.path ? (
@@ -95,7 +94,7 @@ export default function CCHeader() {
         </div>
 
         {/* 오른쪽 로그인 및 버튼 */}
-        <div className="hidden md:flex space-x-4 items-center ">
+        <div className="flex space-x-4 items-center">
           {/* Hover 시에만 보임 */}
           <div
             className={`transition-opacity duration-300 space-x-4 ${
