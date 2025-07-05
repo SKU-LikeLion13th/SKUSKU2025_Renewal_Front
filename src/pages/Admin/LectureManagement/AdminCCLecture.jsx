@@ -22,6 +22,7 @@ const AdminCCLecture = () => {
         const response = await API.get(`/lecture/all/${trackParam}`, {
           withCredentials: true,
         });
+        console.log("강의 전체 데이터:", response.data);
         setAllData(response.data);
         setData(response.data);
       } catch (err) {
@@ -47,8 +48,21 @@ const AdminCCLecture = () => {
 
   const handleDelete = async () => {
     try {
+      // await Promise.all(
+      //   selectedItems.map((id) => API.delete(`/admin/lecture/${id}`))
+      // );
       await Promise.all(
-        selectedItems.map((id) => API.delete(`/admin/lecture/${id}`))
+        selectedItems.map((id) => {
+          const lecture = data.find((item) => item.id === id);
+          console.log("lecture 객체 확인:", lecture);
+          const fileKey = lecture?.files?.[0]?.fileKey;
+          // console.log(`삭제 요청 - ID: ${id}, fileKey: ${lecture.fileKey}`);
+          console.log("fileKey: ", fileKey);
+
+          return API.delete(`/admin/lecture/${id}`, {
+            data: { fileKey }, // 요청 본문에 fileKey 포함
+          });
+        })
       );
       const updated = data.filter((item) => !selectedItems.includes(item.id));
       setData(updated);
