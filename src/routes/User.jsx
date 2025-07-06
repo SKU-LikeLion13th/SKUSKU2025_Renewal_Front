@@ -14,10 +14,7 @@ const User = () => {
       <Route path="review" element={<Review />} />
       <Route path="/quiz/:quizId" element={<Quiz />} />
       <Route path="/assignment" element={<AssignmentMain />} />
-      <Route
-        path="/assignment/essay-assignment"
-        element={<EssayAssignmentSubmit />}
-      />
+      <Route path="/assignment/essay" element={<EssayAssignmentSubmit />} />
       <Route path="/project" element={<Project />} />
       <Route path="/team" element={<TeamPage />} />
     </Routes>

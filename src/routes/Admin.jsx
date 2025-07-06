@@ -7,6 +7,8 @@ import AddAssignment from "../pages/Admin/Assignment/AddAssignment";
 import AdminCCLecture from "../pages/Admin/LectureManagement/AdminCCLecture";
 import AdminCCLectureUpload from "../pages/Admin/LectureManagement/AdminCCLectureUpload";
 import AdminCCLectureEdit from "../pages/Admin/LectureManagement/AdminCCLectureEdit";
+import AdminProject from "../pages/Admin/Project/AdminProject";
+import AddProject from "../pages/Admin/Project/AddProject";
 
 const Admin = () => {
   return (
@@ -14,8 +16,8 @@ const Admin = () => {
       <Route path="/main" element={<AdminMain />} />
       <Route path="/adminReview" element={<AdminReview />} />
       <Route path="/adminQuiz" element={<AdminQuiz />} />
-      <Route path="/admin-assignment" element={<AdminAssignmentMain />} />
-      <Route path="/add-assignment" element={<AddAssignment />} />
+      <Route path="/assignment" element={<AdminAssignmentMain />} />
+      <Route path="/assignment/add" element={<AddAssignment />} />
       <Route path="/LectureManagement/:track" element={<AdminCCLecture />} />
       <Route
         path="/LectureManagement/:track/LectureUpload"
@@ -25,6 +27,8 @@ const Admin = () => {
         path="/LectureManagement/:track/LectureEdit/:lectureId"
         element={<AdminCCLectureEdit />}
       />
+      <Route path="/project" element={<AdminProject />} />
+      <Route path="/project/add" element={<AddProject />} />
     </Routes>
   );
 };

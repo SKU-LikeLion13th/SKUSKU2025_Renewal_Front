@@ -1,6 +1,8 @@
 import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function AddAssignment() {
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [fileFormat, setFileFormat] = useState("Subjective"); // 주관식 or 파일첨부
@@ -229,7 +231,10 @@ export default function AddAssignment() {
               <div className="my-10 flex justify-end gap-4 w-full">
                 <button
                   type="button"
-                  className="min-w-25 py-1.5 cursor-pointer text-[#838383] bg-[#E9E9E9] rounded-md">
+                  className="min-w-25 py-1.5 cursor-pointer text-[#838383] bg-[#E9E9E9] rounded-md"
+                  onClick={() => {
+                    navigate(-1);
+                  }}>
                   나가기
                 </button>
                 <button

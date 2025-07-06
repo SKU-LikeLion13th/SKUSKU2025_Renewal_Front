@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import { FiHome } from "react-icons/fi";
 import AdminAssignmentBoard from "./AdminAssignmentBoard";
 import AdminAssignmentControl from "./AdminAssignmentControl";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminAssignmentMain() {
+  const navigate = useNavigate();
   const [assignments, setAssignments] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [allSelected, setAllSelected] = useState(false);
@@ -72,7 +74,7 @@ export default function AdminAssignmentMain() {
 
   // 과제 등록 페이지로 이동
   const handleCreateAssignment = () => {
-    alert("과제 등록 페이지로 이동합니다.");
+    navigate("/admin/assignment/add");
   };
 
   // 과제 수정 기능 추가
