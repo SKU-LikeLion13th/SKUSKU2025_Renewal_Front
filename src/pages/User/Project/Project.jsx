@@ -70,7 +70,7 @@ export default function Project() {
 
   return (
     <div className="min-h-screen mx-auto bg-black">
-      <div className="w-4/5 mx-auto pt-50">
+      <div className="w-4/5 mx-auto pt-40">
         {/* 제목 */}
         <div className="pb-4 mx-auto text-center font-extrabold md:w-fit md:pb-12 md:pr-20 md:border-b-2 md:text-start md:mx-0">
           <div className="text-[40px] text-[#3B79FF]">LIKELION</div>
