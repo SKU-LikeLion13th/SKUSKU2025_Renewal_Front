@@ -14,7 +14,7 @@ const ReviewBoard = () => {
         const response = await API.get("/reviewWeek");
         console.log("받아온 데이터:", response.data);
 
-        const quizList = response.data.map((quiz, index) => ({
+        const quizList = response.data.data.map((quiz, index) => ({
           Id: index + 1,
           title: quiz.title,
           score: quiz.score,
