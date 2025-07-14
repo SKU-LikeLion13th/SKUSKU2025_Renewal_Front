@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import TaskCard from "./TaskCard";
 import images from "../../../../utils/images.jsx";
 
@@ -32,27 +33,49 @@ const trackInfo = {
     buttonColor: "#0AA678",
     backgroundImage: images.BackEndBg,
     cardColors: ["#0AA678", "#4F9B84", "#1CC694"],
+    urlName: "Back-end",
   },
   프론트엔드: {
     name: "FRONT-END",
     buttonColor: "#F6701D",
     backgroundImage: images.FrontEndBg,
     cardColors: ["#EB6918", "#E77731", "#F88A46"],
+    urlName: "Front-end",
   },
   디자인: {
     name: "DESIGN",
     buttonColor: "#FC6163",
     backgroundImage: images.DesignBg,
     cardColors: ["#FA5558", "#E67678", "#FF8282"],
+    urlName: "Design",
   },
 };
 
 
 const IntroPart2 = () => {
+  const navigate = useNavigate();
+
   const [selectedTrack, setSelectedTrack] = useState(null);
   const currentTrack = trackInfo[selectedTrack];
 
   const backgroundImage = currentTrack?.backgroundImage || images.part2bg;
+
+  const handleCardClick = (cardId) => {
+    if (!selectedTrack) return;
+
+    const urlTrack = trackInfo[selectedTrack].urlName;
+    let path = "";
+
+    if (cardId === "01") {
+      path = `/cybercampus/assignment/${urlTrack}`;
+    } else if (cardId === "02") {
+      path = `/cybercampus/lecture/${urlTrack}`;
+    } else if (cardId === "03") {
+      path = `/cybercampus/review/${urlTrack}`;
+    }
+
+    navigate(path);
+  };
 
 
   return (
@@ -137,6 +160,7 @@ const IntroPart2 = () => {
                   ? trackInfo[selectedTrack].cardColors[idx] // 트랙 선택 후
                   : "#7f7f7f" // 트랙 선택 전
               }
+              onClick={() => handleCardClick(c.id)}
             />
           ))}
         </div>
