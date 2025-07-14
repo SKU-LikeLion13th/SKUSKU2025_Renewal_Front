@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const TaskCard = ({ id, title, subtitle, icon, hovercolor, defaultcolor }) => {
+const TaskCard = ({ id, title, subtitle, icon, hovercolor, defaultcolor, onClick }) => {
   const [isHovered, setIsHovered] = useState(false);
   const imgSizeClass = id === "02" ? "w-[18px] mb-1" : "w-8";
 
@@ -9,7 +9,8 @@ const TaskCard = ({ id, title, subtitle, icon, hovercolor, defaultcolor }) => {
       <div
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className="w-46 h-58 rounded-[19px] p-7 flex flex-col transition-colors duration-200"
+        onClick={onClick}
+        className="w-46 h-58 rounded-[19px] p-7 flex flex-col transition-colors duration-200 cursor-pointer"
         style={{
           backgroundColor: isHovered ? hovercolor : defaultcolor,
         }}
