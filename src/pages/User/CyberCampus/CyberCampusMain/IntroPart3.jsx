@@ -1,5 +1,6 @@
 import React from "react";
 import images from "../../../../utils/images.jsx";
+import Calendar from "./CC_Calendar.jsx";
 
 const IntroPart3 = () => {
   return (
@@ -24,11 +25,19 @@ const IntroPart3 = () => {
             </p>
           </div>
           <div className="flex">
-            <img src={images.chart} className="w-28 h-auto object-contain mr-10"/>
-            <img src={images.bell} className="w-32 h-auto object-contain pt-20"/>
+            <img
+              src={images.chart}
+              className="w-28 h-auto object-contain mr-10"
+            />
+            <img
+              src={images.bell}
+              className="w-32 h-auto object-contain pt-20"
+            />
           </div>
         </div>
-        <div>캘린더가~들어올거야~</div>
+        <div className="mb-15">
+          <Calendar />
+        </div>
       </div>
     </div>
   );
