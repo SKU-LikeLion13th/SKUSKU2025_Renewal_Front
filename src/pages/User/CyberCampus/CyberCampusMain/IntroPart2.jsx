@@ -119,7 +119,7 @@ const IntroPart2 = () => {
             <button
               key={track}
               onClick={() => setSelectedTrack(track)}
-              className={`text-sm px-6 py-[5px] rounded-3xl transition
+              className={`cursor-pointer text-sm px-6 py-[5px] rounded-3xl transition
                 ${selectedTrack === track ? `text-white` : "text-[#c4c4c4]"}`}
               style={{
                 backgroundColor:
