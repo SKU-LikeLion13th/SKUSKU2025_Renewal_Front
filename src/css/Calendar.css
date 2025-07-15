@@ -1,30 +1,58 @@
+/* 캘린더 전체 */
 .react-calendar {
   max-width: 100%;
+  width: 90%;
   font-family: 'Pretendard-Regular', sans-serif;
   height: auto;
-  width: 90%;
 }
 
 .react-calendar *,
 .react-calendar *:before,
 .react-calendar *:after {
   font-family: 'Pretendard-Regular', sans-serif;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
 
-/*일 사이에 선 넣기*/
+/* 날짜 칸 사이 선 */
 .react-calendar button {
   margin: 0;
   border: 0;
   border-top: 1px solid #B7B7B7;
-  border-left : 1px solid #B7B7B7;
+  border-left: 1px solid #B7B7B7;
 }
 
-/*일요일 왼쪽 선 없애기*/
+/* 일요일 왼쪽 선 제거 */
 .react-calendar__month-view__days__day:nth-child(7n+1) {
   border-left: none;
+}
+
+/* 마지막 주 하단 선 추가 */
+.react-calendar__month-view__days__day:nth-last-child(-n+7) {
+  border-bottom: 1px solid #B7B7B7;
+}
+
+/* 네비게이션 */
+.react-calendar__navigation {
+  display: flex;
+  justify-content: flex-start;
+  height: 44px;
+  margin-bottom: 1em;
+}
+
+.react-calendar__navigation button {
+  border: none;
+  outline: none;
+  background: none;
+}
+
+.react-calendar__navigation__label {
+  font-size: 22px;
+  font-weight: bold;
+  /*최대한 안 하고 싶었는데, html 따로 지정해준 코드 못찾음*/
+  flex-grow: 0 !important;
+  /*작동이 이상하게 돼서 클릭 막음*/
+  pointer-events: none;
+  cursor: default;
 }
 
 /*월 이동할때 테두리 없애기*/
@@ -39,26 +67,11 @@
   cursor: pointer;
 }
 
-/*년도, 월 네비게이션*/
-.react-calendar__navigation {
-  display: flex;
-  justify-content: flex-start;
-  height: 44px;
-  margin-bottom: 1em;
-}
-
-.react-calendar__navigation__label {
-  font-size: 22px;
-  font-weight: bold;
-  /*최대한 안 하고 싶었는데, html 따로 지정해준 걸 못찾음*/
-  flex-grow:0 !important;
-}
-
 .my-custom-label{
   margin: 0 20px 0 20px;
 }
 
-/*요일*/
+/* 요일 */
 .react-calendar__month-view__weekdays__weekday {
   display: flex;
   justify-content: center;
@@ -66,59 +79,99 @@
   font-size: 0.75rem;
   color: #9E9E9E;
   font-family: 'Pretendard-Medium', sans-serif;
-  height: 5em; 
+  height: 5em;
   padding: 0;
   margin: 0;
 }
+
 .react-calendar__month-view__weekdays__weekday abbr {
   display: block;
-  line-height: 3;  
+  text-decoration: none;
+  border-bottom: none;
+  cursor: default;
+  line-height: 3;
   margin: 0;
   padding: 0;
 }
 
-/*요일 아래에 자꾸 밑줄이*/
-.react-calendar__month-view__weekdays__weekday abbr {
-  text-decoration: none;   
-  border-bottom: none;     
-  cursor: default;   
-}
-
-/*일*/
-/*일요일 빨갛게*/
+/* 주말 빨갛게 */
 .react-calendar__month-view__days__day--weekend {
   color: #d10000;
 }
-/*지난 or 다음달 일들 흐리게*/
+
+/* 이전/다음 달 흐리게 */
 .react-calendar__month-view__days__day--neighboringMonth,
 .react-calendar__decade-view__years__year--neighboringDecade,
 .react-calendar__century-view__decades__decade--neighboringCentury {
   color: #7F7F7F;
 }
 
+/* 날짜 타일 (숫자 + 일정 수직 배치) */
 .react-calendar__tile {
   display: flex;
-  justify-content: flex-start;  
-  align-items: flex-start;    
-  padding: 15px;      
-}
-.react-calendar__tile abbr {
-  display: inline-block;    
-  align-self: flex-start;
-  margin-top: 0;
-  margin-left: 0;
-  height: 6em;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding: 8px;
+  height: 130px;
 }
 
-/*오늘은 며칠?*/
-/* 오늘 날짜 스타일 */
+/* 날짜 숫자 */
+.react-calendar__tile abbr {
+  display: block;
+  text-align: left;
+  margin-bottom: 5px;
+}
+
+/* 오늘 날짜 - 동그라미 */
 .react-calendar__tile--now abbr {
-  background-color: #3B79FF; 
-  color: white;              
-  border-radius: 50%;     
+  background-color: #3B79FF;
+  color: white;
+  border-radius: 50%;
   width: 1.7em;
   height: 1.7em;
   display: flex;
-  justify-content: center; 
-  align-items: center;      
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+/* 일정 컨테이너 */
+.events-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 5px;
+  flex-grow: 1;
+}
+
+/* 일정 배지 */
+.event-badge {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  font-size: 0.8rem;
+  color: #333;
+  padding: 4px 6px;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 600;
+  word-break: keep-all;
+}
+
+.has-events {
+  position: relative; 
+}
+
+.has-events::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-top: 15px solid #3B79FF;     
+  border-left: 15px solid transparent; 
 }
