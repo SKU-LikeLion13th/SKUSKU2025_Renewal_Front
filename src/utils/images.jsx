@@ -10,6 +10,7 @@ const images = {
   introimg1 : `${PATH}assets/images/CCIntro/introimg1.png`,
   introimg2 : `${PATH}assets/images/CCIntro/introimg2.png`,
   introimg3 : `${PATH}assets/images/CCIntro/introimg3.png`,
+  Ellipse : `${PATH}assets/images/CCIntro/Ellipse.png`,
   //part2bg
   part2bg: `${PATH}assets/images/CCIntro/part2bg.png`,
   FrontEndBg: `${PATH}assets/images/CCIntro/FrontEndBg.png`,

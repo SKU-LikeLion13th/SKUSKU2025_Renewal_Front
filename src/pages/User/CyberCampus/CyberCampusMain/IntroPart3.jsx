@@ -16,27 +16,27 @@ const IntroPart3 = () => {
         alt="background"
         className="absolute inset-0 w-[12%] top-[50%] -z-20"
       />
-      <div className="w-[90%] flex-col justify-center">
-        <div className="flex justify-between items-center mx-10">
-          <div className="title flex flex-col items-start">
-            <p className="text-2xl fontBold mb-1">멋쟁이사자처럼 13기</p>
-            <p className="text-2xl fontBold">
+      <div className="w-full sm:w-[90%] flex-col justify-center">
+        <div className="flex justify-between items-center mx-4 sm:mx-10">
+          <div className="title flex flex-col items-start mx-1">
+            <p className="text-[clamp(15px,5vw,25px)] fontBold mb-1">멋쟁이사자처럼 13기</p>
+            <p className="text-[clamp(15px,5vw,25px)] fontBold">
               <span className="text-[#1f65ff]">일정</span>을 알려드릴게요
             </p>
           </div>
           <div className="flex">
             <img
               src={images.chart}
-              className="w-28 h-auto object-contain mr-10"
+              className="w-15 md:w-28 h-auto object-contain md:mr-10"
             />
             <img
               src={images.bell}
-              className="w-32 h-auto object-contain pt-20"
+              className="w-15 md:w-32 h-auto object-contain pt-20"
             />
           </div>
         </div>
         <div className="mb-15">
-          <Calendar />
+          <Calendar /> 
         </div>
       </div>
     </div>
