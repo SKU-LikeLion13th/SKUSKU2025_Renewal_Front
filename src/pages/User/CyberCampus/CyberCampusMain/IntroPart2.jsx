@@ -51,7 +51,6 @@ const trackInfo = {
   },
 };
 
-
 const IntroPart2 = () => {
   const navigate = useNavigate();
 
@@ -76,7 +75,6 @@ const IntroPart2 = () => {
 
     navigate(path);
   };
-
 
   return (
     <div className="relative min-h-screen w-full flex flex-col justify-center items-center">
@@ -107,8 +105,8 @@ const IntroPart2 = () => {
             </>
           ) : (
             <>
-              <p className="text-3xl mb-1 fontBold">환영합니다!</p>
-              <p className="text-3xl fontBold">
+              <p className="text-xl md:text-3xl mb-1 fontBold">환영합니다!</p>
+              <p className="text-xl md:text-3xl fontBold">
                 <span className="text-[#1f65ff]">트랙</span> 을 선택해주세요.
               </p>
             </>
@@ -119,7 +117,7 @@ const IntroPart2 = () => {
             <button
               key={track}
               onClick={() => setSelectedTrack(track)}
-              className={`cursor-pointer text-sm px-6 py-[5px] rounded-3xl transition
+              className={`cursor-pointer text-[10px] md:text-sm px-4 md:px-6 py-[5px] rounded-3xl transition
                 ${selectedTrack === track ? `text-white` : "text-[#c4c4c4]"}`}
               style={{
                 backgroundColor:
@@ -135,14 +133,14 @@ const IntroPart2 = () => {
         {currentTrack ? (
           <div className="m-[26px]"></div>
         ) : (
-          <p className="text-sm">
+          <p className="text-xs md:text-sm">
             <span className="text-[#1f65ff]">트랙 선택 후</span> 서비스 이용이
             가능합니다.
           </p>
         )}
 
         {/*위 선택한 트랙의 어디로 갈래?*/}
-        <div className="flex gap-20">
+        <div className="flex gap-4 sm:gap-8 md:gap-20">
           {baseCards.map((c, idx) => (
             <TaskCard
               key={c.id}
