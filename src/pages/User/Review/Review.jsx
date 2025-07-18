@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from "react-router-dom";
 import ReviewLocation from './ReviewLocation';
 import ReviewBoard from './ReviewBoard';
 import ReviewSearch from './ReviewSearch';
@@ -10,6 +11,7 @@ export default function Review() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [quizzes, setQuizzes] = useState([]);
+  const { trackType } = useParams();
 
   useEffect(() => {
     setQuizzes(quizData);
@@ -44,7 +46,7 @@ export default function Review() {
         </div>
 
         <div className='flex justify-center w-full mt-14'>
-          <ReviewBoard quizzes={currentPosts} />
+          <ReviewBoard quizzes={currentPosts} trackType={trackType} />
         </div>
 
         <div className='flex w-full'>

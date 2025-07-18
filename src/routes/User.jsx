@@ -11,8 +11,6 @@ const User = () => {
   return (
     <Routes>
       <Route path="/" element={<Main />} />
-      <Route path="review" element={<Review />} />
-      <Route path="/quiz/:quizId" element={<Quiz />} />
       <Route path="/assignment" element={<AssignmentMain />} />
       <Route path="/assignment/essay" element={<EssayAssignmentSubmit />} />
       <Route path="/project" element={<Project />} />

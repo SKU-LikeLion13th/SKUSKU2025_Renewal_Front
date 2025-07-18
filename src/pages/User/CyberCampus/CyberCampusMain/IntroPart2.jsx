@@ -29,25 +29,25 @@ const baseCards = [
 
 const trackInfo = {
   백엔드: {
-    name: "BACK-END",
+    name: "Back-end",
     buttonColor: "#0AA678",
     backgroundImage: images.BackEndBg,
     cardColors: ["#0AA678", "#4F9B84", "#1CC694"],
-    urlName: "Back-end",
+    urlName: "BACKEND",
   },
   프론트엔드: {
-    name: "FRONT-END",
+    name: "Front-end",
     buttonColor: "#F6701D",
     backgroundImage: images.FrontEndBg,
     cardColors: ["#EB6918", "#E77731", "#F88A46"],
-    urlName: "Front-end",
+    urlName: "FRONTEND",
   },
   디자인: {
-    name: "DESIGN",
+    name: "Design",
     buttonColor: "#FC6163",
     backgroundImage: images.DesignBg,
     cardColors: ["#FA5558", "#E67678", "#FF8282"],
-    urlName: "Design",
+    urlName: "DESIGN",
   },
 };
 
