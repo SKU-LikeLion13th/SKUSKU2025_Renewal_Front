@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../../../utils/axios";
 
-const ReviewBoard = () => {
+const ReviewBoard = ({ trackType }) => {
   const navigate = useNavigate();
   const headers = ["번호", "제목", "제출여부", "나의점수"];
   const flexValues = ["1", "7", "1", "1"];
@@ -11,10 +11,10 @@ const ReviewBoard = () => {
   useEffect(() => {
     const fetchQuizzes = async () => {
       try {
-        const response = await API.get("/reviewWeek");
+        const response = await API.get(`/reviewWeek/${trackType}`);
         console.log("받아온 데이터:", response.data);
 
-        const quizList = response.data.data.map((quiz, index) => ({
+        const quizList = response.data.map((quiz, index) => ({
           Id: index + 1,
           title: quiz.title,
           score: quiz.score,
@@ -22,14 +22,17 @@ const ReviewBoard = () => {
           IsSubmit: quiz.isSubmit,
           reviewWeekId: quiz.reviewWeekId,
         }));
+
         setQuizzes(quizList);
       } catch (error) {
         console.error("데이터 가져오기 실패:", error);
       }
     };
 
-    fetchQuizzes();
-  }, []);
+    if (trackType) {
+      fetchQuizzes(); // 함수에 파라미터 직접 넘기지 않아도 됨 (useEffect에서 접근 가능)
+    }
+  }, [trackType]); // trackType이 바뀌면 다시 호출됨
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -54,11 +57,16 @@ const ReviewBoard = () => {
             <div 
               className="flex justify-start px-1 text-[13.5px] cursor-pointer"
               style={{ flex: flexValues[1] }}
-              onClick={() => navigate(`/quiz/${quiz.reviewWeekId}`)}
+              onClick={() => navigate(`/cybercampus/quiz/${quiz.reviewWeekId}`)}
             >
               {quiz.title}
             </div>
-            <div className={`flex justify-center px-1 text-[13.5px] ${quiz.IsSubmit === "제출" ? "text-[#3B79FF] font-bold" : ""}`} style={{ flex: flexValues[2] }}>
+            <div
+              className={`flex justify-center px-1 text-[13.5px] ${
+                quiz.IsSubmit === "제출" ? "text-[#3B79FF] font-bold" : ""
+              }`}
+              style={{ flex: flexValues[2] }}
+            >
               {quiz.IsSubmit}
             </div>
             <div className="flex justify-center px-1 text-[13.5px]" style={{ flex: flexValues[3] }}>
