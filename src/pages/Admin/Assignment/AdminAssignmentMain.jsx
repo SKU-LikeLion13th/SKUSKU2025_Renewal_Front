@@ -19,10 +19,13 @@ export default function AdminAssignmentMain() {
   useEffect(() => {
     const assignmentList = async () => {
       try {
+        console.log(`/assignment/${track}`);
         const response = await API.get(`/assignment/${track}`);
         console.log("과제 데이터:", response.data);
       } catch (error) {
         console.error("과제 데이터를 불러오는 데 실패했습니다:", error);
+        console.error("상태 코드:", error.response?.status);
+        console.error("에러 메시지:", error.response?.data);
       }
     };
 
