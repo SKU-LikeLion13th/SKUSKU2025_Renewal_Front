@@ -1,32 +1,54 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import API from "../../../utils/axios";  // axios 인스턴스 임포트
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "../../../utils/axios";
 
 const AdminReviewBoard = () => {
-  const headers = ["번호", "제목", "수정", "선택"];
+  const { trackType } = useParams();
+  const headers = ["번호", "제목", "수정", "삭제"];
   const flexValues = ["1", "7", "1", "1"];
   const navigate = useNavigate();
 
-  const [isChecked, setIsChecked] = useState(false);
   const [ReviewQuizList, setReviewQuizList] = useState([]);
 
-  const handleCheckboxChange = (e) => {
-    setIsChecked(e.target.checked);
-  };
-
   useEffect(() => {
-  const fetchReviewQuiz = async () => {
+    const fetchReviewQuizzes = async () => {
+      try {
+        const response = await axios.get(`/reviewWeek/${trackType}`);
+        console.log("받아온 데이터:", response);
+
+        const quizList = response.data.map((quiz, index) => ({
+          Id: index + 1,
+          title: quiz.title,
+          score: quiz.score,
+          total: quiz.total,
+          IsSubmit: quiz.isSubmit,
+          reviewWeekId: quiz.reviewWeekId,
+        }));
+
+        setReviewQuizList(quizList);
+      } catch (error) {
+        console.error("리뷰 퀴즈 불러오기 실패:", error);
+      }
+    };
+
+    if (trackType) {
+      fetchReviewQuizzes();
+    }
+  }, [trackType]);
+
+  const handleDelete = async (weekId) => {
+    const confirmed = window.confirm("정말 삭제하시겠습니까?");
+    if (!confirmed) return;
+
     try {
-      const res = await API.get("/admin/reviewQuiz");
-      console.log("데이터:", res.data);
-      setReviewQuizList(res.data);
-    } catch (err) {
-      console.error("리뷰 퀴즈 불러오기 실패:", err);
+      await axios.delete(`/admin/reviewQuiz/delete/${weekId}`);
+      setReviewQuizList((prevList) => prevList.filter(item => item.reviewWeekId !== weekId));
+      alert("삭제가 완료되었습니다.");
+    } catch (error) {
+      console.error("삭제 실패:", error);
+      alert("삭제 중 오류가 발생했습니다.");
     }
   };
-
-  fetchReviewQuiz();
-}, []);
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -47,7 +69,7 @@ const AdminReviewBoard = () => {
           ReviewQuizList.map((item, idx) => (
             <div
               key={item.reviewWeekId}
-              className="flex w-full border-b border-b-[#E0E0E0] p-2"
+              className="flex w-full border-b border-b-[#E0E0E0] p-2 items-center"
             >
               <div
                 className="flex justify-center px-1 text-[13.5px]"
@@ -59,6 +81,7 @@ const AdminReviewBoard = () => {
               <div
                 className="flex justify-start px-1 text-[13.5px]"
                 style={{ flex: flexValues[1] }}
+                onClick={() => navigate(`/admin/reviewUpdate/${trackType}/${item.reviewWeekId}`)}
               >
                 {item.title}
               </div>
@@ -66,15 +89,17 @@ const AdminReviewBoard = () => {
               <div
                 className="flex justify-center px-1 text-[13.5px]"
                 style={{ flex: flexValues[2] }}
+                onClick={() => navigate(`/admin/reviewUpdate/${trackType}/${item.reviewWeekId}`)}
               >
                 수정
               </div>
 
               <div
-                className="flex justify-center px-1 text-[13.5px]"
+                className="flex justify-center px-1 text-[13.5px] text-red-600 cursor-pointer underline"
                 style={{ flex: flexValues[3] }}
+                onClick={() => handleDelete(item.reviewWeekId)}
               >
-                <input type="checkbox" onChange={handleCheckboxChange} />
+                삭제
               </div>
             </div>
           ))
@@ -87,22 +112,9 @@ const AdminReviewBoard = () => {
         <div className="flex justify-between w-full mt-10 text-[14px] fontLight">
           <div
             className="flex bg-[#3B79FF] text-white px-4 py-1.5 rounded-[5.95px] cursor-pointer"
-            onClick={() => navigate("/admin/adminQuiz")}
+            onClick={() => navigate(`/admin/adminQuiz/${trackType}`)}
           >
             문제 등록
-          </div>
-
-          <div className="flex">
-            <div className="flex bg-[#E9E9E9] text-[#838383] px-4 py-1.5 rounded-[5.95px] cursor-pointer">
-              전체 선택
-            </div>
-            <div
-              className={`flex ml-5 text-white px-4 py-1.5 rounded-[5.95px] ${
-                isChecked ? "bg-[#E65252]" : "bg-[#6C6868]"
-              } cursor-pointer`}
-            >
-              선택 삭제
-            </div>
           </div>
         </div>
       </div>

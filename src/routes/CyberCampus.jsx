@@ -15,7 +15,7 @@ export default function CyberCampus() {
         <Route path="lecture/:track" element={<CCLecture />} />
         <Route path="lecture-detail/:id" element={<LectureDetail />} />
         <Route path="/review/:trackType" element={<Review />} />
-        <Route path="/quiz/${reviewWeekId}" element={<Quiz />} />
+        <Route path="/quiz/:reviewWeekId" element={<Quiz />} />
         <Route path="/assignment/:track" element={<AssignmentMain />} />
       </Routes>
     </div>
