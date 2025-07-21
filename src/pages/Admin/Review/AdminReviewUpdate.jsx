@@ -1,38 +1,111 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import API from '../../../utils/axios';
 import axios from 'axios';
+import API from '../../../utils/axios';
 
-export default function AdminQuizContent() {
-  const [questionCount, setQuestionCount] = useState(1);
-  const [questionTypes, setQuestionTypes] = useState([]);
-  // 문제별 첨부파일 상태: {0: [File, ...], 1: [...], ...}
-  const [filesByQuestion, setFilesByQuestion] = useState({});
-
-  const { trackType } = useParams();
+export default function AdminReviewUpdate() {
+  const { reviewWeekId, trackType } = useParams(); // URL 파라미터로 받는다고 가정
   const navigate = useNavigate();
 
+  const [title, setTitle] = useState('');
+  const [questionCount, setQuestionCount] = useState(0);
+  const [questionTypes, setQuestionTypes] = useState([]);
+  const [filesByQuestion, setFilesByQuestion] = useState({});
+  const [selectedFiles, setSelectedFiles] = useState({});
+  const [quizContents, setQuizContents] = useState([]); // 문제 내용, 답 등 담음
+
+  // 1. 기존 퀴즈 데이터 불러오기 (수정 모드 초기화)
+  useEffect(() => {
+    if (!reviewWeekId) return;
+
+    const fetchQuiz = async () => {
+      try {
+        const response = await API.get(`/reviewQuiz/${reviewWeekId}`);
+
+        if (response.status === 200) {
+          const data = response.data;
+
+          // 제목 세팅 (예시는 첫번째 항목의 제목을 받아오나, 따로 API로 받아야 하면 수정)
+          // API에서 제목이 따로 없으면, 직접 입력 받도록 수정 필요
+          // 여기서는 trackType이 param에 있으니 제목은 빈 문자열 유지
+
+          // 문제 갯수 세팅
+          setQuestionCount(data.length);
+
+          // 문제 유형, 내용, 답, 파일, 해설 세팅
+          const types = data.map((q) => (q.quizType === 'MULTIPLE_CHOICE' ? '객관식' : '주관식'));
+          setQuestionTypes(types);
+
+          setQuizContents(
+            data.map((q) => ({
+              content: q.content,
+              answerChoiceList: q.answerChoiceList || [],
+              answer: q.answer || '',
+              explanation: q.explanation || '',
+              files: q.files ? (Array.isArray(q.files) ? q.files : [q.files]) : [],
+            }))
+          );
+
+          // 기존 파일은 실제 File 객체가 아니라 url 정보임. 업로드 파일과는 별도로 관리할 수 있음
+          // 편의를 위해 selectedFiles와 filesByQuestion 초기화는 비워둠
+          setSelectedFiles({});
+          setFilesByQuestion({});
+        }
+      } catch (err) {
+        console.error('퀴즈 불러오기 실패', err);
+      }
+    };
+
+    fetchQuiz();
+  }, [reviewWeekId]);
+
+  // 문제 수 변경 시 상태 관리
   const handleQuestionCountChange = (e) => {
     const value = parseInt(e.target.value, 10);
     if (!isNaN(value)) {
       setQuestionCount(value);
+
       setQuestionTypes((prev) => {
         const updated = [...prev];
         while (updated.length < value) updated.push('');
         return updated.slice(0, value);
       });
-      // 문제 수 변경 시 파일 상태 초기화 또는 자르기
+
+      setQuizContents((prev) => {
+        const updated = [...prev];
+        while (updated.length < value) updated.push({
+          content: '',
+          answerChoiceList: [],
+          answer: '',
+          explanation: '',
+          files: [],
+        });
+        return updated.slice(0, value);
+      });
+
+      // 문제 수 줄어들면 파일 상태도 정리
       setFilesByQuestion((prev) => {
-        const copy = {...prev};
+        const copy = { ...prev };
         Object.keys(copy).forEach(key => {
           if (parseInt(key) >= value) delete copy[key];
         });
         return copy;
       });
+
+      setSelectedFiles((prev) => {
+        const copy = { ...prev };
+        Object.keys(copy).forEach(key => {
+          if (parseInt(key) >= value) delete copy[key];
+        });
+        return copy;
+      });
+
     } else {
       setQuestionCount(0);
       setQuestionTypes([]);
+      setQuizContents([]);
       setFilesByQuestion({});
+      setSelectedFiles({});
     }
   };
 
@@ -42,8 +115,49 @@ export default function AdminQuizContent() {
     setQuestionTypes(updatedTypes);
   };
 
-  const [selectedFiles, setSelectedFiles] = useState({});
+  const handleContentChange = (index, value) => {
+    const updatedContents = [...quizContents];
+    updatedContents[index] = {
+      ...updatedContents[index],
+      content: value,
+    };
+    setQuizContents(updatedContents);
+  };
 
+  const handleExplanationChange = (index, value) => {
+    const updatedContents = [...quizContents];
+    updatedContents[index] = {
+      ...updatedContents[index],
+      explanation: value,
+    };
+    setQuizContents(updatedContents);
+  };
+
+  // 객관식 보기 변경
+  const handleChoiceChange = (questionIndex, choiceIndex, value) => {
+    const updatedContents = [...quizContents];
+    const answerChoiceList = [...(updatedContents[questionIndex].answerChoiceList || [])];
+    answerChoiceList[choiceIndex] = value;
+    updatedContents[questionIndex].answerChoiceList = answerChoiceList;
+    setQuizContents(updatedContents);
+  };
+
+  // 객관식 정답 선택 변경
+  const handleAnswerSelect = (questionIndex, choiceIndex) => {
+    const updatedContents = [...quizContents];
+    const selectedAnswer = updatedContents[questionIndex].answerChoiceList[choiceIndex] || '';
+    updatedContents[questionIndex].answer = selectedAnswer;
+    setQuizContents(updatedContents);
+  };
+
+  // 주관식 정답 변경
+  const handleSubjectiveAnswerChange = (questionIndex, value) => {
+    const updatedContents = [...quizContents];
+    updatedContents[questionIndex].answer = value;
+    setQuizContents(updatedContents);
+  };
+
+  // 파일 선택 변경
   const handleFileChange = (index, e) => {
     const files = Array.from(e.target.files);
     setSelectedFiles((prev) => ({
@@ -52,16 +166,13 @@ export default function AdminQuizContent() {
     }));
 
     setFilesByQuestion((prev) => ({
-    ...prev,
-    [index]: files,
-  }));
+      ...prev,
+      [index]: files,
+    }));
   };
 
-
-  const handleSubmit = async () => {
+  const handleUpdate = async () => {
     try {
-      const title = document.querySelector("input[placeholder='제목을 입력해주세요.']").value;
-
       // 1) 모든 문제에서 선택한 파일들을 배열로 모으기
       const allFiles = [];
       const questionFileIndices = {}; // 문제별로 파일이 allFiles내 인덱스 시작 위치 기억
@@ -111,12 +222,12 @@ export default function AdminQuizContent() {
         };
       });
 
-      // 5) 각 문제별 files 배열 채우기
+      // 5) 각 문제별 files 배열 채우기 및 DTO 준비
       const reviewQuizDTOList = [];
-      for (let index = 0; index < questionTypes.length; index++) {
+      for (let index = 0; index < questionCount; index++) {
         const type = questionTypes[index];
-        const content = document.querySelectorAll("input[placeholder='문제를 입력해주세요.']")[index]?.value || "";
-        const explanationInput = document.querySelectorAll("input[placeholder='해설을 입력해주세요.']")[index]?.value || "";
+        const content = quizContents[index]?.content || "";
+        const explanationInput = quizContents[index]?.explanation || "";
 
         const quizData = {
           quizType: type === '객관식' ? 'MULTIPLE_CHOICE' : 'ESSAY_QUESTION',
@@ -127,33 +238,22 @@ export default function AdminQuizContent() {
           explanation: explanationInput,
         };
 
-        // 객관식 답변 및 보기 처리 (기존 코드 유지)
         if (type === '객관식') {
-          const choiceInputs = document.querySelectorAll(`input[name="answer-${index}"]`);
-          const textInputs = Array.from(choiceInputs).map((input) =>
-            input.parentElement.querySelector('input[type="text"]').value
-          );
-
-          const selectedAnswer = Array.from(choiceInputs).find((input) => input.checked);
-          const answer = selectedAnswer ? textInputs[Array.from(choiceInputs).indexOf(selectedAnswer)] : "";
-
-          quizData.answerChoiceList = textInputs;
-          quizData.answer = answer;
+          quizData.answerChoiceList = quizContents[index]?.answerChoiceList || [];
+          quizData.answer = quizContents[index]?.answer || "";
         }
 
-        // 주관식 답변 처리 (기존 코드 유지)
         if (type === '주관식') {
-          const answerInput = document.querySelectorAll("input[placeholder='정답을 입력해주세요.']")[index]?.value || "";
-          quizData.answer = answerInput;
+          quizData.answer = quizContents[index]?.answer || "";
         }
 
-        // 문제별 업로드한 파일 정보 매핑
         const filesForThisQuestion = filesByQuestion[index] || [];
         if (filesForThisQuestion.length > 0) {
           const startIdx = questionFileIndices[index];
           quizData.files = fileInfoList.slice(startIdx, startIdx + filesForThisQuestion.length);
         } else {
-          quizData.files = [];
+          // 기존에 있는 파일 url 정보가 있으면 그거 쓰도록
+          quizData.files = quizContents[index]?.files || [];
         }
 
         reviewQuizDTOList.push(quizData);
@@ -166,11 +266,11 @@ export default function AdminQuizContent() {
         reviewQuizDTOList,
       };
 
-      // 7) 서버 전송
-      const response = await API.post("/admin/reviewQuiz/add", payload);
+      // 7) 수정 API 호출
+      const response = await API.put(`/admin/reviewQuiz/update/${reviewWeekId}`, payload);
 
-      if (response.status === 201 || response.status === 200) {
-        alert("퀴즈가 성공적으로 등록되었습니다.");
+      if (response.status === 200) {
+        alert("퀴즈가 성공적으로 수정되었습니다.");
         navigate(`/admin/reviewQuiz/${trackType}`);
       } else {
         alert(`오류 발생: ${response.statusText}`);
@@ -184,7 +284,13 @@ export default function AdminQuizContent() {
   const renderQuestionBlock = (index) => (
     <div key={index} className='flex flex-col px-25 py-20 bg-[#F6F6F6] border-[#232323] border-[0.5px] rounded-[15px] w-full mt-20'>
       <div className='flex text-[20px] fontSB'>Question {String(index + 1).padStart(2, '0')}.</div>
-      <input type="text" placeholder='문제를 입력해주세요.' className='flex lg:w-[50%] sm:w-[74%] mt-10 bg-[#FFFFFF] border-[#E5E5E5] border-[1.51px] rounded-[7px] text-[16px] text-[#949494] fontSB px-5 py-3' />
+      <input
+        type="text"
+        placeholder='문제를 입력해주세요.'
+        className='flex lg:w-[50%] sm:w-[74%] mt-10 bg-[#FFFFFF] border-[#E5E5E5] border-[1.51px] rounded-[7px] text-[16px] text-[#949494] fontSB px-5 py-3'
+        value={quizContents[index]?.content || ''}
+        onChange={(e) => handleContentChange(index, e.target.value)}
+      />
 
       <div className='flex w-fit mt-20 text-[20px] fontSB'>문제 형식</div>
       <div className='flex flex-col justify-around max-w-fit sm:flex-row px-4 mt-10 bg-[#FFFFFF] border-[#E5E5E5] border-[1.51px] rounded-[7px]'>
@@ -209,8 +315,20 @@ export default function AdminQuizContent() {
           <div className='flex flex-col w-full px-4 py-7 mt-10 bg-[#FFFFFF] border-[#232323] border-[1px] rounded-[7px]'>
             {[...Array(5)].map((_, i) => (
               <label key={i} className='flex items-center py-2 pl-5 fontRegular'>
-                <input type="radio" name={`answer-${index}`} className='w-5' />
-                <input type='text' placeholder='보기를 입력해 주세요.' className="flex ml-2.5 w-[180px] text-[19px] text-[#121212] px-2 py-1" />
+                <input
+                  type="radio"
+                  name={`answer-${index}`}
+                  className='w-5'
+                  checked={quizContents[index]?.answer === (quizContents[index]?.answerChoiceList?.[i] || '')}
+                  onChange={() => handleAnswerSelect(index, i)}
+                />
+                <input
+                  type='text'
+                  placeholder='보기를 입력해 주세요.'
+                  className="flex ml-2.5 w-[180px] text-[19px] text-[#121212] px-2 py-1"
+                  value={quizContents[index]?.answerChoiceList?.[i] || ''}
+                  onChange={(e) => handleChoiceChange(index, i, e.target.value)}
+                />
               </label>
             ))}
           </div>
@@ -225,6 +343,8 @@ export default function AdminQuizContent() {
             placeholder='정답을 입력해주세요.'
             name={`subjective-answer-${index}`}
             className='flex w-[400px] mt-10 bg-[#FFFFFF] border-[#E5E5E5] border-[1.51px] rounded-[7px] text-[16px] text-[#949494] fontSB px-5 py-3'
+            value={quizContents[index]?.answer || ''}
+            onChange={(e) => handleSubjectiveAnswerChange(index, e.target.value)}
           />
         </>
       )}
@@ -252,20 +372,36 @@ export default function AdminQuizContent() {
               ))}
             </ul>
           ) : (
-            <span className="text-[#A6A6A6]">또는 여기로 파일을 끌어오세요.</span>
+            <ul className="text-[#232323] list-disc ml-5">
+              {quizContents[index]?.files?.map((file, i) => (
+                <li key={i}>{file.fileName || file}</li>
+              ))}
+            </ul>
           )}
         </div>
       </label>
 
       <div className='flex mt-20 text-[20px] fontSB'>해설 입력</div>
-      <input type="text" placeholder='해설을 입력해주세요.' className='flex lg:w-[50%] sm:w-[74%] mt-10 bg-[#FFFFFF] border-[#E5E5E5] border-[1.51px] rounded-[7px] text-[16px] text-[#949494] fontSB px-5 py-3' />
+      <input
+        type="text"
+        placeholder='해설을 입력해주세요.'
+        className='flex lg:w-[50%] sm:w-[74%] mt-10 bg-[#FFFFFF] border-[#E5E5E5] border-[1.51px] rounded-[7px] text-[16px] text-[#949494] fontSB px-5 py-3'
+        value={quizContents[index]?.explanation || ''}
+        onChange={(e) => handleExplanationChange(index, e.target.value)}
+      />
     </div>
   );
 
   return (
-    <div className='flex flex-col justify-start w-full min-h-screen mb-40'>
+    <div className='flex flex-col justify-start w-full min-h-screen mb-40 px-10'>
       <div className='flex mt-20 text-[20px] fontBold'>제목 입력</div>
-      <input type="text" placeholder='제목을 입력해주세요.' className='flex w-[400px] mt-10 border-[#E5E5E5] border-[1.51px] rounded-[7px] text-[16px] text-[#949494] fontSB px-5 py-3' />
+      <input
+        type="text"
+        placeholder='제목을 입력해주세요.'
+        className='flex w-[400px] mt-10 border-[#E5E5E5] border-[1.51px] rounded-[7px] text-[16px] text-[#949494] fontSB px-5 py-3'
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
 
       <div className='flex mt-20 text-[20px] fontBold'>문제 갯수</div>
       <input
@@ -273,18 +409,18 @@ export default function AdminQuizContent() {
         placeholder='숫자만 입력해 주세요.'
         className='flex w-[400px] mt-10 border-[#E5E5E5] border-[1.51px] rounded-[7px] text-[16px] text-[#949494] fontSB px-5 py-3'
         onChange={handleQuestionCountChange}
+        value={questionCount}
         min={0}
       />
 
       {Array.from({ length: questionCount }).map((_, index) => renderQuestionBlock(index))}
 
       <div className='flex justify-end mt-20'>
-        <div className='flex bg-[#E9E9E9] text-[#838383] px-5 py-2 rounded-[6.45px] cursor-pointer'>나가기</div>
         <div
           className='flex bg-[#3B79FF] text-white px-5 py-2 ml-7 rounded-[6.45px] cursor-pointer'
-          onClick={handleSubmit}
+          onClick={handleUpdate}
         >
-          등록하기
+          수정하기
         </div>
       </div>
     </div>
