@@ -57,7 +57,7 @@ const ReviewBoard = ({ trackType }) => {
             <div 
               className="flex justify-start px-1 text-[13.5px] cursor-pointer"
               style={{ flex: flexValues[1] }}
-              onClick={() => navigate(`/cybercampus/quiz/${quiz.reviewWeekId}`)}
+              onClick={() => navigate(`/cybercampus/quiz/${quiz.reviewWeekId}`, { state: { title: quiz.title } })}
             >
               {quiz.title}
             </div>
