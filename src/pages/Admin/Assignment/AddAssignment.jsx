@@ -1,10 +1,18 @@
-import React, { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import API from "../../../utils/axios";
 import axios from "axios";
 
 export default function AddAssignment() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { track } = useParams();
+
+  const { state } = location;
+  const isEdit = state?.isEdit || false;
+  const assignmentId = state?.assignmentId || null;
+  const initialData = state?.assignmentDetail || {};
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [fileFormat, setFileFormat] = useState("Subjective");
@@ -12,10 +20,24 @@ export default function AddAssignment() {
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef(null);
 
-  // S3에 파일 업로드 함수
+  useEffect(() => {
+    if (isEdit) {
+      setTitle(initialData.title || "");
+      setDescription(initialData.description || "");
+      // 파일 초기화: 백엔드에서 files 배열 받아서 UI 반영 필요시 여기에 구현
+      if (initialData.files && initialData.files.length > 0) {
+        setFileFormat("file");
+        // 아래는 파일 리스트 객체들 복사 (필요하면 추가 변환)
+        setSelectedFiles(initialData.files);
+      } else {
+        setFileFormat("Subjective");
+      }
+    }
+  }, [isEdit, initialData]);
+
+  // S3 업로드 함수 (기존과 동일)
   const uploadFileToS3 = async (file) => {
     try {
-      // presigned URL 요청 (파일명, MIME 타입 전달)
       const presignedRes = await API.post("/s3/presigned-urls", [
         {
           fileName: file.name,
@@ -25,7 +47,6 @@ export default function AddAssignment() {
 
       const { uploadUrl, cdnUrl, fileKey, key } = presignedRes.data[0];
 
-      // presigned URL로 실제 파일 업로드 (PUT)
       await axios.put(uploadUrl, file, {
         headers: { "Content-Type": file.type },
       });
@@ -95,36 +116,41 @@ export default function AddAssignment() {
       let uploadedFileData = [];
 
       if (fileFormat === "file") {
-        // 선택한 파일들 S3에 업로드
-        const uploadPromises = selectedFiles.map((file) =>
+        // 수정 모드: 기존에 API에서 받아온 파일 객체와 새로 선택한 File 객체가 혼재할 수 있음
+        // 새로 선택한 File 객체만 S3 업로드 필요
+        const filesToUpload = selectedFiles.filter((f) => f instanceof File);
+        const existingFiles = selectedFiles.filter((f) => !(f instanceof File));
+
+        const uploadPromises = filesToUpload.map((file) =>
           uploadFileToS3(file)
         );
-        uploadedFileData = await Promise.all(uploadPromises);
+        const newlyUploadedFiles = await Promise.all(uploadPromises);
+
+        uploadedFileData = [...existingFiles, ...newlyUploadedFiles];
       }
 
-      // 항상 quizType은 ESSAY_QUESTION, files는 파일첨부 시 업로드한 파일 데이터, 아니면 빈 배열
+      // payload 준비
       const assignmentData = {
+        ...(isEdit && { assignmentId }), // isEdit일 때만 assignmentId 포함
         title,
         description,
-        trackType: "BACKEND",
+        trackType: track.toUpperCase(),
         quizType: "ESSAY_QUESTION",
         files: fileFormat === "file" ? uploadedFileData : [],
       };
 
-      console.log("등록할 과제 데이터:", assignmentData);
+      if (isEdit) {
+        await API.put("/admin/assignment/update", assignmentData);
+        alert("과제가 수정되었습니다.");
+      } else {
+        await API.post("/admin/assignment/upload", assignmentData);
+        alert("과제가 등록되었습니다.");
+      }
 
-      // 과제 등록 API 호출
-      await API.post("/admin/assignment/upload", assignmentData);
-
-      alert("과제가 등록되었습니다.");
-      setTitle("");
-      setDescription("");
-      setFileFormat("Subjective");
-      setSelectedFiles([]);
       navigate(-1);
     } catch (error) {
-      console.error("과제 등록 오류:", error);
-      alert("과제 등록 중 오류가 발생했습니다.");
+      console.error("과제 저장 오류:", error);
+      alert("과제 저장 중 오류가 발생했습니다.");
     } finally {
       setIsUploading(false);
     }
@@ -134,13 +160,16 @@ export default function AddAssignment() {
     <div className="flex mx-auto min-h-screen">
       <div className="flex flex-col w-9/12 mt-30 mx-auto justify-start lg:w-8/12">
         <div className="flex items-center justify-between">
-          <p className="text-4xl font-bold my-15">BACK-END 과제 등록</p>
+          <p className="text-4xl font-bold my-15">
+            {isEdit
+              ? `${trackToTitle(track)} 과제 수정`
+              : `${trackToTitle(track)} 과제 등록`}
+          </p>
         </div>
 
         <div className="border-t-2 border-[#232323]">
           <form onSubmit={handleSubmit}>
             <div className="w-2/5">
-              {/* 과제 제목 */}
               <div className="mt-8">
                 <label className="text-xl font-bold mb-4 block">
                   과제 제목
@@ -154,7 +183,6 @@ export default function AddAssignment() {
                 />
               </div>
 
-              {/* 과제 설명 */}
               <div className="mt-8">
                 <label className="text-xl font-bold mb-4 block">
                   과제 설명
@@ -167,7 +195,6 @@ export default function AddAssignment() {
                 />
               </div>
 
-              {/* 문제 형식 */}
               <div className="mt-8">
                 <label className="text-xl font-bold mb-4 block">
                   문제 형식
@@ -202,7 +229,6 @@ export default function AddAssignment() {
                 </div>
               </div>
 
-              {/* 파일 업로드 */}
               {fileFormat === "file" && (
                 <div className="mt-8">
                   <div className="flex gap-4 items-center">
@@ -238,31 +264,36 @@ export default function AddAssignment() {
 
                   {selectedFiles.length > 0 && (
                     <div className="mt-4 flex flex-wrap gap-2">
-                      {selectedFiles.map((file, index) => (
-                        <div
-                          key={index}
-                          className="bg-gray-100 px-3 py-1 rounded-full text-sm flex items-center">
-                          <span
-                            title={`${file.name} (${Math.round(
-                              file.size / 1024
-                            )}KB)`}>
-                            {file.name}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveFile(index)}
-                            className="ml-2 text-gray-500 hover:text-red-500">
-                            ×
-                          </button>
-                        </div>
-                      ))}
+                      {selectedFiles.map((file, index) => {
+                        // file이 File객체인지 기존 업로드된 파일 객체인지 구분해서 이름 표시
+                        const fileName = file.name || file.fileName || "파일";
+                        const fileSize = file.size || file.fileSize || 0;
+
+                        return (
+                          <div
+                            key={index}
+                            className="bg-gray-100 px-3 py-1 rounded-full text-sm flex items-center">
+                            <span
+                              title={`${fileName} (${Math.round(
+                                fileSize / 1024
+                              )}KB)`}>
+                              {fileName}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveFile(index)}
+                              className="ml-2 text-gray-500 hover:text-red-500">
+                              ×
+                            </button>
+                          </div>
+                        );
+                      })}
                     </div>
                   )}
                 </div>
               )}
             </div>
 
-            {/* 버튼 영역 */}
             <div className="my-10 flex justify-end gap-4 w-full">
               <button
                 type="button"
@@ -278,7 +309,11 @@ export default function AddAssignment() {
                     ? "bg-gray-400 cursor-not-allowed"
                     : "bg-[#3B79FF] cursor-pointer"
                 }`}>
-                {isUploading ? "업로드 중..." : "등록하기"}
+                {isUploading
+                  ? "업로드 중..."
+                  : isEdit
+                  ? "수정하기"
+                  : "등록하기"}
               </button>
             </div>
           </form>
@@ -286,4 +321,13 @@ export default function AddAssignment() {
       </div>
     </div>
   );
+}
+
+function trackToTitle(track) {
+  const map = {
+    BACKEND: "BACK-END",
+    FRONTEND: "FRONT-END",
+    DESIGN: "DESIGN",
+  };
+  return map[track?.toUpperCase()] || track;
 }

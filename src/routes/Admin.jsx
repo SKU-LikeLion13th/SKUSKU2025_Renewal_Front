@@ -3,20 +3,24 @@ import AdminMain from "../pages/Admin/AdminMain";
 import AdminReview from "../pages/Admin/Review/AdminReview";
 import AdminReviewUpdate from "../pages/Admin/Review/AdminReviewUpdate";
 import AdminQuiz from "../pages/Admin/Quiz/AdminQuiz";
-import AdminAssignmentMain from "../pages/Admin/Assignment/AdminAssignmentMain";
+import AssignmentManagement from "../pages/Admin/Assignment/AssignmentManagement";
 import AddAssignment from "../pages/Admin/Assignment/AddAssignment";
 import AdminCCLecture from "../pages/Admin/LectureManagement/AdminCCLecture";
 import AdminCCLectureUpload from "../pages/Admin/LectureManagement/AdminCCLectureUpload";
 import AdminCCLectureEdit from "../pages/Admin/LectureManagement/AdminCCLectureEdit";
 import AdminProject from "../pages/Admin/Project/AdminProject";
 import AddProject from "../pages/Admin/Project/AddProject";
+import AssignmentCheck from "../pages/Admin/Assignment/AssignmentCheck";
+import CheckLions from "../pages/Admin/Assignment/CheckLions";
 
 const Admin = () => {
   return (
     <Routes>
       <Route path="/main" element={<AdminMain />} />
-      <Route path="/assignment/:track" element={<AdminAssignmentMain />} />
-      <Route path="/assignment/add" element={<AddAssignment />} />
+      <Route path="/assignment/:track" element={<AssignmentManagement />} />
+      <Route path="/assignment/add/:track" element={<AddAssignment />} />
+      <Route path="/assignment/check/:track" element={<AssignmentCheck />} />
+      <Route path="/assignment/check/:id/:track" element={<CheckLions />} />
       <Route path="/reviewQuiz/:trackType" element={<AdminReview />} />
       <Route path="/adminQuiz/:trackType" element={<AdminQuiz />} />
       <Route

@@ -29,7 +29,7 @@ export default function AdminAssignmentBoard({
       </div>
       <div className="flex w-full flex-col">
         {assignments.map((assignment, index) => (
-          <div key={assignment.id} className={rowStyle}>
+          <div key={`${assignment.id}-${index}`} className={rowStyle}>
             <div className={cellStyle} style={{ flex: flexValues[0] }}>
               {index + 1}
             </div>
