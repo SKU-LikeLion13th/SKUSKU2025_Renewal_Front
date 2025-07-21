@@ -8,7 +8,7 @@ export default function Main5() {
         <div>
           <div className="flex flex-col text-center justify-center">
             <p className="text-[#3B79FF] fontBold text-[30px]">PROJECTS</p>
-            <p className="fontThin text-[#ffffff] mt-8">
+            <p className="fontThin text-[#ffffff] my-8">
               성결대학교 멋쟁이사자처럼과 함께한 프로젝트들을 소개합니다.
             </p>
           </div>
