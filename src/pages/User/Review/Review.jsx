@@ -38,14 +38,14 @@ export default function Review() {
 
   return (
     <div className='flex min-h-screen mx-auto'>
-      <div className='flex flex-col justify-start w-9/12 mx-auto mt-50 lg:w-8/12'>
+      <div className='flex flex-col justify-start w-9/12 mx-auto sm:mt-50 mt-30 lg:w-8/12'>
         <ReviewTitle />
 
-        <div className='flex justify-start w-full mt-14'>
+        <div className='flex justify-start w-full sm:mt-10 mt-8 pb-5'>
           <ReviewLocation />
         </div>
 
-        <div className='flex justify-center w-full mt-14'>
+        <div className='flex justify-center w-full sm:mt-12 mt-8'>
           <ReviewBoard quizzes={currentPosts} trackType={trackType} />
         </div>
 
