@@ -2,7 +2,8 @@ import React, { useState, useEffect, use } from "react";
 import { FiHome } from "react-icons/fi";
 import AdminAssignmentBoard from "./AdminAssignmentBoard";
 import AdminAssignmentControl from "./AdminAssignmentControl";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import API from "../../../utils/axios";
 
 export default function AdminAssignmentMain() {
   const navigate = useNavigate();
@@ -13,21 +14,22 @@ export default function AdminAssignmentMain() {
   const [searchTerm, setSearchTerm] = useState("");
   const postsPerPage = 15;
 
+  const { track } = useParams(); // URL에서 track 파라미터 받기
+
   useEffect(() => {
-    const sampleData = [
-      { id: 1, title: "4월 10일 과제" },
-      { id: 2, title: "4월 3일과제" },
-      {
-        id: 3,
-        title: "과제 이거 뭐에요...? 감자력 MAX 찍는 중",
-      },
-      {
-        id: 4,
-        title: "과제 이거 뭐에요...? 감자력 MAX 찍는 중",
-      },
-    ];
-    setAssignments(sampleData);
-  }, []);
+    const assignmentList = async () => {
+      try {
+        const response = await API.get(`/assignment/${track}`);
+        console.log("과제 데이터:", response.data);
+      } catch (error) {
+        console.error("과제 데이터를 불러오는 데 실패했습니다:", error);
+      }
+    };
+
+    if (track) {
+      assignmentList();
+    }
+  }, [track]);
 
   // 전체 선택/해제 처리
   const handleSelectAll = () => {

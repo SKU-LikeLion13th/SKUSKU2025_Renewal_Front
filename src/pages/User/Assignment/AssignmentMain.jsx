@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import AssignmentSearchBar from "./AssignmentSearchBar";
 import AssignmentBoard from "./AssignmentBoard";
@@ -10,9 +10,7 @@ export default function AssignmentMain() {
   const postsPerPage = 15; // 기본 설정
   const [searchTerm, setSearchTerm] = useState("");
 
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const track = searchParams.get("track");
+  const { track } = useParams();
 
   const trackNames = {
     FRONTEND: "FRONT-END",
@@ -20,7 +18,7 @@ export default function AssignmentMain() {
     DESIGN: "DESIGN",
   };
 
-  const trackTitle = trackNames[track.toUpperCase()];
+  const trackTitle = trackNames[track.toUpperCase()] || track;
 
   useEffect(() => {
     const sampleData = [
