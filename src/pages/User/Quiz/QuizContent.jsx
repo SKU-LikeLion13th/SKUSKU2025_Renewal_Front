@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, setCurrentQuestionIndex }) {
   const navigate = useNavigate();
   const [selectedAnswer, setSelectedAnswer] = useState({});
+  const redirectPath = localStorage.getItem("redirectAfterLogin") || "";
+  const pathParts = redirectPath.split("/");
+  const trackType = pathParts[pathParts.length - 1] || "";
 
   if (!quiz || !quiz.questions || quiz.questions.length === 0) {
     return <div>퀴즈를 찾을 수 없습니다.</div>;
@@ -13,10 +16,14 @@ export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, 
   const currentQuestion = quiz.questions[currentQuestionIndex];
 
   const handleAnswerChange = (id, answer) => {
-    setSelectedAnswer((prev) => ({
-      ...prev,
-      [id]: answer,
-    }));
+    setSelectedAnswer((prev) => {
+      const updated = {
+        ...prev,
+        [id]: answer,
+      };
+      console.log("답안 저장:", updated); // ← 확인용
+      return updated;
+    });
   };
 
   const goToNextQuestion = () => {
@@ -32,6 +39,14 @@ export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, 
   };
 
   const handleSubmitAnswers = async () => {
+    // 문제 중에 답변이 없거나 빈 문자열인 문제 확인
+    const unanswered = quiz.questions.some(q => !selectedAnswer[q.id] || selectedAnswer[q.id].trim() === "");
+
+    if (unanswered) {
+      alert("모든 문제에 답안을 입력해 주세요.");
+      return; // 제출 중단
+    }
+
     const quizResponseList = quiz.questions.map((q) => ({
       quizId: q.id,
       quizAnswer: selectedAnswer[q.id] || "",
@@ -60,6 +75,7 @@ export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, 
       alert("제출 중 오류가 발생했습니다.");
     }
   };
+
 
   return (
     <div className="flex w-full min-h-[590px] flex-col">
