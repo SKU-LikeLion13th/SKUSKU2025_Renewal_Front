@@ -3,7 +3,7 @@ export default function Main1() {
     <div className="relative sm:h-screen w-full h-[400px] overflow-hidden">
       {/* 배경 이미지 + 검정색 오버레이 */}
       <div className="absolute inset-0 sm:bg-[url('/assets/images/Main/Main1.jpeg')] bg-[url('/assets/images/Mobile_Main/Main1.jpg')] bg-cover bg-no-repeat sm:bg-cover bg-left sm:w-full w-[700px]">
-        <div className="absolute inset-0 bg-black opacity-80"></div>
+        <div className="absolute inset-0 bg-black opacity-80"></div>$
       </div>
 
       {/* 글 (이미지 위에 배치) */}
