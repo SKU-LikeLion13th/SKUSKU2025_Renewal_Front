@@ -78,8 +78,9 @@ export default function Project() {
                 <img
                   src={project.imageUrl}
                   alt={project.title}
-                  className="w-full h-[190px] rounded-md shadow-lg group-hover:opacity-30 transition-opacity duration-500 object-cover"
+                  className="w-full aspect-[4/3] rounded-md shadow-lg group-hover:opacity-30 transition-opacity duration-500 object-cover"
                 />
+
                 <div className="absolute inset-0 flex items-center justify-center transition-opacity duration-500 opacity-0 group-hover:opacity-100">
                   <span className="px-4 py-2 text-lg text-white bg-blue-500 rounded-lg font-bold">
                     사이트 보러가기

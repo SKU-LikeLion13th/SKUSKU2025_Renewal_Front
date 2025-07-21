@@ -3,6 +3,7 @@ import TeamTabs from "./TeamTabs";
 
 import Team13 from "./Team13"; // 13기 페이지
 import Team12 from "./Team12"; // 12기 페이지
+import Team11 from "./Team11"; // 11기 페이지
 
 export default function TeamPage() {
   const [activeTab, setActiveTab] = useState("13");
@@ -19,6 +20,7 @@ export default function TeamPage() {
 
         {activeTab === "13" && <Team13 />}
         {activeTab === "12" && <Team12 />}
+        {activeTab === "11" && <Team11 />}
         {/* 11기는 Team11 컴포넌트 만들어서 추가 */}
       </div>
     </div>

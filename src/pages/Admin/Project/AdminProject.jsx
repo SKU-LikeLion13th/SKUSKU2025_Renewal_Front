@@ -136,7 +136,7 @@ export default function AdminProject() {
                 <img
                   src={project.imageUrl}
                   alt={project.title}
-                  className="w-full h-[190px] rounded-md shadow-lg object-cover"
+                  className="w-full aspect-[4/3] rounded-md shadow-lg object-cover"
                 />
               </div>
               <div className="p-2">

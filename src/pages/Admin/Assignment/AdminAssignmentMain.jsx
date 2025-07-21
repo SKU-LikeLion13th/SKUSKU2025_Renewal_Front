@@ -20,7 +20,7 @@ export default function AdminAssignmentMain() {
     const assignmentList = async () => {
       try {
         console.log(`/assignment/${track}`);
-        const response = await API.get(`/assignment/${track}`);
+        const response = await API.get(`/assignment/track/${track}`);
         console.log("과제 데이터:", response.data);
       } catch (error) {
         console.error("과제 데이터를 불러오는 데 실패했습니다:", error);
