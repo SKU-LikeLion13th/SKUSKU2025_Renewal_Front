@@ -8,6 +8,18 @@ export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, 
   const redirectPath = localStorage.getItem("redirectAfterLogin") || "";
   const pathParts = redirectPath.split("/");
   const trackType = pathParts[pathParts.length - 1] || "";
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalImageSrc, setModalImageSrc] = useState("");
+
+  const openImageModal = (src) => {
+    setModalImageSrc(src);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setModalImageSrc("");
+  };
 
   if (!quiz || !quiz.questions || quiz.questions.length === 0) {
     return <div>퀴즈를 찾을 수 없습니다.</div>;
@@ -98,6 +110,7 @@ export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, 
                       src={file.fileUrl}
                       alt={`question-${currentQuestion.id}-image-${index}`}
                       className="flex object-contain max-h-60 w-fit my-2"
+                      onClick={() => openImageModal(file.fileUrl)}
                     />
                   ))}
             </div>
@@ -184,6 +197,26 @@ export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, 
         </div>
       ) : (
         <p>모든 질문을 완료했습니다.</p>
+      )}
+      {modalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
+          onClick={closeModal} // 배경 클릭 시 닫기
+        >
+          <img
+            src={modalImageSrc}
+            alt="확대 이미지"
+            className="max-w-[80vw] max-h-[90vh] rounded-lg"
+            onClick={(e) => e.stopPropagation()} // 이미지 클릭 시 이벤트 전파 차단
+          />
+          <button
+            className="absolute top-5 right-5 text-white text-3xl font-bold"
+            onClick={closeModal}
+            aria-label="닫기"
+          >
+            &times;
+          </button>
+        </div>
       )}
     </div>
   );

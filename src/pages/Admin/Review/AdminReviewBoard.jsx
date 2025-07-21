@@ -1,40 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "../../../utils/axios";
 
-const AdminReviewBoard = () => {
-  const { trackType } = useParams();
-  const headers = ["번호", "제목", "수정", "삭제"];
-  const flexValues = ["1", "7", "1", "1"];
+const headers = ["번호", "제목", "수정", "삭제"];
+const flexValues = ["1", "7", "1", "1"];
+
+export default function AdminReviewBoard({ posts, trackType, setAllPosts }) {
   const navigate = useNavigate();
-
-  const [ReviewQuizList, setReviewQuizList] = useState([]);
-
-  useEffect(() => {
-    const fetchReviewQuizzes = async () => {
-      try {
-        const response = await axios.get(`/reviewWeek/${trackType}`);
-        console.log("받아온 데이터:", response);
-
-        const quizList = response.data.map((quiz, index) => ({
-          Id: index + 1,
-          title: quiz.title,
-          score: quiz.score,
-          total: quiz.total,
-          IsSubmit: quiz.isSubmit,
-          reviewWeekId: quiz.reviewWeekId,
-        }));
-
-        setReviewQuizList(quizList);
-      } catch (error) {
-        console.error("리뷰 퀴즈 불러오기 실패:", error);
-      }
-    };
-
-    if (trackType) {
-      fetchReviewQuizzes();
-    }
-  }, [trackType]);
 
   const handleDelete = async (weekId) => {
     const confirmed = window.confirm("정말 삭제하시겠습니까?");
@@ -42,7 +14,7 @@ const AdminReviewBoard = () => {
 
     try {
       await axios.delete(`/admin/reviewQuiz/delete/${weekId}`);
-      setReviewQuizList((prevList) => prevList.filter(item => item.reviewWeekId !== weekId));
+      setAllPosts((prevList) => prevList.filter((item) => item.reviewWeekId !== weekId));
       alert("삭제가 완료되었습니다.");
     } catch (error) {
       console.error("삭제 실패:", error);
@@ -52,7 +24,7 @@ const AdminReviewBoard = () => {
 
   return (
     <div className="flex flex-col items-center w-full">
-      <div className="flex w-full border-t-[2.5px] border-t-[#232323] border-b border-b-[#9A9A9A] bg-[#F7F7F7] p-2">
+      <div className="flex w-full sm:text-[15px] text-[13px] border-t-[2.5px] border-t-[#232323] border-b border-b-[#9A9A9A] bg-[#F7F7F7] p-2">
         {headers.map((header, index) => (
           <div
             key={index}
@@ -65,21 +37,18 @@ const AdminReviewBoard = () => {
       </div>
 
       <div className="flex w-full min-h-[590px] flex-col">
-        {ReviewQuizList.length > 0 ? (
-          ReviewQuizList.map((item, idx) => (
+        {posts.length > 0 ? (
+          posts.map((item, idx) => (
             <div
               key={item.reviewWeekId}
               className="flex w-full border-b border-b-[#E0E0E0] p-2 items-center"
             >
-              <div
-                className="flex justify-center px-1 text-[13.5px]"
-                style={{ flex: flexValues[0] }}
-              >
+              <div className="flex justify-center px-1 text-[13.5px]" style={{ flex: flexValues[0] }}>
                 {idx + 1}
               </div>
 
               <div
-                className="flex justify-start px-1 text-[13.5px]"
+                className="flex justify-start px-1 text-[13.5px] cursor-pointer"
                 style={{ flex: flexValues[1] }}
                 onClick={() => navigate(`/admin/reviewUpdate/${trackType}/${item.reviewWeekId}`)}
               >
@@ -87,7 +56,7 @@ const AdminReviewBoard = () => {
               </div>
 
               <div
-                className="flex justify-center px-1 text-[13.5px]"
+                className="flex justify-center px-1 text-[13.5px] cursor-pointer"
                 style={{ flex: flexValues[2] }}
                 onClick={() => navigate(`/admin/reviewUpdate/${trackType}/${item.reviewWeekId}`)}
               >
@@ -104,9 +73,7 @@ const AdminReviewBoard = () => {
             </div>
           ))
         ) : (
-          <div className="flex justify-center p-10 text-gray-500">
-            등록된 과제가 없습니다.
-          </div>
+          <div className="flex justify-center p-10 text-gray-500">등록된 과제가 없습니다.</div>
         )}
 
         <div className="flex justify-between w-full mt-10 text-[14px] fontLight">
@@ -120,6 +87,4 @@ const AdminReviewBoard = () => {
       </div>
     </div>
   );
-};
-
-export default AdminReviewBoard;
+}
