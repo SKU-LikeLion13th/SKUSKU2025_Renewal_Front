@@ -9,7 +9,7 @@ export default function HeaderMobile() {
   return (
     <div
       className={`fixed z-10 bg-[#121212] top-0 w-full transition-all duration-300 ${
-        isHovered || isMenuOpen ? "bg-white min-h-[180px]" : "backdrop-blur-2xl"
+        isMenuOpen ? "bg-white" : "backdrop-blur-2xl"
       }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => {
@@ -24,7 +24,7 @@ export default function HeaderMobile() {
               <img src="/likelionLogo.png" alt="Logo" className="w-7 md:w-9" />
               <p
                 className={`text-md md:text-[21px] fontBlack ${
-                  isHovered || isMenuOpen ? "text-[#000]" : "text-[#3B79FF]"
+                  isMenuOpen ? "text-[#000]" : "text-[#3B79FF]"
                 }`}
               >
                 LIKELION SKU
@@ -43,7 +43,7 @@ export default function HeaderMobile() {
               }}
             >
               {isMenuOpen ? (
-                <FiX size={24} />
+                <FiX size={24} className="text-black" />
               ) : (
                 <FiMenu size={24} className="text-white" />
               )}
