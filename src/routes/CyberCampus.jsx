@@ -6,6 +6,7 @@ import CyberCampusIntro from "../pages/User/CyberCampus/CyberCampusMain/CyberCam
 import Review from "../pages/User/Review/Review";
 import Quiz from "../pages/User/Quiz/Quiz";
 import AssignmentMain from "../pages/User/Assignment/AssignmentMain";
+import AssignmentSubmitPage from "../pages/User/Assignment/AssignmentSubmitPage";
 
 export default function CyberCampus() {
   return (
@@ -17,6 +18,10 @@ export default function CyberCampus() {
         <Route path="/review/:trackType" element={<Review />} />
         <Route path="/quiz/:reviewWeekId" element={<Quiz />} />
         <Route path="/assignment/:track" element={<AssignmentMain />} />
+        <Route
+          path="/assignment/:assignmentId/:track"
+          element={<AssignmentSubmitPage />}
+        />
       </Routes>
     </div>
   );

@@ -116,8 +116,6 @@ export default function AddAssignment() {
       let uploadedFileData = [];
 
       if (fileFormat === "file") {
-        // 수정 모드: 기존에 API에서 받아온 파일 객체와 새로 선택한 File 객체가 혼재할 수 있음
-        // 새로 선택한 File 객체만 S3 업로드 필요
         const filesToUpload = selectedFiles.filter((f) => f instanceof File);
         const existingFiles = selectedFiles.filter((f) => !(f instanceof File));
 

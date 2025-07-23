@@ -28,12 +28,16 @@ export default function AssignmentBoard({ assignments }) {
         {assignments.map((assignment) => (
           <div key={assignment.id} className={rowStyle}>
             <div className={cellStyle} style={{ flex: flexValues[0] }}>
-              {assignment.id}
+              {assignment.displayNumber}
             </div>
             <div
               className={titleCellStyle}
               style={{ flex: flexValues[1] }}
-              onClick={() => navigate(`/assignment/${assignment.id}`)}>
+              onClick={() =>
+                navigate(
+                  `/cybercampus/assignment/${assignment.id}/${assignment.track}`
+                )
+              }>
               {assignment.title}
             </div>
             <div
