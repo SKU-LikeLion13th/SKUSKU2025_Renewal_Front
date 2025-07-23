@@ -8,9 +8,13 @@ export default function GoogleLoginBtn({ isHovered }) {
 
   return (
     <div
-      className={`flex items-center px-4 py-2 rounded-sm cursor-pointer
-          ${isHovered ? "bg-white text-black border" : "bg-white/50 text-white"}
-          hover:bg-white  hover:text-black transition`}
+      className={`flex items-center px-4 py-2 rounded-sm cursor-pointer box-border
+      border ${
+        isHovered
+          ? "bg-white text-black border-black"
+          : "border-transparent bg-white/50 text-white"
+      }
+      hover:bg-white hover:text-black transition`}
       onClick={handleLogin}
     >
       <img

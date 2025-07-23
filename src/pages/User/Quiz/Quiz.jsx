@@ -26,6 +26,7 @@ export default function Quiz() {
         const quizData = response.data;
         setQuiz({ questions: quizData });
       } catch (err) {
+        console.log(err);
         setError("퀴즈 데이터를 불러오는 중 오류가 발생했습니다.");
       } finally {
         setLoading(false);
@@ -45,11 +46,11 @@ export default function Quiz() {
 
   return (
     <div className="flex min-h-screen mx-auto">
-      <div className="flex flex-col justify-start w-9/12 mx-auto mt-50 lg:w-8/12">
+      <div className="flex flex-col justify-start w-9/12 mx-auto sm:mt-50 mt-30 lg:w-8/12">
 
         <ReviewTitle />
 
-        <div className="flex justify-start w-full mt-14">
+        <div className="flex justify-start w-full sm:mt-10 mt-8 pb-3">
           <ReviewLocation />
         </div>
 

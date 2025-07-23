@@ -182,14 +182,14 @@ export default function AdminQuizContent() {
   };
 
   const renderQuestionBlock = (index) => (
-    <div key={index} className='flex flex-col px-25 py-20 bg-[#F6F6F6] border-[#232323] border-[0.5px] rounded-[15px] w-full mt-20'>
-      <div className='flex text-[20px] fontSB'>Question {String(index + 1).padStart(2, '0')}.</div>
-      <input type="text" placeholder='문제를 입력해주세요.' className='flex lg:w-[50%] sm:w-[74%] mt-10 bg-[#FFFFFF] border-[#E5E5E5] border-[1.51px] rounded-[7px] text-[16px] text-[#949494] fontSB px-5 py-3' />
+    <div key={index} className='flex flex-col px-10 py-8 sm:px-25 sm:py-20 bg-[#F6F6F6] border-[#232323] border-[0.5px] rounded-[15px] w-full sm:mt-20 mt-10'>
+      <div className='flex text-[15px] sm:text-[20px] fontSB'>Question {String(index + 1).padStart(2, '0')}.</div>
+      <input type="text" placeholder='문제를 입력해주세요.' className='flex w-fit lg:w-[50%] sm:w-[74%] sm:text-[16px] text-[12.5px] sm:mt-10 mt-3 bg-[#FFFFFF] border-[#E5E5E5] border-[1.51px] rounded-[7px] text-[#949494] fontSB sm:px-5 sm:py-3 px-4 py-2' />
 
-      <div className='flex w-fit mt-20 text-[20px] fontSB'>문제 형식</div>
-      <div className='flex flex-col justify-around max-w-fit sm:flex-row px-4 mt-10 bg-[#FFFFFF] border-[#E5E5E5] border-[1.51px] rounded-[7px]'>
+      <div className='flex w-fit sm:mt-20 mt-8 sm:text-[20px] text-[15px] fontSB'>문제 형식</div>
+      <div className='flex justify-around max-w-fit sm:flex-row sm:px-4 sm:mt-10 mt-3 bg-[#FFFFFF] border-[#E5E5E5] border-[1.51px] rounded-[7px]'>
         {['객관식', '주관식'].map((type) => (
-          <label key={type} className='flex text-[16px] text-[#232323] fontSB px-5 py-3'>
+          <label key={type} className='flex sm:text-[16px] text-[11px] text-[#232323] fontSB sm:px-5 sm:py-3 px-4 py-2'>
             <div className="flex mr-2.5 w-fit">{type}</div>
             <input
               type="radio"
@@ -205,12 +205,12 @@ export default function AdminQuizContent() {
 
       {questionTypes[index] === '객관식' && (
         <>
-          <div className='flex mt-20 text-[20px] fontSB'>보기 입력</div>
-          <div className='flex flex-col w-full px-4 py-7 mt-10 bg-[#FFFFFF] border-[#232323] border-[1px] rounded-[7px]'>
+          <div className='flex sm:mt-20 mt-8 sm:text-[20px] text-[15px] fontSB'>보기 입력</div>
+          <div className='flex flex-col w-full px-4 sm:py-7 py-5 sm:mt-10 mt-4 bg-[#FFFFFF] border-[#232323] border-[1px] rounded-[7px]'>
             {[...Array(5)].map((_, i) => (
-              <label key={i} className='flex items-center py-2 pl-5 fontRegular'>
+              <label key={i} className='flex w-fit items-center py-1 sm:py-2 sm:pl-5 fontRegular'>
                 <input type="radio" name={`answer-${index}`} className='w-5' />
-                <input type='text' placeholder='보기를 입력해 주세요.' className="flex ml-2.5 w-[180px] text-[19px] text-[#121212] px-2 py-1" />
+                <input type='text' placeholder='보기를 입력해 주세요.' className="flex ml-1.5 sm:ml-2.5 w-fit sm:text-[19px] text-[12.5px] text-[#121212] px-2 py-1" />
               </label>
             ))}
           </div>
@@ -219,23 +219,23 @@ export default function AdminQuizContent() {
 
       {questionTypes[index] === '주관식' && (
         <>
-          <div className='flex mt-20 text-[20px] fontSB'>정답 입력</div>
+          <div className='flex sm:mt-20 mt-8 sm:text-[20px] text-[15px] fontSB'>정답 입력</div>
           <input
             type="text"
             placeholder='정답을 입력해주세요.'
             name={`subjective-answer-${index}`}
-            className='flex w-[400px] mt-10 bg-[#FFFFFF] border-[#E5E5E5] border-[1.51px] rounded-[7px] text-[16px] text-[#949494] fontSB px-5 py-3'
+            className='flex sm:w-[400px] w-fit sm:mt-10 mt-3 bg-[#FFFFFF] border-[#E5E5E5] border-[1.51px] rounded-[7px] sm:text-[16px] text-[12.5px] text-[#949494] fontSB sm:px-5 sm:py-3 px-4 py-2'
           />
         </>
       )}
 
       {/* 파일첨부 input 추가 */}
-      <div className="flex mt-20 text-[20px] fontSB">파일 업로드</div>
+      <div className="flex sm:mt-20 mt-8 sm:text-[20px] text-[15px] fontSB">파일 업로드</div>
       <label
         htmlFor={`file-upload-${index}`}
-        className="flex w-fit mt-10 bg-[#FFFFFF] border-[#E5E5E5] border-[1.51px] rounded-[7px] px-5 py-3 cursor-pointer"
+        className="flex w-fit sm:mt-10 mt-3 bg-[#FFFFFF] border-[#E5E5E5] border-[1.51px] rounded-[7px] sm:px-5 sm:py-3 px-4 py-2 cursor-pointer"
       >
-        <span className="text-[14px] text-[#232323] underline">파일 선택</span>
+        <span className="sm:text-[14px] text-[9.5px] text-[#232323] underline">파일 선택</span>
         <input
           id={`file-upload-${index}`}
           type="file"
@@ -244,7 +244,7 @@ export default function AdminQuizContent() {
           className="hidden"
         />
 
-        <div className="ml-3 text-[14px]">
+        <div className="ml-3 sm:text-[14px] text-[9.5px]">
           {selectedFiles[index] && selectedFiles[index].length > 0 ? (
             <ul className="text-[#232323] list-disc ml-5">
               {selectedFiles[index].map((file, i) => (
@@ -257,31 +257,36 @@ export default function AdminQuizContent() {
         </div>
       </label>
 
-      <div className='flex mt-20 text-[20px] fontSB'>해설 입력</div>
-      <input type="text" placeholder='해설을 입력해주세요.' className='flex lg:w-[50%] sm:w-[74%] mt-10 bg-[#FFFFFF] border-[#E5E5E5] border-[1.51px] rounded-[7px] text-[16px] text-[#949494] fontSB px-5 py-3' />
+      <div className='flex sm:mt-20 mt-8 sm:text-[20px] text-[15px] fontSB'>해설 입력</div>
+      <input type="text" placeholder='해설을 입력해주세요.' className='flex lg:w-[50%] sm:w-[74%] w-fit sm:mt-10 mt-3 bg-[#FFFFFF] border-[#E5E5E5] border-[1.51px] rounded-[7px] sm:text-[16px] text-[12.5px] text-[#949494] fontSB sm:px-5 sm:py-3 px-4 py-2' />
     </div>
   );
 
   return (
     <div className='flex flex-col justify-start w-full min-h-screen mb-40'>
-      <div className='flex mt-20 text-[20px] fontBold'>제목 입력</div>
-      <input type="text" placeholder='제목을 입력해주세요.' className='flex w-[400px] mt-10 border-[#E5E5E5] border-[1.51px] rounded-[7px] text-[16px] text-[#949494] fontSB px-5 py-3' />
+      <div className='flex sm:mt-20 mt-10 sm:text-[20px] text-[17px] fontBold'>제목 입력</div>
+      <input type="text" placeholder='제목을 입력해주세요.' className='flex w-fit sm:mt-10 mt-5 border-[#E5E5E5] border-[1.51px] rounded-[7px] sm:text-[16px] text-[12.5px] text-[#949494] fontSB sm:px-5 sm:py-3 px-4 py-2' />
 
-      <div className='flex mt-20 text-[20px] fontBold'>문제 갯수</div>
+      <div className='flex sm:mt-20 mt-8 sm:text-[20px] text-[17px] fontBold'>문제 갯수</div>
       <input
         type="number"
         placeholder='숫자만 입력해 주세요.'
-        className='flex w-[400px] mt-10 border-[#E5E5E5] border-[1.51px] rounded-[7px] text-[16px] text-[#949494] fontSB px-5 py-3'
+        className='flex w-fit sm:mt-10 mt-5 border-[#E5E5E5] border-[1.51px] rounded-[7px] sm:text-[16px] text-[12.5px] text-[#949494] fontSB sm:px-5 sm:py-3 px-4 py-2'
         onChange={handleQuestionCountChange}
         min={0}
       />
 
       {Array.from({ length: questionCount }).map((_, index) => renderQuestionBlock(index))}
 
-      <div className='flex justify-end mt-20'>
-        <div className='flex bg-[#E9E9E9] text-[#838383] px-5 py-2 rounded-[6.45px] cursor-pointer'>나가기</div>
+      <div className='flex justify-end sm:mt-20 mt-10'>
         <div
-          className='flex bg-[#3B79FF] text-white px-5 py-2 ml-7 rounded-[6.45px] cursor-pointer'
+          className='flex bg-[#E9E9E9] text-[#838383] sm:px-5 sm:py-2 px-4 py-1.5 rounded-[6.45px] cursor-pointer'
+          onClick={() => navigate(-1)}  // 이전 페이지로 이동
+        >
+          나가기
+        </div>
+        <div
+          className='flex bg-[#3B79FF] text-white sm:px-5 sm:py-2 px-4 py-1.5 sm:ml-7 ml-2 rounded-[6.45px] cursor-pointer'
           onClick={handleSubmit}
         >
           등록하기
