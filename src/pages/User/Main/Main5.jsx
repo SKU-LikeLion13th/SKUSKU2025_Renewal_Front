@@ -7,8 +7,10 @@ export default function Main5() {
         {/* projects */}
         <div>
           <div className="flex flex-col text-center justify-center">
-            <p className="text-[#3B79FF] fontBold text-[30px]">PROJECTS</p>
-            <p className="fontThin text-[#ffffff] my-8">
+            <p className="text-[#3B79FF] fontBold sm:text-[30px] text-[20px]">
+              PROJECTS
+            </p>
+            <p className="fontThin text-[#ffffff] sm:mt-8 mt-2 sm:text-[18px] text-[9px] mb-12">
               성결대학교 멋쟁이사자처럼과 함께한 프로젝트들을 소개합니다.
             </p>
           </div>
@@ -16,7 +18,7 @@ export default function Main5() {
           <div></div>
         </div>
         {/* 스르륵 */}
-        <div>
+        <div className="sm:mx-9 mx-4">
           <ProjectSlider />
         </div>
       </div>

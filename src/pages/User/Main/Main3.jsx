@@ -61,21 +61,21 @@ export default function Main3() {
           @2025 PROGRAM info
         </p>
 
-        <div className="max-w-6xl mx-auto sm:flex sm:flex-col max-sm:grid max-sm:grid-cols-2 max-sm:gap-2 gap-20 sm:gap-40">
+        <div className="max-w-5xl mx-auto sm:flex sm:flex-col max-sm:grid max-sm:grid-cols-2 sm:gap-40 ">
           {programs.map((program, idx) => (
             <div
               key={idx}
               className={`flex flex-col sm:flex-row items-center ${
                 idx % 2 === 1 ? "sm:flex-row-reverse" : ""
-              } gap-6 sm:gap-32`}
+              } gap-4 sm:gap-32`}
             >
               <img
                 src={program.img}
                 alt={program.highlight}
-                className="w-40 sm:w-[45%] sm:rounded-[15px] rounded-sm"
+                className="w-38 sm:w-[45%] sm:rounded-[15px] rounded-sm"
               />
-              <div className="flex-1 text-white space-y-4 sm:space-y-6 sm:px-4 ">
-                <p className="text-[12px] sm:text-[30px] fontSB">
+              <div className="flex-1 text-white space-y-4 sm:space-y-6 sm:px-4">
+                <p className="text-[12px] sm:text-[30px] fontSB ">
                   {program.title}
                   <span className="text-[#72A6FF]">{program.highlight}</span>
                 </p>
