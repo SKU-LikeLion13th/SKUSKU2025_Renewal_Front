@@ -11,7 +11,6 @@ import Admin from "./routes/Admin";
 import "./css/App.css";
 import Header from "./components/Header";
 import HeaderMobile from "./components/HeaderMobile";
-import Footer from "./components/Footer";
 import CyberCampus from "./routes/CyberCampus";
 import CCHeader from "./components/CCHeader";
 

@@ -122,11 +122,7 @@ export default function CCHeader() {
           <CCBtn isHovered={isHovered} />
 
           {user ? (
-            <div
-              className={`flex items-center justify-center  ${
-                isHovered ? "text-white" : "text-black"
-              }`}
-            >
+            <div className="flex items-center justify-center ">
               <div className="flex items-center">
                 {/** 색상 조건 설정 */}
                 <div

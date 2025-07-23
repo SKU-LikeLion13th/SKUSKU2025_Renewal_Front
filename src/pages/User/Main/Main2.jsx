@@ -64,25 +64,31 @@ export default function Main2() {
           "내 아이디어를 내 손으로 실현한다."
         </p>
         {/* 박스 3개 */}
-        <div className="flex sm:space-x-20 space-x-2 mt-2">
+        {/* 박스 3개 */}
+        <div className="flex w-full px-4 sm:px-0 justify-center gap-2 sm:gap-20 mt-2">
           {items.map(({ title, desc, imgSrc, imgClass, bgColor }, idx) => (
             <div
               key={idx}
-              className="flex sm:w-100 sm:h-50 w-28 h-16 sm:rounded-xl rounded-sm items-center justify-evenly"
+              className="flex flex-1 min-w-0 sm:max-w-[300px] max-w-[33%] h-auto sm:h-52 aspect-[4/3] sm:aspect-auto rounded-sm sm:rounded-xl items-center justify-between px-2 sm:px-4 py-2"
               style={{ backgroundColor: bgColor }}
             >
-              <div className="flex flex-col items-around">
-                <p className="sm:fontBold sm:text-[35px] text-[11px]">
+              <div className="flex flex-col justify-center gap-1 sm:gap-2 text-left overflow-hidden">
+                <p className="fontBold text-[11px] sm:text-[22px] truncate">
                   {title}
                 </p>
-                <p className="hidden sm:block sm:fontEL sm:text-[13px]">
+                <div className="hidden sm:block fontEL text-[12px] break-words leading-tight">
                   {desc}
-                </p>
+                </div>
               </div>
-              <img src={imgSrc} alt={title} className={imgClass} />
+              <img
+                src={imgSrc}
+                alt={title}
+                className={`${imgClass} shrink-0`}
+              />
             </div>
           ))}
         </div>
+
         {/* 글 */}
         <div className="text-center hidden sm:block">
           <p className="fontThin">

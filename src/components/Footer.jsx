@@ -29,7 +29,9 @@ export default function Footer() {
             <p>주소: 경기도 안양시 만안구 성결대학로 53</p>
             <p>문의처: sku@likelion.org</p>
           </div>
-          <div className="fontSB text-[#4F4F4F]">SKU LIKELION @2025_V2</div>
+          <div className="fontSB text-[12px] text-[#4F4F4F]">
+            SKU LIKELION @2025_V2
+          </div>
         </div>
       </div>
     </div>
