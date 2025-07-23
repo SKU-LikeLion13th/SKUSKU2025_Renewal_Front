@@ -8,6 +8,11 @@ export default function AdminMain() {
     navigate(`/admin/LectureManagement/${track}`);
   };
 
+  const handleTrackSelect2 = (trackType) => {
+    // track: FRONT-END, BACK-END, DESIGN
+    navigate(`/admin/reviewQuiz/${trackType}`);
+  };
+
   return (
     <div className="mt-40">
       <h2>트랙 선택</h2>
@@ -25,6 +30,14 @@ export default function AdminMain() {
           과제 등록하기
         </button>
         {/* 다른 메뉴도 비슷하게 처리 가능 */}
+      </div>
+
+      <div className="mt-6 space-x-4">
+        <button onClick={() => handleTrackSelect2("FRONTEND")}>
+          프론트엔드 복습하기
+        </button>
+        <button onClick={() => handleTrackSelect2("BACKEND")}>백엔드 복습하기</button>
+        <button onClick={() => handleTrackSelect2("DESIGN")}>디자인 복습하기</button>
       </div>
     </div>
   );

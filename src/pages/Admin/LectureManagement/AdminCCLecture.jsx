@@ -48,19 +48,35 @@ const AdminCCLecture = () => {
 
   const handleDelete = async () => {
     try {
-      // await Promise.all(
-      //   selectedItems.map((id) => API.delete(`/admin/lecture/${id}`))
-      // );
       await Promise.all(
         selectedItems.map((id) => {
           const lecture = data.find((item) => item.id === id);
-          console.log("lecture 객체 확인:", lecture);
-          const fileKey = lecture?.files?.[0]?.fileKey;
-          // console.log(`삭제 요청 - ID: ${id}, fileKey: ${lecture.fileKey}`);
-          console.log("fileKey: ", fileKey);
+          // const fileKey =
+          //   lecture?.files?.map((f) => f.fileKey).filter(Boolean) || [];
+
+          const fileKey = [];
+
+          // 1. files 배열이 있다면 거기서 추출
+          if (lecture?.files?.length > 0) {
+            fileKey.push(
+              ...lecture.files.map((f) => f.fileKey).filter(Boolean)
+            );
+          }
+
+          // 2. fileKey가 문자열로 직접 존재한다면 그것도 추가
+          if (lecture?.fileKey && typeof lecture.fileKey === "string") {
+            fileKey.push(lecture.fileKey);
+          }
+
+          // console.log("fileKey: ", fileKey);
+          // console.log("삭제 요청 lecture:", lecture);
+          console.log("최종 fileKey:", fileKey);
+          console.log("삭제 요청 lecture:", lecture);
 
           return API.delete(`/admin/lecture/${id}`, {
-            data: { fileKey }, // 요청 본문에 fileKey 포함
+            // headers: { "Content-Type": "application/json" },
+            data: { fileKey },
+            // withCredentials: true,
           });
         })
       );
