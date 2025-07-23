@@ -20,13 +20,15 @@ export default function CheckLions() {
     const fetchSubmittedLions = async () => {
       try {
         const { data } = await API.get(
-          `/assignment/checklions/${assignmentId}`
+          `/admin/assignment/checklions/${assignmentId}`
         );
+
         const processed = data.map((item, index) => ({
-          id: item.memberId,
-          name: item.name,
+          id: item.submitAssignmentId,
+          name: item.lionName ?? "", // lionName → name으로 매핑
           index: index + 1,
         }));
+
         setAssignments(processed);
       } catch (error) {
         console.error("아기사자 과제 조회 실패:", error);
@@ -42,7 +44,7 @@ export default function CheckLions() {
   };
 
   const filteredAssignments = assignments.filter((a) =>
-    a.name.toLowerCase().includes(searchTerm.toLowerCase())
+    a.name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const totalPosts = filteredAssignments.length;
@@ -85,6 +87,14 @@ export default function CheckLions() {
           flexValues={["1", "10", "2", "2"]}
           emptyText="제출한 아기사자가 없습니다."
         />
+
+        {totalPages > 1 && (
+          <AdminAssignmentPagination
+            totalPages={totalPages}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+          />
+        )}
       </div>
     </div>
   );
