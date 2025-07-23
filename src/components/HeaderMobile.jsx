@@ -6,6 +6,12 @@ export default function HeaderMobile() {
   const [isHovered, setIsHovered] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const menuItems = [
+    { title: "PROJECT", path: "/project" },
+    { title: "TEAM", path: "/team" },
+    { title: "COMMUNITY", path: "/community" },
+  ];
+
   return (
     <div
       className={`fixed z-10 bg-[#121212] top-0 w-full transition-all duration-300 ${
@@ -54,9 +60,10 @@ export default function HeaderMobile() {
         {/* 모바일 메뉴 항목 */}
         {isMenuOpen && (
           <div className="flex flex-col space-y-4 mt-4 md:hidden transition-all duration-300">
-            {["PROJECT", "TEAM", "COMMUNITY"].map((title, index) => (
-              <div
-                key={index}
+            {menuItems.map(({ title, path }) => (
+              <Link
+                to={path}
+                key={title}
                 className="text-black text-base fontMedium cursor-pointer px-4"
                 onClick={() => {
                   setIsMenuOpen(false);
@@ -64,7 +71,7 @@ export default function HeaderMobile() {
                 }}
               >
                 {title}
-              </div>
+              </Link>
             ))}
           </div>
         )}

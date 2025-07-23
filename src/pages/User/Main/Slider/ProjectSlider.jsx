@@ -11,18 +11,25 @@ const ProjectItem = ({ title, subtitle, image, url }) => (
     target="_blank"
     rel="noopener noreferrer"
   >
-    <div className="relative w-3/5 xl:w-full h-[14rem] mx-8 rounded-[15px] overflow-hidden">
+    <div className="relative w-[90%] mx-2 rounded-[10px] overflow-hidden aspect-[4/3] md:aspect-[16/9]">
       <div
         className="absolute inset-0 bg-center bg-cover rounded-[15px]"
         style={{
           backgroundImage: `url(data:image/png;base64,${image})`,
         }}
       >
-        <div className="absolute inset-0 bg-black opacity-50 rounded-[15px]"></div>
+        <div className="absolute inset-0 bg-black opacity-50 rounded-[15px]" />
       </div>
-      <div className="relative z-10 flex flex-col justify-end h-full pb-6 pl-6 text-start">
-        <div className="text-3xl fontEB text-white">{title}</div>
-        <p className="pt-2 text-xl text-white fontRegular">{subtitle}</p>
+      <div
+        className="relative z-10 flex flex-col justify-end h-full 
+                      pb-3 pl-3 sm:pb-4 sm:pl-4 md:pb-5 md:pl-5 lg:pb-6 lg:pl-6 text-start"
+      >
+        <div className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl fontEB text-white">
+          {title}
+        </div>
+        <p className="pt-1 sm:pt-2 text-[10px] sm:text-sm md:text-base lg:text-lg text-white fontRegular">
+          {subtitle}
+        </p>
       </div>
     </div>
   </a>
@@ -56,17 +63,17 @@ export default function ProjectSlider() {
     fade: false,
     responsive: [
       {
-        breakpoint: 1280, // 1240px 미만에서는 슬라이드 개수를 1로 설정
+        breakpoint: 768,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: 3,
         },
       },
     ],
   };
 
   return (
-    <div className="flex justify-center items-center">
-      <div className="w-[85%] mx-auto">
+    <div className="flex justify-center items-center py-6">
+      <div className="w-full">
         <Slider {...settings}>
           {projects.map((project) => (
             <ProjectItem
