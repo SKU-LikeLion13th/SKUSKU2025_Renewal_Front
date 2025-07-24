@@ -29,7 +29,10 @@ const EventModal = ({ date, onClose, onSaved, initialData }) => {
         color: initialData.color || "",
       });
     } else {
-      const formattedDate = date.toISOString().split("T")[0];
+      const offsetDate = new Date(
+        date.getTime() - date.getTimezoneOffset() * 60000
+      );
+      const formattedDate = offsetDate.toISOString().split("T")[0];
       setFormData({
         title: "",
         startDate: formattedDate,
