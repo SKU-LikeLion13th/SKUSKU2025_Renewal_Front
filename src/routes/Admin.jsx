@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import AdminMain from "../pages/Admin/AdminMain";
+import AdminMain from "../pages/Admin/Intro/AdminRealMain";
 import AdminReview from "../pages/Admin/Review/AdminReview";
 import AdminReviewUpdate from "../pages/Admin/Review/AdminReviewUpdate";
 import AdminQuiz from "../pages/Admin/Quiz/AdminQuiz";

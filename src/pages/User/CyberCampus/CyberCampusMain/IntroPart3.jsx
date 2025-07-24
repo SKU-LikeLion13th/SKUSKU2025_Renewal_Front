@@ -1,8 +1,11 @@
 import React from "react";
 import images from "../../../../utils/images.jsx";
 import Calendar from "./CC_Calendar.jsx";
+import AdminCalendar from "../../../Admin/Intro/AdminCalendar.jsx";
 
 const IntroPart3 = () => {
+  const isAdmin = location.pathname.includes("/Admin");
+
   return (
     <div className="relative w-full min-h-screen flex justify-center items-center">
       {/* 배경 이미지 */}
@@ -35,8 +38,8 @@ const IntroPart3 = () => {
             />
           </div>
         </div>
-        <div className="mb-15">
-          <Calendar /> 
+        <div className="md:mb-15">
+          {isAdmin ? <AdminCalendar/> : <Calendar />}
         </div>
       </div>
     </div>

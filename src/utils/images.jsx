@@ -22,6 +22,7 @@ const images = {
   part3bg2: `${PATH}assets/images/CCIntro/part3bg2.png`,
   chart: `${PATH}assets/images/CCIntro/chart.png`,
   bell: `${PATH}assets/images/CCIntro/bell.png`,
+  Pen: `${PATH}assets/images/CCIntro/Pen.png`,
 };
 
 export default images;

@@ -1,58 +1,99 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import TaskCard from "./TaskCard";
 import images from "../../../../utils/images.jsx";
 
-const baseCards = [
-  {
-    id: "01",
-    title: "과제",
-    subtitle: "확인하기",
-    icon: images.introimg1,
-    color: "#407cfe",
-  },
-  {
-    id: "02",
-    title: "자료실",
-    subtitle: "바로가기",
-    icon: images.introimg2,
-    color: "#264c9f",
-  },
-  {
-    id: "03",
-    title: "배운 내용",
-    subtitle: "복습하기",
-    icon: images.introimg3,
-    color: "#4b76d2",
-  },
-];
+const isAdmin = location.pathname.includes("/Admin");
+
+//관리자인지 링크로 확인해서 isAdmin일때 설정들 추가
+const baseCards = isAdmin
+  ? [
+      {
+        id: "01",
+        title: "신규 과제",
+        subtitle: "등록하기",
+        icon: images.introimg1,
+        color: "#407cfe",
+      },
+      {
+        id: "02",
+        title: "아기사자 과제",
+        subtitle: "채점하기",
+        icon: images.introimg1,
+        color: "#407cfe",
+      },
+      {
+        id: "03",
+        title: "수업자료",
+        subtitle: "관리하기",
+        icon: images.introimg2,
+        color: "#264c9f",
+      },
+      {
+        id: "04",
+        title: "복습 문제",
+        subtitle: "관리하기",
+        icon: images.introimg3,
+        color: "#4b76d2",
+      },
+    ]
+  : [
+      {
+        id: "01",
+        title: "과제",
+        subtitle: "확인하기",
+        icon: images.introimg1,
+        color: "#407cfe",
+      },
+      {
+        id: "02",
+        title: "자료실",
+        subtitle: "바로가기",
+        icon: images.introimg2,
+        color: "#264c9f",
+      },
+      {
+        id: "03",
+        title: "배운 내용",
+        subtitle: "복습하기",
+        icon: images.introimg3,
+        color: "#4b76d2",
+      },
+    ];
 
 const trackInfo = {
   백엔드: {
     name: "Back-end",
     buttonColor: "#0AA678",
     backgroundImage: images.BackEndBg,
-    cardColors: ["#0AA678", "#4F9B84", "#1CC694"],
+    cardColors: isAdmin
+      ? ["#1CC694", "#0AA678", "#4F9B84", "#1CC694"]
+      : ["#0AA678", "#4F9B84", "#1CC694"],
     urlName: "BACKEND",
   },
   프론트엔드: {
     name: "Front-end",
     buttonColor: "#F6701D",
     backgroundImage: images.FrontEndBg,
-    cardColors: ["#EB6918", "#E77731", "#F88A46"],
+    cardColors: isAdmin
+      ? ["#EB6918", "#E77731", "#F88A46", "#FF8336"]
+      : ["#EB6918", "#E77731", "#F88A46"],
     urlName: "FRONTEND",
   },
   디자인: {
     name: "Design",
     buttonColor: "#FC6163",
     backgroundImage: images.DesignBg,
-    cardColors: ["#FA5558", "#E67678", "#FF8282"],
+    cardColors: isAdmin
+      ? ["#FA5558", "#FF8282", "#E67678", "#F96F71"]
+      : ["#FA5558", "#E67678", "#FF8282"],
     urlName: "DESIGN",
   },
 };
 
 const IntroPart2 = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [selectedTrack, setSelectedTrack] = useState(null);
   const currentTrack = trackInfo[selectedTrack];
@@ -61,19 +102,25 @@ const IntroPart2 = () => {
 
   const handleCardClick = (cardId) => {
     if (!selectedTrack) return;
-
     const urlTrack = trackInfo[selectedTrack].urlName;
     let path = "";
+    if (isAdmin) {
+      if (cardId === "01") path = `/admin/LectureManagement/${urlTrack}`;
+      else if (cardId === "02") path = `/admin/LectureManagement/${urlTrack}`;
+      else if (cardId === "03") path = `/admin/LectureManagement/${urlTrack}`;
+      else if (cardId === "04") path = `/admin/reviewQuiz/${urlTrack}`;
+      navigate(path);
+    } else {
+      if (cardId === "01") {
+        path = `/cybercampus/assignment/${urlTrack}`;
+      } else if (cardId === "02") {
+        path = `/cybercampus/lecture/${urlTrack}`;
+      } else if (cardId === "03") {
+        path = `/cybercampus/review/${urlTrack}`;
+      }
 
-    if (cardId === "01") {
-      path = `/cybercampus/assignment/${urlTrack}`;
-    } else if (cardId === "02") {
-      path = `/cybercampus/lecture/${urlTrack}`;
-    } else if (cardId === "03") {
-      path = `/cybercampus/review/${urlTrack}`;
+      navigate(path);
     }
-
-    navigate(path);
   };
 
   return (
@@ -140,7 +187,11 @@ const IntroPart2 = () => {
         )}
 
         {/*위 선택한 트랙의 어디로 갈래?*/}
-        <div className="flex gap-4 sm:gap-8 md:gap-20">
+        <div
+          className={`${
+            isAdmin ? "grid grid-cols-2 gap-3 sm:flex sm:gap-8 md:gap-20" : "flex gap-4 sm:gap-8 md:gap-20"
+          }`}
+        >
           {baseCards.map((c, idx) => (
             <TaskCard
               key={c.id}
@@ -159,6 +210,7 @@ const IntroPart2 = () => {
                   : "#7f7f7f" // 트랙 선택 전
               }
               onClick={() => handleCardClick(c.id)}
+              isAdmin={isAdmin}
             />
           ))}
         </div>
