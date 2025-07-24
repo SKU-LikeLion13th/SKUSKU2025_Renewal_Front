@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, setCurrentQuestionIndex }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [selectedAnswer, setSelectedAnswer] = useState({});
-  const redirectPath = localStorage.getItem("redirectAfterLogin") || "";
-  const pathParts = redirectPath.split("/");
-  const trackType = pathParts[pathParts.length - 1] || "";
+  const { trackType } = location.state || {};
   const [modalOpen, setModalOpen] = useState(false);
   const [modalImageSrc, setModalImageSrc] = useState("");
 
