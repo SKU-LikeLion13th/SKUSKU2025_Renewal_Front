@@ -65,34 +65,47 @@ const ReviewBoard = ({ trackType }) => {
       </div>
 
       <div className="flex w-full min-h-[590px] flex-col">
-        {quizzes.map((quiz) => (
-          <div key={quiz.reviewWeekId} className="flex w-full border-b border-b-[#E0E0E0] p-2">
-            <div className="flex justify-center sm:px-1 px-0.5 sm:text-[13.5px] text-[12px]" style={{ flex: flexValues[0] }}>
-              {quiz.Id}
+        {quizzes.length > 0 ? (
+          quizzes.map((quiz) => (
+            <div key={quiz.reviewWeekId} className="flex w-full border-b border-b-[#E0E0E0] p-2">
+              <div className="flex justify-center sm:px-1 px-0.5 sm:text-[13.5px] text-[12px]" style={{ flex: flexValues[0] }}>
+                {quiz.Id}
+              </div>
+              <div 
+                className="flex justify-start sm:px-1 px-0.5 sm:text-[13.5px] text-[12px] cursor-pointer"
+                style={{ flex: flexValues[1] }}
+                onClick={() =>
+                  navigate(`/cybercampus/quiz/${quiz.reviewWeekId}`, {
+                    state: {
+                      title: quiz.title,
+                      trackType: trackType,
+                    },
+                  })
+                }
+              >
+                {quiz.title}
+              </div>
+              <div
+                className={`flex justify-center sm:px-1 px-0.5 sm:text-[13.5px] text-[12px] ${
+                  quiz.IsSubmit === "제출" ? "text-[#3B79FF] font-bold" : ""
+                }`}
+                style={{ flex: flexValues[2] }}
+              >
+                {quiz.IsSubmit}
+              </div>
+              <div className="flex justify-center sm:px-1 px-0.5 sm:text-[13.5px] text-[12px]" style={{ flex: flexValues[3] }}>
+                {quiz.score} / {quiz.total}
+              </div>
             </div>
-            <div 
-              className="flex justify-start sm:px-1 px-0.5 sm:text-[13.5px] text-[12px] cursor-pointer"
-              style={{ flex: flexValues[1] }}
-              onClick={() => navigate(`/cybercampus/quiz/${quiz.reviewWeekId}`, { state: { title: quiz.title } })}
-            >
-              {quiz.title}
-            </div>
-            <div
-              className={`flex justify-center sm:px-1 px-0.5 sm:text-[13.5px] text-[12px] ${
-                quiz.IsSubmit === "제출" ? "text-[#3B79FF] font-bold" : ""
-              }`}
-              style={{ flex: flexValues[2] }}
-            >
-              {quiz.IsSubmit}
-            </div>
-            <div className="flex justify-center sm:px-1 px-0.5 sm:text-[13.5px] text-[12px]" style={{ flex: flexValues[3] }}>
-              {quiz.score} / {quiz.total}
-            </div>
+          ))
+        ) : (
+          <div className="flex justify-center items-center h-full text-[#888] text-sm sm:text-base py-10">
+            문제가 없습니다.
           </div>
-        ))}
+        )}
       </div>
-    </div>
-  );
-};
 
+          </div>
+        );
+      };
 export default ReviewBoard;

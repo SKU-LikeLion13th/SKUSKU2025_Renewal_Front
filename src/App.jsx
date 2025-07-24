@@ -13,6 +13,7 @@ import Header from "./components/Header";
 import HeaderMobile from "./components/HeaderMobile";
 import CyberCampus from "./routes/CyberCampus";
 import CCHeader from "./components/CCHeader";
+import ScrollToTop from "./components/ScrollToTop";
 
 function AppContent() {
   const location = useLocation();
@@ -29,6 +30,7 @@ function AppContent() {
 
   return (
     <div className="App">
+      <ScrollToTop />
       {isCyberCampus ? <CCHeader /> : isMobile ? <HeaderMobile /> : <Header />}
       <Routes>
         <Route path="/CyberCampus/*" element={<CyberCampus />} />

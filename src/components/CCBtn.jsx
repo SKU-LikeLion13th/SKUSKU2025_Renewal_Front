@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function CCBtn({ isHovered }) {
   return (
-    <Link to="CyberCampus/intro">
+    <Link to="CyberCampus">
       <div
         className={`flex text-white items-center px-4 py-2 rounded-sm transition-colors duration-300
           ${
