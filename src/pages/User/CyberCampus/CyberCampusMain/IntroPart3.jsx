@@ -4,7 +4,7 @@ import Calendar from "./CC_Calendar.jsx";
 import AdminCalendar from "../../../Admin/Intro/AdminCalendar.jsx";
 
 const IntroPart3 = () => {
-  const isAdmin = location.pathname.includes("/Admin");
+  const isAdmin = location.pathname.includes("/admin");
 
   return (
     <div className="relative w-full min-h-screen flex justify-center items-center">

@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import TaskCard from "./TaskCard";
 import images from "../../../../utils/images.jsx";
 
-const isAdmin = location.pathname.includes("/Admin");
+const isAdmin = location.pathname.includes("/admin");
 
 //관리자인지 링크로 확인해서 isAdmin일때 설정들 추가
 const baseCards = isAdmin
