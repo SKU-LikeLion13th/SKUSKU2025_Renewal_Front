@@ -13,7 +13,7 @@ export default function CyberCampus() {
   return (
     <div>
       <Routes>
-        <Route path="intro" element={<CyberCampusIntro />} />
+        <Route path="/" element={<CyberCampusIntro />} />
         <Route path="lecture/:track" element={<CCLecture />} />
         <Route path="lecture-detail/:id" element={<LectureDetail />} />
         <Route path="/review/:trackType" element={<Review />} />

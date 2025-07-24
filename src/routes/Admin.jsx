@@ -16,7 +16,7 @@ import CheckLions from "../pages/Admin/Assignment/CheckLions";
 const Admin = () => {
   return (
     <Routes>
-      <Route path="/main" element={<AdminMain />} />
+      <Route path="/" element={<AdminMain />} />
       <Route path="/assignment/:track" element={<AssignmentManagement />} />
       <Route path="/assignment/add/:track" element={<AddAssignment />} />
       <Route path="/assignment/check/:track" element={<AssignmentCheck />} />
