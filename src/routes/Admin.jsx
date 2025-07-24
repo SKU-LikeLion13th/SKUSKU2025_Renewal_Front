@@ -12,6 +12,7 @@ import AdminProject from "../pages/Admin/Project/AdminProject";
 import AddProject from "../pages/Admin/Project/AddProject";
 import AssignmentCheck from "../pages/Admin/Assignment/AssignmentCheck";
 import CheckLions from "../pages/Admin/Assignment/CheckLions";
+import CheckDetails from "../pages/Admin/Assignment/CheckDetails";
 
 const Admin = () => {
   return (
@@ -21,6 +22,10 @@ const Admin = () => {
       <Route path="/assignment/add/:track" element={<AddAssignment />} />
       <Route path="/assignment/check/:track" element={<AssignmentCheck />} />
       <Route path="/assignment/check/:id/:track" element={<CheckLions />} />
+      <Route
+        path="/assignment/check/:id/:submitId/:track"
+        element={<CheckDetails />}
+      />
       <Route path="/reviewQuiz/:trackType" element={<AdminReview />} />
       <Route path="/adminQuiz/:trackType" element={<AdminQuiz />} />
       <Route

@@ -6,7 +6,7 @@ import CyberCampusIntro from "../pages/User/CyberCampus/CyberCampusMain/CyberCam
 import Review from "../pages/User/Review/Review";
 import Quiz from "../pages/User/Quiz/Quiz";
 import AssignmentMain from "../pages/User/Assignment/AssignmentMain";
-import AssignmentSubmitPage from "../pages/User/Assignment/AssignmentSubmitPage";
+import AssignmentSubmitPage from "../pages/User/Assignment/AssignmentSubmit/AssignmentSubmitPage";
 import CCFooter from "../components/CCFooter";
 
 export default function CyberCampus() {
