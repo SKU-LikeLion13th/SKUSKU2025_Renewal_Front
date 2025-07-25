@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import API from "../../../utils/axios";
 import AdminAssignmentCheckBoard from "./AdminAssignmentCheckBoard";
 import AdminAssignmentPagination from "./AdminAssignmentPagination";
+import Breadcrumb from "../../../components/Breadcrumb";
 
 export default function AssignmentCheck() {
   const navigate = useNavigate();
@@ -112,6 +113,10 @@ export default function AssignmentCheck() {
       <div className="flex flex-col w-9/12 mt-30 mx-auto justify-start lg:w-8/12">
         <div className="flex items-center justify-between">
           <h1 className="text-4xl font-bold my-15">{displayTrack} 과제 채점</h1>
+        </div>
+
+        <div className="mb-10">
+          <Breadcrumb/>
         </div>
 
         <AdminAssignmentCheckBoard

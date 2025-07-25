@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import API from "../../../utils/axios";
+import Breadcrumb from "../../../components/Breadcrumb";
 
 export default function CheckDetails() {
   const navigate = useNavigate();
@@ -105,6 +106,10 @@ export default function CheckDetails() {
       <div className="flex flex-col w-9/12 mt-30 mx-auto justify-start lg:w-8/12">
         {/* 타이틀 */}
         <div className="text-4xl font-bold my-15">{displayTrack} 과제 채점</div>
+        
+        <div className="mb-10">
+          <Breadcrumb/>
+        </div>
 
         <h1 className="text-2xl font-bold mb-6">{assignment.title}</h1>
 

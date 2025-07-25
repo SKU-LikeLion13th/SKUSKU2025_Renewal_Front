@@ -10,7 +10,8 @@ const pathMap = {
   LectureEdit: "자료 수정",
   LectureUpload:"자료 업로드",
   reviewUpdate:"복습 퀴즈 수정",
-  reviewAdd: "복습 퀴즈 추가"
+  reviewAdd: "복습 퀴즈 추가",
+  add: "과제 추가 및 수정"
 };
 
 const sectionMap = {
@@ -19,6 +20,7 @@ const sectionMap = {
   review: "복습 공간",
   LectureManagement: "자료 관리",
   reviewQuiz: "복습 퀴즈",
+  assignment_check: "과제 채점",
 };
 
 const Breadcrumb = () => {
@@ -40,7 +42,7 @@ const Breadcrumb = () => {
       const track = trimmed[i + 1];
       if (track) {
         pathnames.push(`${track}-${sectionMap[segment]}`);
-        i++; // skip track
+        i++;
       }
     } else {
       pathnames.push(segment);
@@ -50,7 +52,6 @@ const Breadcrumb = () => {
   return (
     <nav className="flex text-sm" aria-label="Breadcrumb">
       <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
-        {/* 홈 아이콘 */}
         <li className="inline-flex items-center">
           <Link
             to="/"
