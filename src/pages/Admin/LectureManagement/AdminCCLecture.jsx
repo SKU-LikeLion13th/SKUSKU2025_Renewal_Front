@@ -123,7 +123,7 @@ const AdminCCLecture = () => {
   ];
 
   return (
-    <div className="w-full max-w-[90%] sm:max-w-2xl md:max-w-3xl lg:max-w-5xl mx-auto mt-32 pb-10 px-2 sm:px-4">
+    <div className="w-full max-w-[90%] sm:max-w-2xl md:max-w-3xl lg:max-w-5xl mx-auto mt-24 sm:mt-44 pb-10 px-2 sm:px-4">
       <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl fontBold mb-10 sm:mb-16">
         {track} 자료실
       </h1>

@@ -23,8 +23,10 @@ const FileUploader = ({ onUploadComplete, error }) => {
 
   return (
     <div className="flex mb-6 items-center justify-between">
-      <div className="flex items-center">
-        <h3 className="text-lg fontSB mr-4">파일 업로드</h3>
+      <div className="flex sm:items-center flex-col  sm:flex-row">
+        <h3 className="text-lg sm:text-xl fontSB sm:fontBold mb-4">
+          파일 업로드
+        </h3>
         <div
           {...getRootProps()}
           className="border px-5 py-2 border-gray-300 rounded-md cursor-pointer bg-white max-w-sm"

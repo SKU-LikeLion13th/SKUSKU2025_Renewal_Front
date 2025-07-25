@@ -9,8 +9,8 @@ export default function TeamPage() {
   const [activeTab, setActiveTab] = useState("13");
 
   return (
-    <div className="p-8 min-h-screen mx-auto bg-black">
-      <div className="w-full mx-auto pb-20 pt-25 sm:pt-40 sm:w-4/5">
+    <div className="p-8 min-h-screen mx-auto bg-black pb-40">
+      <div className="w-4/5 mx-auto pt-45">
         <div className="mb-4 text-white">
           <div className="text-[40px] text-[#3B79FF] text-center sm:text-start">
             LIKELION

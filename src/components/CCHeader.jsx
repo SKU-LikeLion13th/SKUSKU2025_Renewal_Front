@@ -14,7 +14,7 @@ export default function CCHeader() {
   const menuItems = [
     { title: "PROJECT", path: "/project" },
     { title: "TEAM", path: "/team" },
-    { title: "COMMUNITY", path: null },
+    { title: "COMMUNITY", path: "/community" },
   ];
 
   function getColorByTrack(track) {
@@ -32,13 +32,13 @@ export default function CCHeader() {
 
   return (
     <div
-      className={`fixed z-10 top-0 w-full transition-all duration-300
+      className={`fixed z-100 top-0 w-full transition-all duration-300
         ${isHovered ? "bg-[#4A4A4A] min-h-[280px]" : "backdrop-blur-2xl"}
       `}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="flex md:py-5 py-3 md:px-12 px-6 items-center justify-between mx-auto relative z-10 shadow-[0px_0.5px_0px_0px_rgba(217,217,217,1)] ">
+      <div className="flex md:py-5 py-3 md:px-12 px-5 items-center justify-between mx-auto relative z-10 shadow-[0px_0.5px_0px_0px_rgba(217,217,217,1)] ">
         {/* 왼쪽 로고 + 메뉴 */}
         <div className="flex space-x-12">
           <Link to={"/"}>

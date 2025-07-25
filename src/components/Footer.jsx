@@ -7,12 +7,14 @@ export default function Footer() {
           {/* project */}
           <div className="pl-28">
             <p className="text-[#2D5ABB] fontBold mb-8">PROJECT</p>
+            <p className="text-[#B0B0B0] mb-3">13기</p>
             <p className="text-[#B0B0B0] mb-3">12기</p>
             <p className="text-[#B0B0B0]">11기</p>
           </div>
           {/* team */}
           <div>
             <p className="text-[#2D5ABB] fontBold mb-8">TEAM</p>
+            <p className="text-[#B0B0B0] mb-3">13기</p>
             <p className="text-[#B0B0B0] mb-3">12기</p>
             <p className="text-[#B0B0B0]">11기</p>
           </div>

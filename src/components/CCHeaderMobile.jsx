@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FiMenu, FiX } from "react-icons/fi";
 
-export default function HeaderMobile() {
+export default function CCHeaderMobile() {
   const [isHovered, setIsHovered] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -15,7 +15,7 @@ export default function HeaderMobile() {
   return (
     <div
       className={`fixed z-100 top-0 w-full transition-all duration-300 ${
-        isMenuOpen ? "bg-white" : "backdrop-blur-2xl"
+        isMenuOpen ? "bg-[#4A4A4A]" : "backdrop-blur-2xl"
       }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => {
@@ -30,7 +30,7 @@ export default function HeaderMobile() {
               <img src="/likelionLogo.png" alt="Logo" className="w-7 md:w-10" />
               <p
                 className={`text-md fontBlack md:text-xl ${
-                  isMenuOpen ? "text-[#000]" : "text-[#3B79FF]"
+                  isMenuOpen ? "text-[#fff]" : "text-[#3B79FF]"
                 }`}
               >
                 LIKELION SKU
@@ -47,9 +47,9 @@ export default function HeaderMobile() {
             }}
           >
             {isMenuOpen ? (
-              <FiX size={24} className="text-black" />
+              <FiX size={24} className="text-[#fff]" />
             ) : (
-              <FiMenu size={24} className="text-white" />
+              <FiMenu size={24} className="text-[#4A4A4A]" />
             )}
           </button>
         </div>
@@ -60,7 +60,7 @@ export default function HeaderMobile() {
               <Link
                 to={path}
                 key={title}
-                className="text-black text-base fontMedium cursor-pointer px-4"
+                className=" text-sm fontMedium cursor-pointer px-4 text-[#fff]"
                 onClick={() => {
                   setIsMenuOpen(false);
                   setIsHovered(false);

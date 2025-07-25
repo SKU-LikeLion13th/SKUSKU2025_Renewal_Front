@@ -97,31 +97,37 @@ const AdminCCLectureUpload = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto mt-44 px-4 pb-20">
-      <h1 className="text-4xl fontBold mb-20">{track} 자료 등록</h1>
-      <div className="text-sm text-gray-500 mb-12">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 mt-28 pb-24">
+      <h1 className="text-2xl sm:text-4xl fontBold sm:mb-20 mb-10">
+        {track} 자료 등록
+      </h1>
+      <div className="text-xs sm:text-sm text-gray-500 mb-8">
         홈 &gt; 사이버캠퍼스 &gt; 자료실 &gt; 자료 등록
       </div>
-      <div className="border w-full mb-12"></div>
+      <div className="border border-gray-200 mb-12"></div>
 
-      <div className="mb-20">
-        <h2 className="text-xl fontSB mb-8">자료 게시물 제목</h2>
+      <div className="mb-14">
+        <h2 className="text-lg sm:text-xl fontSB sm:fontBold mb-4">
+          자료 게시물 제목
+        </h2>
         <input
           type="text"
           value={title}
           onChange={handleTitleChange}
           placeholder="제목을 입력해 주세요."
-          className="border-[0.5px] border-gray-350 py-3 px-3 w-120 rounded-md placeholder-[#949494]"
+          className="w-full max-w-md border border-gray-300 py-2 px-3 rounded-md placeholder-[#949494] text-sm"
         />
       </div>
 
-      <div className="mb-16">
-        <h3 className="text-xl fontSB mb-8">게시물 내용</h3>
+      <div className="mb-12">
+        <h3 className="text-lg sm:text-xl fontSB sm:fontBold mb-4">
+          게시물 내용
+        </h3>
         <textarea
           value={content}
           onChange={handleContentChange}
           placeholder="내용을 입력해 주세요."
-          className="bg-[#F9F9F9] w-full h-30 resize-none p-5 placeholder-[#949494]"
+          className="bg-[#F9F9F9] w-full h-40 resize-none p-4 rounded-md text-sm placeholder-[#949494]"
         />
       </div>
 
