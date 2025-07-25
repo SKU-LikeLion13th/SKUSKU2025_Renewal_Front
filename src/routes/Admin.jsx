@@ -36,13 +36,17 @@ const Admin = () => {
         <Route path="/assignment/:track" element={<AssignmentManagement />} />
         <Route path="/assignment/add/:track" element={<AddAssignment />} />
         <Route path="/assignment/check/:track" element={<AssignmentCheck />} />
-        <Route path="/assignment/check/:track/:id" element={<CheckLions />} />
+        <Route path="/assignment/check/:id/:track" element={<CheckLions />} />
         <Route
           path="/assignment/check/:id/:submitId/:track"
           element={<CheckDetails />}
         />
+
         <Route path="/reviewQuiz/:trackType" element={<AdminReview />} />
-        <Route path="/reviewQuiz/:trackType/reviewAdd" element={<AdminQuiz />} />
+        <Route
+          path="/reviewQuiz/:trackType/reviewAdd"
+          element={<AdminQuiz />}
+        />
         <Route
           path="/reviewQuiz/:trackType/reviewUpdate/:reviewWeekId"
           element={<AdminReviewUpdate />}
