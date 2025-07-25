@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import API from "../../../utils/axios";
 
-export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, setCurrentQuestionIndex }) {
+export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, setCurrentQuestionIndex, trackType }) {
   const navigate = useNavigate();
-  const location = useLocation();
   const [selectedAnswer, setSelectedAnswer] = useState({});
-  const { trackType } = location.state || {};
   const [modalOpen, setModalOpen] = useState(false);
   const [modalImageSrc, setModalImageSrc] = useState("");
 
@@ -69,11 +67,7 @@ export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, 
     };
 
     try {
-      const response = await axios.post(
-        "http://backend.sku-sku.com/reviewQuiz/solve",
-        payload,
-        { headers: { "Content-Type": "application/json" } }
-      );
+      const response = await API.post("/reviewQuiz/solve", payload);
 
       if (response.status === 200) {
         alert("퀴즈가 성공적으로 제출되었습니다!");

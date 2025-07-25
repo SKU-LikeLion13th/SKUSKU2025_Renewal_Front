@@ -9,6 +9,7 @@ import QuizContent from "./QuizContent";
 export default function Quiz() {
   const { reviewWeekId } = useParams();
   const location = useLocation();
+  const { trackType } = location.state || {};
 
   const titleFromState = location.state?.title || "제목 정보가 없습니다";
 
@@ -63,6 +64,7 @@ export default function Quiz() {
           reviewWeekId={reviewWeekId}
           currentQuestionIndex={currentQuestionIndex}
           setCurrentQuestionIndex={setCurrentQuestionIndex}
+          trackType={trackType}
         />
       </div>
     </div>
