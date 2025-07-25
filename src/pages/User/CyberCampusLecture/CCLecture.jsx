@@ -58,9 +58,11 @@ const CCLecture = () => {
   ];
 
   return (
-    <div className="max-w-5xl mx-auto mt-44 pb-10 px-4">
-      <h1 className="text-4xl fontBold mb-20">{track} 자료실</h1>
-      <div className="text-sm text-gray-500 mb-6">
+    <div className="w-full max-w-[90%] sm:max-w-2xl md:max-w-3xl lg:max-w-5xl mx-auto mt-32 pb-10 px-2 sm:px-4">
+      <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl fontBold mb-10 sm:mb-16">
+        {track} 자료실
+      </h1>
+      <div className="text-xs sm:text-sm text-gray-500 mb-6">
         홈 &gt; 사이버캠퍼스 &gt; 자료실
       </div>
 

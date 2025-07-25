@@ -14,7 +14,7 @@ export default function HeaderMobile() {
 
   return (
     <div
-      className={`fixed z-10 bg-[#121212] top-0 w-full transition-all duration-300 ${
+      className={`fixed z-10 top-0 w-full transition-all duration-300 ${
         isMenuOpen ? "bg-white" : "backdrop-blur-2xl"
       }`}
       onMouseEnter={() => setIsHovered(true)}
@@ -22,14 +22,16 @@ export default function HeaderMobile() {
         if (!isMenuOpen) setIsHovered(false);
       }}
     >
-      <div className="flex flex-col md:flex-row py-4 px-4 ">
-        {/* 로고 & 햄버거 */}
-        <div className="w-full flex justify-between items-center">
-          <Link to={"/"}>
-            <div className="flex items-center space-x-2 md:space-x-4">
-              <img src="/likelionLogo.png" alt="Logo" className="w-7 md:w-9" />
+      <div className="flex flex-col py-4 md:py-6 px-4">
+        {/* 👆 flex-col이 핵심 */}
+
+        {/* 로고 & 햄버거 버튼 (윗줄) */}
+        <div className="flex justify-between items-center w-full md:px-3">
+          <Link to="/">
+            <div className="flex items-center space-x-2">
+              <img src="/likelionLogo.png" alt="Logo" className="w-7 md:w-10" />
               <p
-                className={`text-md md:text-[21px] fontBlack ${
+                className={`text-md fontBlack md:text-xl ${
                   isMenuOpen ? "text-[#000]" : "text-[#3B79FF]"
                 }`}
               >
@@ -38,28 +40,25 @@ export default function HeaderMobile() {
             </div>
           </Link>
 
-          {/* 모바일 전용 햄버거 메뉴 */}
-          <div className="md:hidden">
-            <button
-              className="flex"
-              onClick={() => {
-                const newState = !isMenuOpen;
-                setIsMenuOpen(newState);
-                if (!newState) setIsHovered(false);
-              }}
-            >
-              {isMenuOpen ? (
-                <FiX size={24} className="text-black" />
-              ) : (
-                <FiMenu size={24} className="text-white" />
-              )}
-            </button>
-          </div>
+          <button
+            className="flex"
+            onClick={() => {
+              const newState = !isMenuOpen;
+              setIsMenuOpen(newState);
+              if (!newState) setIsHovered(false);
+            }}
+          >
+            {isMenuOpen ? (
+              <FiX size={24} className="text-black" />
+            ) : (
+              <FiMenu size={24} className="text-white" />
+            )}
+          </button>
         </div>
 
-        {/* 모바일 메뉴 항목 */}
+        {/* 👇 메뉴 항목들 (아랫줄에 따로!) */}
         {isMenuOpen && (
-          <div className="flex flex-col space-y-4 mt-4 md:hidden transition-all duration-300">
+          <div className="flex flex-col space-y-4 mt-4 transition-all duration-300 sm:ml-5">
             {menuItems.map(({ title, path }) => (
               <Link
                 to={path}
@@ -75,8 +74,6 @@ export default function HeaderMobile() {
             ))}
           </div>
         )}
-
-        {/* 메뉴 리스트 */}
       </div>
     </div>
   );

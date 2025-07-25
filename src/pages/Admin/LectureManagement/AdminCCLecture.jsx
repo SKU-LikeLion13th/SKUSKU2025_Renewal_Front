@@ -109,23 +109,25 @@ const AdminCCLecture = () => {
     setCurrentPage(1);
   };
 
-  // 📌 페이지네이션 계산
+  // 페이지네이션 계산
   const totalItems = data.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentItems = data.slice(startIndex, endIndex);
 
-  // 📌 빈 행 포함한 배열 만들기
+  // 빈 행 포함한 배열 만들기
   const paddedItems = [
     ...currentItems,
     ...Array(itemsPerPage - currentItems.length).fill(null),
   ];
 
   return (
-    <div className="max-w-5xl mx-auto mt-44 pb-10 px-4">
-      <h1 className="text-4xl fontBold mb-20">{track} 자료실</h1>
-      <div className="text-sm text-gray-500 mb-6">
+    <div className="w-full max-w-[90%] sm:max-w-2xl md:max-w-3xl lg:max-w-5xl mx-auto mt-32 pb-10 px-2 sm:px-4">
+      <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl fontBold mb-10 sm:mb-16">
+        {track} 자료실
+      </h1>
+      <div className="text-xs sm:text-sm text-gray-500 mb-6">
         홈 &gt; 사이버캠퍼스 &gt; 자료실
       </div>
 
@@ -137,23 +139,23 @@ const AdminCCLecture = () => {
         toggleSelect={toggleSelect}
       />
 
-      <div className="flex justify-between mt-12 text-sm">
+      <div className="flex justify-between md:mt-12 mt-6 text-sm">
         <Link to={`/admin/LectureManagement/${track}/LectureUpload`}>
-          <div className="bg-[#3B79FF] text-white px-3 py-2 rounded-lg ">
+          <div className="bg-[#3B79FF] text-white px-3 py-2 rounded-lg text-xs sm:text-sm md:text-base">
             자료 등록
           </div>
         </Link>
         <div className="flex">
           <button
             onClick={handleSelectAll}
-            className="bg-[#E9E9E9] text-[#838383] px-3 py-2 rounded-lg"
+            className="bg-[#E9E9E9] text-[#838383] px-3 py-2 rounded-lg text-xs sm:text-sm md:text-base "
           >
             {isAllSelected ? "선택 해제" : "전체 선택"}
           </button>
           <button
             onClick={handleDelete}
             disabled={selectedItems.length === 0}
-            className={`px-3 py-2 rounded-lg ml-3 transition ${
+            className={`px-3 py-2 rounded-lg ml-3 transition text-xs sm:text-sm md:text-base ${
               selectedItems.length > 0
                 ? "bg-[#FF4D4D] text-white"
                 : "bg-[#6C6868] text-white opacity-50 cursor-not-allowed"

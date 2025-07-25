@@ -152,8 +152,8 @@ const AdminCCLectureEdit = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto mt-44 px-4 pb-20">
-      <h1 className="text-4xl fontBold mb-20">{track} 자료 수정</h1>
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 mt-28 pb-24">
+      <h1 className="text-2xl sm:text-4xl fontBold mb-20">{track} 자료 수정</h1>
       <div className="text-sm text-gray-500 mb-12">
         홈 &gt; 사이버캠퍼스 &gt; 자료실 &gt; 자료 수정
       </div>

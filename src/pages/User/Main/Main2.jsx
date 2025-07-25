@@ -43,7 +43,7 @@ export default function Main2() {
     },
   ];
   return (
-    <div className="relative sm:h-screen h-[250px] w-full">
+    <div className="relative sm:h-screen h-[250px] w-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
       {/* 배경 이미지 + 검정색 오버레이 */}
       <div className="absolute inset-0 sm:bg-[url('/assets/images/Main/Main2.jpeg')] bg-cover bg-center">
         <div className="absolute inset-0 bg-black opacity-80"></div>
