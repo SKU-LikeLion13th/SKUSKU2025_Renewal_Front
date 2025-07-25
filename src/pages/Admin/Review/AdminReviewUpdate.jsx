@@ -61,34 +61,38 @@ export default function AdminReviewUpdate() {
     fetchQuiz();
   }, [reviewWeekId]);
 
-  // 문제 수 변경 시 상태 관리
   const handleQuestionCountChange = (e) => {
     const value = parseInt(e.target.value, 10);
-    if (!isNaN(value)) {
+
+    if (!isNaN(value) && value >= 0) {
       setQuestionCount(value);
 
+      // 문제 형식 (기존 유지, 부족하면 빈 값 추가)
       setQuestionTypes((prev) => {
         const updated = [...prev];
-        while (updated.length < value) updated.push('');
-        return updated.slice(0, value);
+        while (updated.length < value) updated.push(''); // 새 문제 형식 추가
+        return updated.slice(0, value); // 필요 이상이면 잘라냄
       });
 
+      // 문제 내용 (기존 유지, 부족하면 새 문제 생성)
       setQuizContents((prev) => {
         const updated = [...prev];
-        while (updated.length < value) updated.push({
-          content: '',
-          answerChoiceList: [],
-          answer: '',
-          explanation: '',
-          files: [],
-        });
+        while (updated.length < value) {
+          updated.push({
+            content: '',
+            answerChoiceList: [],
+            answer: '',
+            explanation: '',
+            files: [],
+          });
+        }
         return updated.slice(0, value);
       });
 
-      // 문제 수 줄어들면 파일 상태도 정리
+      // 문제 수 줄어들면 해당 인덱스 이상 파일 제거
       setFilesByQuestion((prev) => {
         const copy = { ...prev };
-        Object.keys(copy).forEach(key => {
+        Object.keys(copy).forEach((key) => {
           if (parseInt(key) >= value) delete copy[key];
         });
         return copy;
@@ -96,13 +100,14 @@ export default function AdminReviewUpdate() {
 
       setSelectedFiles((prev) => {
         const copy = { ...prev };
-        Object.keys(copy).forEach(key => {
+        Object.keys(copy).forEach((key) => {
           if (parseInt(key) >= value) delete copy[key];
         });
         return copy;
       });
 
     } else {
+      // 유효하지 않은 값이거나 음수일 경우 모두 초기화
       setQuestionCount(0);
       setQuestionTypes([]);
       setQuizContents([]);
@@ -110,6 +115,7 @@ export default function AdminReviewUpdate() {
       setSelectedFiles({});
     }
   };
+
 
   const handleTypeChange = (index, type) => {
     const updatedTypes = [...questionTypes];
@@ -171,6 +177,16 @@ export default function AdminReviewUpdate() {
       ...prev,
       [index]: files,
     }));
+  };
+
+  const handleExistingFileDelete = (questionIndex, fileIndex) => {
+    setQuizContents((prev) => {
+      const updated = [...prev];
+      const files = [...(updated[questionIndex]?.files || [])];
+      files.splice(fileIndex, 1); // 해당 파일 제거
+      updated[questionIndex].files = files;
+      return updated;
+    });
   };
 
   const handleUpdate = async () => {
@@ -374,9 +390,18 @@ export default function AdminReviewUpdate() {
               ))}
             </ul>
           ) : (
-            <ul className="text-[#232323] list-disc ml-5">
+            <ul className="text-[#232323] ml-5">
               {quizContents[index]?.files?.map((file, i) => (
-                <li key={i}>{file.fileName || file}</li>
+                <li key={i} className="flex items-center text-[13px] sm:text-[14px] mb-1">
+                  <span className="mr-2">{file.fileName || file}</span>
+                  <button
+                    type="button"
+                    onClick={() => handleExistingFileDelete(index, i)}
+                    className="text-red-500 text-[11px] sm:text-[12px] underline"
+                  >
+                    삭제
+                  </button>
+                </li>
               ))}
             </ul>
           )}
