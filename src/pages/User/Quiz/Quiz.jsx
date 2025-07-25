@@ -5,6 +5,7 @@ import ReviewTitle from "../Review/ReviewTitle";
 import ReviewLocation from "../Review/ReviewLocation";
 import QuizTitle from "./QuizTitle";
 import QuizContent from "./QuizContent";
+import Breadcrumb from "../../../components/Breadcrumb";
 
 export default function Quiz() {
   const { reviewWeekId } = useParams();
@@ -52,7 +53,7 @@ export default function Quiz() {
         <ReviewTitle />
 
         <div className="flex justify-start w-full sm:mt-10 mt-8 pb-3">
-          <ReviewLocation />
+          <Breadcrumb />
         </div>
 
         {/* 진행바 있는 QuizTitle에 currentQuestionIndex 전달 */}
