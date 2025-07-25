@@ -84,6 +84,11 @@ const CC_Calendar = () => {
       <Calendar
         onChange={setValue}
         value={value}
+        onActiveStartDateChange={({ activeStartDate }) => {
+          const year = activeStartDate.getFullYear();
+          const month = activeStartDate.getMonth() + 1;
+          fetchEvents(year, month);
+        }}
         formatDay={(locale, date) =>
           date.toLocaleString("en", { day: "numeric" })
         }
@@ -143,7 +148,9 @@ const CC_Calendar = () => {
             className="flex justify-between items-center mb-6"
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className="text-lg mt-1 sm:mt-0 sm:text-2xl font-bold">Events</h3>
+            <h3 className="text-lg mt-1 sm:mt-0 sm:text-2xl font-bold">
+              Events
+            </h3>
             <button
               onClick={() => setModalIsOpen(false)}
               className="text-3xl text-gray-400 hover:text-black"

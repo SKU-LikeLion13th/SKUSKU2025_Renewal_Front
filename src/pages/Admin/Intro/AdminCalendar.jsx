@@ -129,6 +129,11 @@ const AdminCalendar = () => {
       <Calendar
         onChange={setValue}
         value={value}
+        onActiveStartDateChange={({ activeStartDate }) => {
+          const year = activeStartDate.getFullYear();
+          const month = activeStartDate.getMonth() + 1;
+          fetchEvents(year, month);
+        }}
         formatDay={(locale, date) =>
           date.toLocaleString("en", { day: "numeric" })
         }
@@ -201,9 +206,9 @@ const AdminCalendar = () => {
               Events
             </div>
             <div className="flex justify-center items-center">
-              <div className="mt-1 mr-5 fontEL">
-                <button onClick={handleSelectAll} className="mr-3 text-sm px-3 py-[6px] rounded-md bg-[#E9E9E9] text-[#838383] cursor-pointer">전체 선택</button>
-                <button onClick={handleDelete} className="mr-2 text-sm px-3 py-[6px] rounded-md bg-[#6C6868] text-white cursor-pointer">선택 삭제</button>
+              <div className="mt-1 sm:mr-5 fontEL sm:text-sm text-xs">
+                <button onClick={handleSelectAll} className="ml-12 sm:mr-3 sm:ml-0 mb-1 sm:mb-0 px-3 py-[6px] rounded-md bg-[#E9E9E9] text-[#838383] cursor-pointer">전체 선택</button>
+                <button onClick={handleDelete} className="ml-12 sm:mr-2 sm:ml-0 px-3 py-[6px] rounded-md bg-[#6C6868] text-white cursor-pointer">선택 삭제</button>
               </div>
               <button
                 onClick={() => setModalIsOpen(false)}
