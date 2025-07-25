@@ -11,6 +11,29 @@ export default function AssignmentBoard({ assignments }) {
   const titleCellStyle =
     "flex justify-start px-1 text-[13.5px] cursor-pointer hover:text-blue-500";
 
+  // 선택된 과제 데이터와 함께 네비게이션하는 함수
+  const handleAssignmentClick = (assignment) => {
+    // 원본 API 데이터 형태로 변환
+    const selectedAssignmentData = {
+      assignmentId: assignment.id,
+      title: assignment.title,
+      isSubmit: assignment.status === "제출" ? "True" : "False",
+      description: assignment.description,
+      adminCheck:
+        assignment.completed === "확인"
+          ? "PASS"
+          : assignment.completed === "보류"
+          ? "NONE_PASS"
+          : "UNREVIEWED",
+    };
+
+    navigate(`/cybercampus/assignment/${assignment.id}/${assignment.track}`, {
+      state: {
+        selectedAssignment: selectedAssignmentData,
+      },
+    });
+  };
+
   return (
     <div className="flex flex-col items-center w-full">
       {/* 헤더 */}
@@ -19,8 +42,7 @@ export default function AssignmentBoard({ assignments }) {
           <div
             key={index}
             className={headerStyle}
-            style={{ flex: flexValues[index] }}
-          >
+            style={{ flex: flexValues[index] }}>
             {header}
           </div>
         ))}
@@ -53,12 +75,7 @@ export default function AssignmentBoard({ assignments }) {
               <div
                 className={titleCellStyle}
                 style={{ flex: flexValues[1] }}
-                onClick={() =>
-                  navigate(
-                    `/cybercampus/assignment/${assignment.id}/${assignment.track}`
-                  )
-                }
-              >
+                onClick={() => handleAssignmentClick(assignment)}>
                 {assignment.title}
               </div>
 

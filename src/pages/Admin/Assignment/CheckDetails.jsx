@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import API from "../../../utils/axios";
 
 export default function CheckDetails() {
+  const navigate = useNavigate();
   const location = useLocation();
   const lionName = location.state?.lionName || "이름 없음";
 
@@ -27,11 +28,26 @@ export default function CheckDetails() {
     fetchAssignment();
   }, [assignmentId, submitId]);
 
-  const handleFileDownload = (url, name) => {
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = name;
-    a.click();
+  // AssignmentSubmit과 동일한 파일 다운로드 함수
+  const handleFileDownload = async (fileUrl, fileName) => {
+    try {
+      const response = await fetch(fileUrl);
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error("파일 다운로드 실패:", error);
+      // fallback: 새 탭에서 파일 열기
+      window.open(fileUrl, "_blank");
+    }
   };
 
   const handleSubmitFeedback = async (passStatus) => {
@@ -59,6 +75,8 @@ export default function CheckDetails() {
 
       const statusText = passStatus === "PASS" ? "통과" : "보류";
       alert(`${statusText} 처리가 완료되었습니다.`);
+
+      navigate(-1, { replace: true });
     } catch (error) {
       console.error("피드백 처리 실패:", error);
       console.error("에러 상세:", error.response?.data || error.message);
@@ -93,8 +111,7 @@ export default function CheckDetails() {
         {/* 과제 설명 */}
         <div
           className="bg-[#F9F9F9] p-8 mt-3 border-t-2 border-[#232323]"
-          style={{ whiteSpace: "pre-line" }}
-        >
+          style={{ whiteSpace: "pre-line" }}>
           {assignment.description}
         </div>
 
@@ -102,28 +119,33 @@ export default function CheckDetails() {
         <h2 className="text-2xl font-bold mb-4 mt-10">주관식 답변</h2>
         <div
           className="w-full p-8 bg-[#F9F9F9] border-t-2 border-[#232323]"
-          style={{ whiteSpace: "pre-wrap" }}
-        >
+          style={{ whiteSpace: "pre-wrap" }}>
           {assignment.content || "내용이 없습니다."}
         </div>
 
         {/* 파일 다운로드 (있을 때만) */}
         {assignment.files && assignment.files.length > 0 && (
           <>
-            <h2 className="text-2xl font-bold mb-4 mt-10">파일 다운로드</h2>
+            <h2 className="text-2xl font-bold mb-4 mt-10">제출된 파일</h2>
             <div className="bg-[#F9F9F9] p-8 mb-6 border-t-2 border-[#232323]">
-              {assignment.files.map((f, idx) => (
+              {assignment.files.map((file, idx) => (
                 <div
                   key={idx}
-                  className="mb-2 flex justify-between items-center"
-                >
+                  className="mb-2 flex justify-between items-center">
                   <button
                     type="button"
-                    onClick={() => handleFileDownload(f.fileUrl, f.fileName)}
-                    className="underline text-[#4881FF] hover:text-blue-700"
-                  >
-                    {f.fileName} 다운로드
+                    onClick={() =>
+                      handleFileDownload(file.fileUrl, file.fileName)
+                    }
+                    className="underline text-[#4881FF] hover:text-blue-700 transition-colors duration-200">
+                    {file.fileName} 다운로드
                   </button>
+                  {/* 파일 크기 정보 표시 (있다면) */}
+                  {file.fileSize && (
+                    <span className="text-sm text-gray-500">
+                      ({(file.fileSize / 1024 / 1024).toFixed(2)} MB)
+                    </span>
+                  )}
                 </div>
               ))}
             </div>
