@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../../../utils/axios";
+import { useParams } from "react-router-dom";
 
-export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, setCurrentQuestionIndex, trackType }) {
+export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, setCurrentQuestionIndex }) {
   const navigate = useNavigate();
   const [selectedAnswer, setSelectedAnswer] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
   const [modalImageSrc, setModalImageSrc] = useState("");
+  const { trackType } = useParams();
 
   const openImageModal = (src) => {
     setModalImageSrc(src);
@@ -67,18 +69,19 @@ export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, 
     };
 
     try {
-      const response = await API.post("/reviewQuiz/solve", payload);
+        const response = await API.post("/reviewQuiz/solve", payload);
 
-      if (response.status === 200) {
-        alert("퀴즈가 성공적으로 제출되었습니다!");
-        navigate(`/cybercampus/review/${trackType}`);
-      } else {
-        alert("제출에 실패했습니다.");
+        if (response.status === 200) {
+          const { score, total } = response.data;
+          alert(`퀴즈 제출 완료!\n총 ${total}문제 중 ${score}문제를 맞혔습니다.`);
+          navigate(`/cybercampus/review/${trackType}`);
+        } else {
+          alert("제출에 실패했습니다.");
+        }
+      } catch (error) {
+        console.error("제출 중 오류:", error);
+        alert("제출 중 오류가 발생했습니다.");
       }
-    } catch (error) {
-      console.error("제출 중 오류:", error);
-      alert("제출 중 오류가 발생했습니다.");
-    }
   };
 
 
