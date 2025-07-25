@@ -4,6 +4,7 @@ import axios from 'axios';
 import API from '../../../utils/axios';
 import AdminReviewTitle from './AdminReviewTitle';
 import ReviewLocation from '../../User/Review/ReviewLocation';
+import Breadcrumb from '../../../components/Breadcrumb';
 
 export default function AdminReviewUpdate() {
   const { reviewWeekId, trackType } = useParams(); // URL 파라미터로 받는다고 가정
@@ -426,7 +427,7 @@ export default function AdminReviewUpdate() {
       </div>
 
       <div className='flex justify-start w-full sm:mt-14 mt-8 sm:pb-14 pb-8 border-b-[#232323] border-b-[2.57px]'>
-        <ReviewLocation />
+        <Breadcrumb/>
       </div>
 
       <div className='flex w-full flex-col min-h-screen mb-40'>

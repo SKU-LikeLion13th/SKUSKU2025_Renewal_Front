@@ -50,7 +50,7 @@ export default function AdminReviewBoard({ posts, trackType, setAllPosts }) {
               <div
                 className="flex justify-start px-1 text-[13.5px] cursor-pointer"
                 style={{ flex: flexValues[1] }}
-                onClick={() => navigate(`/admin/reviewUpdate/${trackType}/${item.reviewWeekId}`)}
+                onClick={() => navigate(`/admin/reviewQuiz/${trackType}/reviewUpdate/${item.reviewWeekId}`)}
               >
                 {item.title}
               </div>
@@ -58,7 +58,7 @@ export default function AdminReviewBoard({ posts, trackType, setAllPosts }) {
               <div
                 className="flex justify-center px-1 text-[13.5px] cursor-pointer"
                 style={{ flex: flexValues[2] }}
-                onClick={() => navigate(`/admin/reviewUpdate/${trackType}/${item.reviewWeekId}`)}
+                onClick={() => navigate(`/admin/reviewQuiz/${trackType}/reviewUpdate/${item.reviewWeekId}`)}
               >
                 수정
               </div>
@@ -79,7 +79,7 @@ export default function AdminReviewBoard({ posts, trackType, setAllPosts }) {
         <div className="flex justify-between w-full mt-10 text-[14px] fontLight">
           <div
             className="flex bg-[#3B79FF] text-white px-4 py-1.5 rounded-[5.95px] cursor-pointer"
-            onClick={() => navigate(`/admin/adminQuiz/${trackType}`)}
+            onClick={() => navigate(`/admin/reviewQuiz/${trackType}/reviewAdd`)}
           >
             문제 등록
           </div>

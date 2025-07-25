@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import API from "../../../utils/axios";
 import axios from "axios";
 import FileUploader from "../../../components/FileUploader";
+import Breadcrumb from "../../../components/Breadcrumb";
 
 const AdminCCLectureUpload = () => {
   const { track } = useParams();
@@ -101,8 +102,8 @@ const AdminCCLectureUpload = () => {
       <h1 className="text-2xl sm:text-4xl fontBold sm:mb-20 mb-10">
         {track} 자료 등록
       </h1>
-      <div className="text-xs sm:text-sm text-gray-500 mb-8">
-        홈 &gt; 사이버캠퍼스 &gt; 자료실 &gt; 자료 등록
+      <div className="mb-8">
+        <Breadcrumb/>
       </div>
       <div className="border border-gray-200 mb-12"></div>
 

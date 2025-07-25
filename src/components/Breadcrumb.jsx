@@ -7,17 +7,24 @@ const pathMap = {
   assignment_detail: "과제",
   admin: "관리자",
   quiz: "퀴즈",
+  LectureEdit: "자료 수정",
+  LectureUpload:"자료 업로드",
+  reviewUpdate:"복습 퀴즈 수정",
+  reviewAdd: "복습 퀴즈 추가"
 };
 
 const sectionMap = {
   lecture: "자료실",
   assignment: "과제 목록",
   review: "복습 공간",
+  LectureManagement: "자료 관리",
+  reviewQuiz: "복습 공간",
 };
 
 const Breadcrumb = () => {
   const location = useLocation();
   const rawPathnames = location.pathname.split("/").filter((x) => x);
+  const isAdmin = rawPathnames.includes("admin");
 
   // 마지막 segment가 숫자일 경우 제거
   const trimmed = !isNaN(rawPathnames[rawPathnames.length - 1])
@@ -80,7 +87,9 @@ const Breadcrumb = () => {
             const sectionKey = Object.keys(sectionMap).find(
               (key) => sectionMap[key] === sectionLabel
             );
-            routeTo = `/cybercampus/${sectionKey}/${track}`;
+            routeTo = `/${
+              isAdmin ? "admin" : "cybercampus"
+            }/${sectionKey}/${track}`;
           } else {
             routeTo = "/" + rawPathnames.slice(0, index + 1).join("/");
           }

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import API from "../../../utils/axios";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
+import Breadcrumb from "../../../components/Breadcrumb";
 
 const AdminCCLectureEdit = () => {
   const { track, lectureId } = useParams();
@@ -156,8 +157,8 @@ const AdminCCLectureEdit = () => {
       <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl fontBold mb-10 sm:mb-16">
         {track} 자료 수정
       </h1>
-      <div className="text-xs sm:text-sm text-gray-500 mb-8">
-        홈 &gt; 사이버캠퍼스 &gt; 자료실 &gt; 자료 수정
+      <div className="mb-8">
+        <Breadcrumb/>
       </div>
 
       <hr className="border border-gray-200 mb-12" />

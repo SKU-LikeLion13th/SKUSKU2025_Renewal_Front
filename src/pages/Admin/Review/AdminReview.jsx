@@ -5,6 +5,7 @@ import AdminReviewTitle from "./AdminReviewTitle";
 import AdminReviewBoard from "./AdminReviewBoard";
 import AdminReviewSearch from "./AdminReviewSearch";
 import ReviewLocation from "../../User/Review/ReviewLocation";
+import Breadcrumb from "../../../components/Breadcrumb";
 
 const POSTS_PER_PAGE = 15;
 
@@ -70,8 +71,8 @@ export default function AdminReview() {
       <div className="flex flex-col justify-start w-9/12 mx-auto sm:mt-50 mt-30 lg:w-8/12">
         <AdminReviewTitle />
 
-        <div className='flex justify-start w-full sm:mt-10 mt-8 pb-5'>
-          <ReviewLocation />
+        <div className='flex justify-start w-full sm:mt-10 mt-10 pb-2'>
+          <Breadcrumb />
         </div>
 
         <div className="flex justify-center w-full sm:mt-12 mt-8">

@@ -42,9 +42,9 @@ const Admin = () => {
           element={<CheckDetails />}
         />
         <Route path="/reviewQuiz/:trackType" element={<AdminReview />} />
-        <Route path="/adminQuiz/:trackType" element={<AdminQuiz />} />
+        <Route path="/reviewQuiz/:trackType/reviewAdd" element={<AdminQuiz />} />
         <Route
-          path="/reviewUpdate/:trackType/:reviewWeekId"
+          path="/reviewQuiz/:trackType/reviewUpdate/:reviewWeekId"
           element={<AdminReviewUpdate />}
         />
         <Route path="/LectureManagement/:track" element={<AdminCCLecture />} />
