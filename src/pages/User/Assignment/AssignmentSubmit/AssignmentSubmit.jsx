@@ -7,8 +7,10 @@ export default function AssignmentSubmit({ assignment }) {
   const [content, setContent] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submittedContent, setSubmittedContent] = useState("");
+  const [submittedFiles, setSubmittedFiles] = useState([]);
   const [assignmentDetails, setAssignmentDetails] = useState(null);
   const [files, setFiles] = useState([]);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   const fileInputRef = useRef();
 
@@ -26,19 +28,25 @@ export default function AssignmentSubmit({ assignment }) {
 
     fetchAssignmentDetails();
 
-    const checkSubmissionStatus = async () => {
-      const submissionData = {
-        isSubmitted: false,
-        content: "이것은 제출된 답안입니다.",
-      };
-      setIsSubmitted(submissionData.isSubmitted);
-      if (submissionData.isSubmitted) {
-        setSubmittedContent(submissionData.content);
+    // 제출 상태 확인 - assignment prop에서 받은 데이터 사용
+    const checkSubmissionStatus = () => {
+      const hasContent = assignment.content && assignment.content.trim() !== "";
+      const hasFiles = assignment.files && assignment.files.length > 0;
+
+      if (hasContent || hasFiles) {
+        setIsSubmitted(true);
+        setSubmittedContent(assignment.content || "");
+        setSubmittedFiles(assignment.files || []);
+        setContent(assignment.content || "");
+      } else {
+        setIsSubmitted(false);
+        setSubmittedContent("");
+        setSubmittedFiles([]);
       }
     };
 
     checkSubmissionStatus();
-  }, [assignment.assignmentId]);
+  }, [assignment]);
 
   const handleContentChange = (e) => {
     setContent(e.target.value);
@@ -71,6 +79,23 @@ export default function AssignmentSubmit({ assignment }) {
 
   const handleFileRemove = (index) => {
     setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+  };
+
+  const handleSubmittedFileRemove = (index) => {
+    setSubmittedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+  };
+
+  const handleEditMode = () => {
+    setIsEditMode(true);
+    setContent(submittedContent);
+    setFiles([]);
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditMode(false);
+    setContent(submittedContent);
+    setFiles([]);
+    setSubmittedFiles(assignment.files || []);
   };
 
   // S3 업로드 함수
@@ -106,30 +131,48 @@ export default function AssignmentSubmit({ assignment }) {
     e.preventDefault();
 
     try {
-      // 1. 파일 S3 업로드
+      // 1. 새로 추가된 파일들만 S3 업로드
       const uploadedFiles = await Promise.all(
         files.map((file) => uploadFileToS3(file))
       );
 
-      // 2. 과제 제출 요청
+      // 2. 기존 제출된 파일들과 새로 업로드된 파일들 합치기
+      const allFiles = [...submittedFiles, ...uploadedFiles];
+
+      // 3. 과제 제출/수정 요청
       const submitPayload = {
         assignmentId: assignment.assignmentId,
         content: content,
-        files: uploadedFiles,
+        files: allFiles,
       };
 
-      await API.post("/assignment/submit", submitPayload);
+      if (isSubmitted) {
+        // 수정 모드인 경우
+        await API.put("/assignment/update", submitPayload);
+        alert("과제가 수정되었습니다.");
+      } else {
+        // 새 제출인 경우
+        await API.post("/assignment/submit", submitPayload);
+        alert("과제가 제출되었습니다.");
+      }
 
-      alert("과제가 제출되었습니다.");
       setIsSubmitted(true);
       setSubmittedContent(content);
-      setContent("");
+      setSubmittedFiles(allFiles);
+      setIsEditMode(false);
       setFiles([]);
     } catch (err) {
-      console.error("과제 제출 중 오류:", err);
-      alert("과제 제출에 실패했습니다.");
+      console.error("과제 제출/수정 중 오류:", err);
+      alert(
+        isSubmitted ? "과제 수정에 실패했습니다." : "과제 제출에 실패했습니다."
+      );
     }
   };
+
+  // 파일 업로드가 가능한지 확인 (과제에 파일이 첨부되어 있거나 이미 제출된 파일이 있는 경우)
+  const canUploadFiles =
+    (assignmentDetails?.files && assignmentDetails.files.length > 0) ||
+    (submittedFiles && submittedFiles.length > 0);
 
   return (
     <div className="flex mx-auto min-h-screen">
@@ -148,7 +191,7 @@ export default function AssignmentSubmit({ assignment }) {
               <button
                 type="button"
                 onClick={() => handleFileDownload(f.fileUrl, f.fileName)}
-                className="underline text-[#4881FF] hover:text-blue-700">
+                className="underline text-sm text-[#4881FF] hover:text-blue-700">
                 {f.fileName} 다운로드
               </button>
             </div>
@@ -157,18 +200,50 @@ export default function AssignmentSubmit({ assignment }) {
           {assignment.description}
         </div>
 
-        {isSubmitted ? (
+        {isSubmitted && !isEditMode ? (
+          // 제출 완료 상태 (읽기 모드)
           <div className="mb-13">
             <div className="w-full p-8 bg-[#F9F9F9] border-t-2 border-[#232323] min-h-64">
               {submittedContent}
             </div>
-            <div className="flex justify-end mt-10">
-              <div className="py-2 text-[#4881FF] font-medium">
+
+            {/* 제출된 파일들 표시 */}
+            {submittedFiles && submittedFiles.length > 0 && (
+              <div className="mt-6">
+                <h3 className="text-lg font-bold mb-4">제출된 파일</h3>
+                <div className="bg-[#F9F9F9] p-8 border-t-2 border-[#232323]">
+                  {submittedFiles.map((file, idx) => (
+                    <div
+                      key={idx}
+                      className="mb-2 flex justify-between items-center">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleFileDownload(file.fileUrl, file.fileName)
+                        }
+                        className="underline text-sm text-[#4881FF] hover:text-blue-700">
+                        {file.fileName} 다운로드
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="flex justify-end mt-10 gap-2">
+              <div className="py-2 text-sm text-[#4881FF] font-medium">
                 과제 제출이 완료되었습니다.
               </div>
+              <button
+                type="button"
+                onClick={handleEditMode}
+                className="px-4 py-2 text-sm text-white bg-[#6B6B6B] rounded-md hover:bg-[#525252]">
+                수정하기
+              </button>
             </div>
           </div>
         ) : (
+          // 작성/수정 모드
           <form onSubmit={handleSubmit}>
             {/* 텍스트 제출 */}
             <div className="mb-6">
@@ -181,10 +256,33 @@ export default function AssignmentSubmit({ assignment }) {
             </div>
 
             {/* 파일 업로드 영역 */}
-            {assignmentDetails?.files && assignmentDetails.files.length > 0 && (
+            {canUploadFiles && (
               <>
                 <h1 className="text-2xl font-bold mb-6">파일 업로드</h1>
+
                 <div className="bg-[#F9F9F9] p-8 mt-3 mb-6 border-t-2 border-[#232323] text-sm">
+                  {/* 기존 제출된 파일들 (수정 모드일 때) */}
+                  {isEditMode && submittedFiles.length > 0 && (
+                    <div className="mb-6">
+                      {submittedFiles.map((file, idx) => (
+                        <div
+                          key={idx}
+                          className="mb-2 flex justify-between items-center">
+                          <span className="underline text-[#4881FF]">
+                            {file.fileName}
+                          </span>
+                          <button
+                            type="button"
+                            className="text-xs underline text-gray-700"
+                            onClick={() => handleSubmittedFileRemove(idx)}>
+                            삭제
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* 새 파일 추가 영역 */}
                   {files.map((f, idx) => (
                     <div
                       key={idx}
@@ -219,16 +317,24 @@ export default function AssignmentSubmit({ assignment }) {
             )}
 
             <div className="flex justify-end gap-2">
+              {isEditMode && (
+                <button
+                  type="button"
+                  onClick={handleCancelEdit}
+                  className="px-4 py-2 text-sm text-gray-600 bg-gray-200 rounded-md hover:bg-gray-300">
+                  취소
+                </button>
+              )}
               <button
                 type="submit"
                 className="px-4 py-2 text-sm text-white bg-[#4881FF] rounded-md hover:bg-blue-700">
-                과제 제출
+                {isSubmitted ? "과제 수정" : "과제 제출"}
               </button>
             </div>
           </form>
         )}
 
-        <AssignmentAdminComments />
+        <AssignmentAdminComments feedback={assignment.feedback} />
       </div>
     </div>
   );

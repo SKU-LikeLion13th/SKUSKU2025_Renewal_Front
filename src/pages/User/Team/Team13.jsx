@@ -3,14 +3,22 @@ import TeamSection from "./TeamSection"; // 섹션 박스 컴포넌트
 
 export default function Team13() {
   return (
-    <div className="space-y-12">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div className="space-y-6">
+      {/* 대표/부대표와 디자인팀 - 큰 화면에서는 나란히, 작은 화면에서는 세로로 */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         <TeamSection title="대표/부대표" members={leader} />
         <TeamSection title="디자인(UX/UI)팀" members={design} />
       </div>
 
-      <TeamSection title="프론트엔드팀" members={frontend} />
-      <TeamSection title="백엔드팀" members={backend} />
+      {/* 프론트엔드팀 - 전체 너비 */}
+      <div className="w-full">
+        <TeamSection title="프론트엔드팀" members={frontend} />
+      </div>
+
+      {/* 백엔드팀 - 전체 너비 */}
+      <div className="w-full">
+        <TeamSection title="백엔드팀" members={backend} />
+      </div>
     </div>
   );
 }

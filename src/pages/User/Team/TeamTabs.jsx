@@ -8,7 +8,7 @@ export default function TeamTabs({ activeTab, onTabClick }) {
   ];
 
   return (
-    <div className="flex gap-4 mb-20 text-lg">
+    <div className="flex gap-4 mb-20 text-lg justify-center sm:justify-start">
       {tabs.map((tab) => (
         <button
           key={tab.value}
@@ -17,7 +17,8 @@ export default function TeamTabs({ activeTab, onTabClick }) {
             activeTab === tab.value
               ? "text-white border-b-[#3B79FF] cursor-pointer"
               : "text-[#A8A8A8] border-b-transparent cursor-pointer"
-          }`}>
+          }`}
+        >
           {tab.label}
         </button>
       ))}

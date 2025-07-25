@@ -25,12 +25,12 @@ export default function CheckLions() {
         console.log("제출한 아기사자 목록:", data);
 
         const processed = data.map((item, index) => {
-          console.log("처리 중인 item:", item); // 디버깅용
           return {
             id: item.submitAssignmentId,
-            name: item.lionName || item.name || "이름 없음", // 여러 필드 체크
+            name: item.lionName || item.name || "이름 없음",
             index: index + 1,
-            originalData: item, // 원본 데이터도 보관
+            passNonePass: item.passNonePass, // 👈 상태 정보 추가
+            originalData: item,
           };
         });
 
@@ -102,9 +102,21 @@ export default function CheckLions() {
         <AdminAssignmentCheckBoard
           assignments={currentPosts}
           onGradeAssignment={(memberId, name) => {
-            console.log("Board에서 전달받은 memberId:", memberId);
-            console.log("Board에서 전달받은 name:", name);
             handleGradeAssignment(memberId, name);
+          }}
+          onEditAssignment={(memberId) => {
+            const targetAssignment = assignments.find((a) => a.id === memberId);
+            const nameToPass = targetAssignment?.name || "이름 없음";
+
+            navigate(
+              `/admin/assignment/check/${assignmentId}/${memberId}/${track}`,
+              {
+                state: {
+                  lionName: nameToPass,
+                  title, // 현재 과제 제목
+                },
+              }
+            );
           }}
           headers={["번호", "제출자 명", "채점", "수정"]}
           flexValues={["1", "10", "2", "2"]}

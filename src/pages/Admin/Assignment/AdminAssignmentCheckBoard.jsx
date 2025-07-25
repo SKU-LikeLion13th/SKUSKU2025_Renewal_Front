@@ -37,12 +37,23 @@ export default function AdminAssignmentCheckBoard({
                 {assignment.name || assignment.title || "제목 없음"}
               </div>
               <div className={cellStyle} style={{ flex: flexValues[2] }}>
-                <button
-                  className={buttonStyle}
-                  onClick={() => onGradeAssignment?.(assignment.id)}>
-                  채점
-                </button>
+                {assignment.passNonePass === "PASS" ? (
+                  <span className="text-[#4881FF] font-semibold text-sm">
+                    확인
+                  </span>
+                ) : assignment.passNonePass === "NONE_PASS" ? (
+                  <span className="text-[#FF4D4F] font-semibold text-sm">
+                    보류
+                  </span>
+                ) : (
+                  <button
+                    className={buttonStyle}
+                    onClick={() => onGradeAssignment?.(assignment.id)}>
+                    채점
+                  </button>
+                )}
               </div>
+
               <div className={cellStyle} style={{ flex: flexValues[3] }}>
                 <button
                   className={buttonStyle}

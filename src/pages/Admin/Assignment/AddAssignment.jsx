@@ -17,6 +17,8 @@ export default function AddAssignment() {
   const [description, setDescription] = useState("");
   const [fileFormat, setFileFormat] = useState("Subjective");
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [originalFiles, setOriginalFiles] = useState([]); // 원본 파일들 저장
+  const [deletedFiles, setDeletedFiles] = useState([]); // 삭제된 파일들 추적
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef(null);
 
@@ -24,10 +26,11 @@ export default function AddAssignment() {
     if (isEdit) {
       setTitle(initialData.title || "");
       setDescription(initialData.description || "");
-      // 파일 초기화: 백엔드에서 files 배열 받아서 UI 반영 필요시 여기에 구현
+
       if (initialData.files && initialData.files.length > 0) {
         setFileFormat("file");
-        // 아래는 파일 리스트 객체들 복사 (필요하면 추가 변환)
+        // 기존 파일들 저장 (File 객체가 아닌 형태로)
+        setOriginalFiles(initialData.files);
         setSelectedFiles(initialData.files);
       } else {
         setFileFormat("Subjective");
@@ -89,6 +92,20 @@ export default function AddAssignment() {
   };
 
   const handleRemoveFile = (index) => {
+    const fileToRemove = selectedFiles[index];
+
+    // 원본 파일인지 확인 (File 객체가 아닌 경우 = 기존에 업로드된 파일)
+    if (!(fileToRemove instanceof File)) {
+      setDeletedFiles((prev) => [
+        ...prev,
+        {
+          ...fileToRemove,
+          status: "DELETE",
+        },
+      ]);
+    }
+
+    // selectedFiles에서 제거
     const newFiles = [...selectedFiles];
     newFiles.splice(index, 1);
     setSelectedFiles(newFiles);
@@ -113,32 +130,53 @@ export default function AddAssignment() {
     setIsUploading(true);
 
     try {
-      let uploadedFileData = [];
+      let fileData = [];
 
       if (fileFormat === "file") {
-        const filesToUpload = selectedFiles.filter((f) => f instanceof File);
-        const existingFiles = selectedFiles.filter((f) => !(f instanceof File));
+        if (isEdit) {
+          // 수정 모드: 변경사항만 처리
 
-        const uploadPromises = filesToUpload.map((file) =>
-          uploadFileToS3(file)
-        );
-        const newlyUploadedFiles = await Promise.all(uploadPromises);
+          // 1. 새로 추가된 파일들 업로드 (File 객체인 것들)
+          const newFiles = selectedFiles.filter((file) => file instanceof File);
+          const uploadPromises = newFiles.map((file) => uploadFileToS3(file));
+          const uploadedFiles = await Promise.all(uploadPromises);
 
-        uploadedFileData = [...existingFiles, ...newlyUploadedFiles];
+          // 2. 새로 업로드된 파일들에 NEW status 추가
+          const newFileData = uploadedFiles.map((file) => ({
+            ...file,
+            status: "NEW",
+          }));
+
+          // 3. 삭제된 파일들과 새로 추가된 파일들만 포함
+          fileData = [...deletedFiles, ...newFileData];
+        } else {
+          // 등록 모드: 기존 로직 유지
+          const filesToUpload = selectedFiles.filter((f) => f instanceof File);
+          const uploadPromises = filesToUpload.map((file) =>
+            uploadFileToS3(file)
+          );
+          fileData = await Promise.all(uploadPromises);
+        }
       }
 
       // payload 준비
       const assignmentData = {
-        ...(isEdit && { assignmentId }), // isEdit일 때만 assignmentId 포함
+        ...(isEdit && { assignmentId }),
         title,
         description,
         trackType: track.toUpperCase(),
         quizType: "ESSAY_QUESTION",
-        files: fileFormat === "file" ? uploadedFileData : [],
+        files: fileFormat === "file" ? fileData : [],
       };
 
       if (isEdit) {
-        await API.put("/admin/assignment/update", assignmentData);
+        console.log("수정할 과제 데이터:", assignmentData);
+        console.log("파일 변경사항:", {
+          deletedFiles: deletedFiles,
+          newFiles: fileData.filter((f) => f.status === "NEW"),
+        });
+
+        // await API.put("/admin/assignment/update", assignmentData);
         alert("과제가 수정되었습니다.");
       } else {
         await API.post("/admin/assignment/upload", assignmentData);
@@ -263,19 +301,30 @@ export default function AddAssignment() {
                   {selectedFiles.length > 0 && (
                     <div className="mt-4 flex flex-wrap gap-2">
                       {selectedFiles.map((file, index) => {
-                        // file이 File객체인지 기존 업로드된 파일 객체인지 구분해서 이름 표시
                         const fileName = file.name || file.fileName || "파일";
                         const fileSize = file.size || file.fileSize || 0;
+                        const isOriginalFile = file.isOriginal;
 
                         return (
                           <div
                             key={index}
-                            className="bg-gray-100 px-3 py-1 rounded-full text-sm flex items-center">
+                            className={`px-3 py-1 rounded-full text-sm flex items-center ${
+                              isOriginalFile
+                                ? "bg-blue-100 border border-blue-300"
+                                : "bg-gray-100"
+                            }`}>
                             <span
                               title={`${fileName} (${Math.round(
                                 fileSize / 1024
-                              )}KB)`}>
+                              )}KB)${
+                                isOriginalFile ? " - 기존 파일" : " - 새 파일"
+                              }`}>
                               {fileName}
+                              {isOriginalFile && (
+                                <span className="ml-1 text-blue-600 text-xs">
+                                  기존
+                                </span>
+                              )}
                             </span>
                             <button
                               type="button"
@@ -286,6 +335,14 @@ export default function AddAssignment() {
                           </div>
                         );
                       })}
+                    </div>
+                  )}
+
+                  {/* 삭제 예정 파일들 표시 (개발자 확인용, 필요시 제거 가능) */}
+                  {isEdit && deletedFiles.length > 0 && (
+                    <div className="mt-2 text-red-600 text-sm">
+                      삭제 예정:{" "}
+                      {deletedFiles.map((f) => f.fileName || f.name).join(", ")}
                     </div>
                   )}
                 </div>

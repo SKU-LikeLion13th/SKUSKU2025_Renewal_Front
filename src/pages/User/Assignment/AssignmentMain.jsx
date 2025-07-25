@@ -28,11 +28,17 @@ export default function AssignmentMain() {
           id: item.assignmentId,
           title: item.title,
           status: item.isSubmit ? "제출" : "미제출",
-          completed: item.adminCheck === "PASS" ? "확인" : "미확인",
+          completed:
+            item.adminCheck === "PASS"
+              ? "확인"
+              : item.adminCheck === "NONE_PASS"
+                ? "보류"
+                : "미확인",
           description: item.description,
-          track: track, // URL에서 가져온 track 정보 추가
+          track: track,
         }));
         setAssignments(processed);
+        console.log("과제 데이터:", data);
       } catch (error) {
         console.error("과제 데이터를 불러오는 데 실패했습니다:", error);
         if (error.response?.status === 404) {

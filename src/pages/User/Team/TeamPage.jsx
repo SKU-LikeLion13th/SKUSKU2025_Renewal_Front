@@ -12,8 +12,12 @@ export default function TeamPage() {
     <div className="p-8 min-h-screen mx-auto bg-black pb-40">
       <div className="w-4/5 mx-auto pt-45">
         <div className="mb-4 text-white">
-          <div className="text-[40px] text-[#3B79FF]">LIKELION</div>
-          <div className="text-[55px] text-white font-bold">TEAM</div>
+          <div className="text-[40px] text-[#3B79FF] text-center sm:text-start">
+            LIKELION
+          </div>
+          <div className="text-[55px] text-white font-bold text-center sm:text-start">
+            TEAM
+          </div>
         </div>
 
         <TeamTabs activeTab={activeTab} onTabClick={setActiveTab} />
