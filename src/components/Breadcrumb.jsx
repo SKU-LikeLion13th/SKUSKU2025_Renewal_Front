@@ -11,7 +11,6 @@ const pathMap = {
   LectureUpload:"자료 업로드",
   reviewUpdate:"복습 퀴즈 수정",
   reviewAdd: "복습 퀴즈 추가",
-  add: "과제 추가 및 수정"
 };
 
 const sectionMap = {
@@ -20,7 +19,6 @@ const sectionMap = {
   review: "복습 공간",
   LectureManagement: "자료 관리",
   reviewQuiz: "복습 퀴즈",
-  assignment_check: "과제 채점",
 };
 
 const Breadcrumb = () => {

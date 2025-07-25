@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import API from "../../../utils/axios";
 import axios from "axios";
-import Breadcrumb from "../../../components/Breadcrumb";
 
 export default function AddAssignment() {
   const navigate = useNavigate();
@@ -202,9 +201,6 @@ export default function AddAssignment() {
               ? `${trackToTitle(track)} 과제 수정`
               : `${trackToTitle(track)} 과제 등록`}
           </p>
-        </div>
-        <div className="mb-10">
-          <Breadcrumb/>
         </div>
         <div className="border-t-2 border-[#232323]">
           <form onSubmit={handleSubmit}>

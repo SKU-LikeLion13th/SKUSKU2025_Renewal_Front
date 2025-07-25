@@ -34,11 +34,11 @@ const Admin = () => {
       <Routes>
         <Route path="/" element={<AdminMain />} />
         <Route path="/assignment/:track" element={<AssignmentManagement />} />
-        <Route path="/assignment/:track/add" element={<AddAssignment />} />
-        <Route path="/assignment_check/:track" element={<AssignmentCheck />} />
-        <Route path="/assignment_check/:track/:id" element={<CheckLions />} />
+        <Route path="/assignment/add/:track" element={<AddAssignment />} />
+        <Route path="/assignment/check/:track" element={<AssignmentCheck />} />
+        <Route path="/assignment/check/:track/:id" element={<CheckLions />} />
         <Route
-          path="/assignment_check/:id/:submitId/:track"
+          path="/assignment/check/:id/:submitId/:track"
           element={<CheckDetails />}
         />
         <Route path="/reviewQuiz/:trackType" element={<AdminReview />} />

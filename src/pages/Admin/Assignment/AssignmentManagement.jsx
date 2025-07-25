@@ -4,7 +4,6 @@ import API from "../../../utils/axios";
 import AdminAssignmentBoard from "./AdminAssignmentBoard";
 import AdminAssignmentControl from "./AdminAssignmentControl";
 import AdminAssignmentPagination from "./AdminAssignmentPagination";
-import Breadcrumb from "../../../components/Breadcrumb";
 
 export default function AssignmentManagement() {
   const navigate = useNavigate();
@@ -101,7 +100,7 @@ export default function AssignmentManagement() {
   };
 
   const handleCreateAssignment = () => {
-    navigate(`/admin/assignment/${track}/add`, { state: { isEdit: false } });
+    navigate(`/admin/assignment/add/${track}`, { state: { isEdit: false } });
   };
 
   const handleEditAssignment = async (id) => {
@@ -113,7 +112,7 @@ export default function AssignmentManagement() {
       const currentAssignment = assignments.find((a) => a.id === id);
       const title = currentAssignment?.title || "제목 없음";
 
-      navigate(`/admin/assignment/${track}/add`, {
+      navigate(`/admin/assignment/add/${track}`, {
         state: {
           isEdit: true,
           assignmentId: id,
@@ -155,9 +154,6 @@ export default function AssignmentManagement() {
       <div className="flex flex-col w-9/12 mt-30 mx-auto justify-start lg:w-8/12">
         <div className="flex items-center justify-between">
           <h1 className="text-4xl font-bold my-15">{displayTrack} 과제 등록</h1>
-        </div>
-        <div className="mb-10">
-          <Breadcrumb/>
         </div>
 
         <AdminAssignmentBoard

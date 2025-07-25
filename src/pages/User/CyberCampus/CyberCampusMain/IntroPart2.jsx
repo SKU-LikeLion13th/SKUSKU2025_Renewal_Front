@@ -106,7 +106,7 @@ const IntroPart2 = () => {
     let path = "";
     if (isAdmin) {
       if (cardId === "01") path = `/admin/assignment/${urlTrack}`;
-      else if (cardId === "02") path = `/admin/assignment_check/${urlTrack}`;
+      else if (cardId === "02") path = `/admin/assignment/check/${urlTrack}`;
       else if (cardId === "03") path = `/admin/LectureManagement/${urlTrack}`;
       else if (cardId === "04") path = `/admin/reviewQuiz/${urlTrack}`;
       navigate(path);
