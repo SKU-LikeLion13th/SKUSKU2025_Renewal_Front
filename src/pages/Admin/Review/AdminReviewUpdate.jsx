@@ -62,6 +62,36 @@ export default function AdminReviewUpdate() {
     fetchQuiz();
   }, [reviewWeekId]);
 
+  const handleDeleteQuestion = (index) => {
+    if (!window.confirm(`문제 ${index + 1}번을 삭제하시겠습니까?`)) return;
+
+    setQuestionCount((prev) => prev - 1);
+
+    setQuestionTypes((prev) => prev.filter((_, i) => i !== index));
+    setQuizContents((prev) => prev.filter((_, i) => i !== index));
+
+    setFilesByQuestion((prev) => {
+      const updated = {};
+      Object.entries(prev).forEach(([key, val]) => {
+        const i = parseInt(key);
+        if (i < index) updated[i] = val;
+        else if (i > index) updated[i - 1] = val;
+      });
+      return updated;
+    });
+
+    setSelectedFiles((prev) => {
+      const updated = {};
+      Object.entries(prev).forEach(([key, val]) => {
+        const i = parseInt(key);
+        if (i < index) updated[i] = val;
+        else if (i > index) updated[i - 1] = val;
+      });
+      return updated;
+    });
+  };
+
+
   const handleQuestionCountChange = (e) => {
     const value = parseInt(e.target.value, 10);
 
@@ -302,7 +332,19 @@ export default function AdminReviewUpdate() {
 
   const renderQuestionBlock = (index) => (
     <div key={index} className='flex flex-col px-10 py-8 sm:px-25 sm:py-20 bg-[#F6F6F6] border-[#232323] border-[0.5px] rounded-[15px] w-full sm:mt-20 mt-10'>
-      <div className='flex text-[15px] sm:text-[20px] fontSB'>Question {String(index + 1).padStart(2, '0')}.</div>
+      <div className="flex justify-between items-center mb-5">
+        <div className='flex text-[15px] sm:text-[20px] fontSB'>
+          Question {String(index + 1).padStart(2, '0')}.
+        </div>
+        <button
+          type="button"
+          className="text-[12px] sm:text-[14px] text-red-500 underline"
+          onClick={() => handleDeleteQuestion(index)}
+        >
+          삭제
+        </button>
+      </div>
+
       <input
         type="text"
         placeholder='문제를 입력해주세요.'
