@@ -138,7 +138,8 @@ export default function AddAssignment() {
       };
 
       if (isEdit) {
-        await API.put("/admin/assignment/update", assignmentData);
+        console.log("수정할 과제 데이터:", assignmentData);
+        // await API.put("/admin/assignment/update", assignmentData);
         alert("과제가 수정되었습니다.");
       } else {
         await API.post("/admin/assignment/upload", assignmentData);
@@ -234,7 +235,8 @@ export default function AddAssignment() {
                     <div
                       className="flex items-center border border-[#7D7D7D] rounded py-1.5 px-4"
                       onDragOver={handleDragOver}
-                      onDrop={handleDrop}>
+                      onDrop={handleDrop}
+                    >
                       <input
                         type="file"
                         ref={fileInputRef}
@@ -251,7 +253,8 @@ export default function AddAssignment() {
                           isUploading
                             ? "cursor-not-allowed opacity-50"
                             : "cursor-pointer"
-                        }`}>
+                        }`}
+                      >
                         {isUploading ? "업로드 중..." : "파일선택"}
                       </button>
                       <span className="ml-3 text-[#A6A6A6] text-sm">
@@ -270,17 +273,20 @@ export default function AddAssignment() {
                         return (
                           <div
                             key={index}
-                            className="bg-gray-100 px-3 py-1 rounded-full text-sm flex items-center">
+                            className="bg-gray-100 px-3 py-1 rounded-full text-sm flex items-center"
+                          >
                             <span
                               title={`${fileName} (${Math.round(
                                 fileSize / 1024
-                              )}KB)`}>
+                              )}KB)`}
+                            >
                               {fileName}
                             </span>
                             <button
                               type="button"
                               onClick={() => handleRemoveFile(index)}
-                              className="ml-2 text-gray-500 hover:text-red-500">
+                              className="ml-2 text-gray-500 hover:text-red-500"
+                            >
                               ×
                             </button>
                           </div>
@@ -296,7 +302,8 @@ export default function AddAssignment() {
               <button
                 type="button"
                 className="min-w-25 py-1.5 cursor-pointer text-[#838383] bg-[#E9E9E9] rounded-md"
-                onClick={() => navigate(-1)}>
+                onClick={() => navigate(-1)}
+              >
                 나가기
               </button>
               <button
@@ -306,12 +313,13 @@ export default function AddAssignment() {
                   isUploading
                     ? "bg-gray-400 cursor-not-allowed"
                     : "bg-[#3B79FF] cursor-pointer"
-                }`}>
+                }`}
+              >
                 {isUploading
                   ? "업로드 중..."
                   : isEdit
-                  ? "수정하기"
-                  : "등록하기"}
+                    ? "수정하기"
+                    : "등록하기"}
               </button>
             </div>
           </form>

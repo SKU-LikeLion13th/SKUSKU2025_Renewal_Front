@@ -93,7 +93,8 @@ export default function CheckDetails() {
         {/* 과제 설명 */}
         <div
           className="bg-[#F9F9F9] p-8 mt-3 border-t-2 border-[#232323]"
-          style={{ whiteSpace: "pre-line" }}>
+          style={{ whiteSpace: "pre-line" }}
+        >
           {assignment.description}
         </div>
 
@@ -101,7 +102,8 @@ export default function CheckDetails() {
         <h2 className="text-2xl font-bold mb-4 mt-10">주관식 답변</h2>
         <div
           className="w-full p-8 bg-[#F9F9F9] border-t-2 border-[#232323]"
-          style={{ whiteSpace: "pre-wrap" }}>
+          style={{ whiteSpace: "pre-wrap" }}
+        >
           {assignment.content || "내용이 없습니다."}
         </div>
 
@@ -113,11 +115,13 @@ export default function CheckDetails() {
               {assignment.files.map((f, idx) => (
                 <div
                   key={idx}
-                  className="mb-2 flex justify-between items-center">
+                  className="mb-2 flex justify-between items-center"
+                >
                   <button
                     type="button"
                     onClick={() => handleFileDownload(f.fileUrl, f.fileName)}
-                    className="underline text-[#4881FF] hover:text-blue-700">
+                    className="underline text-[#4881FF] hover:text-blue-700"
+                  >
                     {f.fileName} 다운로드
                   </button>
                 </div>
@@ -154,7 +158,7 @@ export default function CheckDetails() {
               className="w-22 p-1.5 text-white bg-[#4881FF] rounded-md hover:bg-blue-700"
               onClick={() => handleSubmitFeedback("PASS")} // 수정: 통과 요청 전달
             >
-              등록
+              통과
             </button>
           </div>
         </div>
