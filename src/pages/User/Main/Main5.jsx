@@ -2,7 +2,7 @@ import ProjectSlider from "./Slider/ProjectSlider";
 
 export default function Main5() {
   return (
-    <div className="bg-[#121212] py-[6%]">
+    <div className="bg-[#121212] pt-14 sm:pb-30 pb-12">
       <div className="">
         {/* projects */}
         <div>

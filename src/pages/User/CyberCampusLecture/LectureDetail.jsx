@@ -38,31 +38,39 @@ const LectureDetail = () => {
   }
 
   return (
-    <div className="max-w-5xl mx-auto mt-44 px-4 pb-20">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 mt-24 sm:mt-44 pb-24">
       {/* 제목 */}
-      <h1 className="text-4xl fontBold mb-20">{lecture.trackType} 자료실</h1>
+      <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl fontBold mb-10 sm:mb-16">
+        {lecture.trackType} 자료실
+      </h1>
 
       {/* 경로 */}
-      <div className="text-sm text-gray-500 mb-16">
+      <div className="text-xs sm:text-sm text-gray-500 mb-12">
         홈 &gt; 사이버캠퍼스 &gt; 자료실 &gt; 다운로드
       </div>
 
-      {/* 강의 제목 */}
-      <h2 className="text-xl fontSB mb-2">{lecture.title}</h2>
+      <hr className="border border-gray-200 mb-12" />
 
-      <div className="bg-[#F9F9F9] border-t-[1.5px] mb-20 h-32">
-        {lecture.content && <div className="p-8">{lecture.content}</div>}
+      {/* 강의 제목 */}
+      <h2 className="text-lg sm:text-xl fontSB sm:fontBold mb-4">
+        {lecture.title}
+      </h2>
+
+      <div className="bg-[#F9F9F9] border-t-[1.5px] mb-12 sm:mb-20 h-32 text-sm sm:text-base">
+        {lecture.content && <div className="p-6 sm:p-8">{lecture.content}</div>}
       </div>
 
       {/* 파일 다운로드 */}
-      <h3 className="text-xl fontSB mb-4">파일 다운로드</h3>
-      <div className="bg-[#F9F9F9] border-t-[1.5px] p-8">
+      <h3 className="text-lg sm:text-xl fontSB sm:fontBold mb-4">
+        파일 다운로드
+      </h3>
+      <div className="bg-[#F9F9F9] border-t-[1.5px] p-6 sm:p-8">
         {lecture.joinLectureFiles?.map((file) => (
           <a
             key={file.fileName}
             href={`data:${file.fileType};base64,${file.file}`}
             download={file.fileName}
-            className="text-blue-500 underline flex items-center mb-2 text-[14px]"
+            className="text-blue-500 underline flex items-center mb-2 text-xs sm:text-base"
           >
             <img
               src="https://cdn-icons-png.flaticon.com/512/337/337946.png"

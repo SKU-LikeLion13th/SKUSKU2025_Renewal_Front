@@ -152,50 +152,65 @@ const AdminCCLectureEdit = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 mt-28 pb-24">
-      <h1 className="text-2xl sm:text-4xl fontBold mb-20">{track} 자료 수정</h1>
-      <div className="text-sm text-gray-500 mb-12">
+    <div className="max-w-5xl mx-auto px-6 mt-24 sm:mt-44 pb-24">
+      <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl fontBold mb-10 sm:mb-16">
+        {track} 자료 수정
+      </h1>
+      <div className="text-xs sm:text-sm text-gray-500 mb-8">
         홈 &gt; 사이버캠퍼스 &gt; 자료실 &gt; 자료 수정
       </div>
-      <div className="border w-full mb-12"></div>
 
-      <div className="mb-20">
-        <h2 className="text-xl fontSB mb-8">자료 게시물 제목</h2>
+      <hr className="border border-gray-200 mb-12" />
+
+      {/* 제목 */}
+      <div className="mb-14">
+        <h2 className="text-lg sm:text-xl fontSB sm:fontBold mb-4">
+          자료 게시물 제목
+        </h2>
         <input
           type="text"
           value={title}
           onChange={handleTitleChange}
           placeholder="제목을 입력해 주세요."
-          className="border-[0.5px] border-gray-350 py-3 px-3 w-120 rounded-md placeholder-[#949494]"
+          className="w-full max-w-md border border-gray-300 py-2 px-3 rounded-md placeholder-[#949494] text-sm"
         />
       </div>
 
-      <div className="mb-16">
-        <h3 className="text-xl fontSB mb-8">게시물 내용</h3>
+      {/* 내용 */}
+      <div className="mb-12">
+        <h3 className="text-lg sm:text-xl fontSB sm:fontBold mb-4">
+          게시물 내용
+        </h3>
         <textarea
           value={content}
           onChange={handleContentChange}
           placeholder="내용을 입력해 주세요."
-          className="bg-[#F9F9F9] w-full h-30 resize-none p-5 placeholder-[#949494]"
+          className="bg-[#F9F9F9] w-full h-40 resize-none p-4 rounded-md text-sm placeholder-[#949494]"
         />
       </div>
 
-      <div className="mb-10">
-        <h3 className="text-xl fontSB mb-4">파일 업로드</h3>
+      {/* 파일 업로드 */}
+      <div className="mb-12">
+        <h3 className="text-lg sm:text-xl fontSB sm:fontBold mb-4">
+          파일 업로드
+        </h3>
         <div
           {...getRootProps()}
-          className="border p-4 border-gray-300 rounded-md cursor-pointer mb-4"
+          className="border border-gray-300 p-4 rounded-md cursor-pointer bg-white mb-4"
         >
           <input {...getInputProps()} />
           <p className="text-gray-500 text-sm">
-            <span className="fontBold underline mr-4">파일선택</span>또는 여기로
-            파일을 끌어오세요.
+            <span className="font-semibold underline mr-2">파일 선택</span>
+            또는 여기로 파일을 끌어오세요.
           </p>
         </div>
         {files.length > 0 && (
           <ul className="text-sm text-gray-700 space-y-2">
             {files.map((file, index) => (
-              <li key={index} className="flex justify-between items-center">
+              <li
+                key={index}
+                className="flex justify-between items-center flex-wrap gap-2"
+              >
                 <span>
                   {file.fileName} ({(file.fileSize / 1024).toFixed(1)} KB)
                   {file.status === "DELETE" && (
@@ -205,7 +220,7 @@ const AdminCCLectureEdit = () => {
                 {file.status !== "DELETE" && (
                   <button
                     onClick={() => handleFileDelete(index)}
-                    className="text-sm text-red-500 hover:underline"
+                    className="text-red-500 hover:underline text-sm"
                   >
                     삭제
                   </button>
@@ -216,15 +231,17 @@ const AdminCCLectureEdit = () => {
         )}
       </div>
 
-      <div className="flex items-center">
+      {/* 버튼 */}
+      <div className="flex justify-start">
         <button
           onClick={handleUpdate}
-          className="px-6 py-2 bg-[#4881FF] text-white rounded-md"
+          className="px-6 py-2 bg-[#4881FF] text-white rounded-md text-sm"
         >
           수정 완료
         </button>
       </div>
 
+      {/* 에러 메시지 */}
       {error && <div className="text-red-500 mt-4">{error}</div>}
     </div>
   );

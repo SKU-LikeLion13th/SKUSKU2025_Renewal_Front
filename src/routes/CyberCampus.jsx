@@ -9,18 +9,22 @@ import Quiz from "../pages/User/Quiz/Quiz";
 import AssignmentMain from "../pages/User/Assignment/AssignmentMain";
 import AssignmentSubmitPage from "../pages/User/Assignment/AssignmentSubmit/AssignmentSubmitPage";
 import CCFooter from "../components/CCFooter";
+import CCHeader from "../components/CCHeader";
+import CCHeaderMobile from "../components/CCHeaderMobile";
 
 export default function CyberCampus() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const checkIsMobile = () => setIsMobile(window.innerWidth < 768);
+    const checkIsMobile = () => setIsMobile(window.innerWidth < 1270);
     checkIsMobile();
     window.addEventListener("resize", checkIsMobile);
     return () => window.removeEventListener("resize", checkIsMobile);
   }, []);
+
   return (
     <div>
+      {isMobile ? <CCHeaderMobile /> : <CCHeader />}
       <Routes>
         <Route path="/" element={<CyberCampusIntro />} />
         <Route path="lecture/:track" element={<CCLecture />} />

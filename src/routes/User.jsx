@@ -4,12 +4,14 @@ import Main from "../pages/User/Main/Main";
 import Project from "../pages/User/Project/Project";
 import TeamPage from "../pages/User/Team/TeamPage";
 import Footer from "../components/Footer";
+import Header from "../components/Header";
+import HeaderMobile from "../components/HeaderMobile";
 
 const User = () => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const checkIsMobile = () => setIsMobile(window.innerWidth < 1070);
+    const checkIsMobile = () => setIsMobile(window.innerWidth < 1270);
     checkIsMobile();
     window.addEventListener("resize", checkIsMobile);
     return () => window.removeEventListener("resize", checkIsMobile);
@@ -17,6 +19,7 @@ const User = () => {
 
   return (
     <div>
+      {isMobile ? <HeaderMobile /> : <Header />}
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/project" element={<Project />} />

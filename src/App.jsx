@@ -31,7 +31,6 @@ function AppContent() {
   return (
     <div className="App">
       <ScrollToTop />
-      {isCyberCampus ? <CCHeader /> : isMobile ? <HeaderMobile /> : <Header />}
       <Routes>
         <Route path="/CyberCampus/*" element={<CyberCampus />} />
         <Route path="/Admin/*" element={<Admin />} />
