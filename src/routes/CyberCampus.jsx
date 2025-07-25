@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 // import CCLecture from "../pages/User/CyberCampusLecture/CCLecture";
 import CCLecture from "../pages/User/CyberCampusLecture/CCLecture";
@@ -10,6 +11,14 @@ import AssignmentSubmitPage from "../pages/User/Assignment/AssignmentSubmit/Assi
 import CCFooter from "../components/CCFooter";
 
 export default function CyberCampus() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIsMobile = () => setIsMobile(window.innerWidth < 768);
+    checkIsMobile();
+    window.addEventListener("resize", checkIsMobile);
+    return () => window.removeEventListener("resize", checkIsMobile);
+  }, []);
   return (
     <div>
       <Routes>
@@ -24,7 +33,7 @@ export default function CyberCampus() {
           element={<AssignmentSubmitPage />}
         />
       </Routes>
-      <CCFooter />
+      {!isMobile && <CCFooter />}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 export default function Main1() {
   return (
-    <div className="relative sm:h-screen w-full h-[400px] overflow-hidden">
+    <div className="relative sm:h-screen w-full h-[400px] overflow-hidden  px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
       {/* 배경 이미지 + 검정색 오버레이 */}
       <div className="absolute inset-0 sm:bg-[url('/assets/images/Main/Main1.jpeg')] bg-[url('/assets/images/Mobile_Main/Main1.jpg')] bg-cover bg-no-repeat sm:bg-cover bg-left sm:w-full w-[700px]">
         <div className="absolute inset-0 bg-black opacity-80"></div>$

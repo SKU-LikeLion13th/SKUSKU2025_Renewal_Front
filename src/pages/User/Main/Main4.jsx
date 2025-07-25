@@ -138,7 +138,7 @@ export default function Main4() {
             <div className="flex">
               <img
                 src={trackDetails[selectedTrack].image}
-                className="w-12 mr-4"
+                className="w-12 mr-4 "
                 alt=""
               />
               <div className="text-center flex items-center">
@@ -151,7 +151,7 @@ export default function Main4() {
               </div>
             </div>
             <img
-              className={`text-[16px]  ${
+              className={`text-[16px] md:w-[50%] ${
                 selectedTrack === "backend" ? "w-[900px]" : "w-[700px]"
               }`}
               src={trackDetails[selectedTrack].curri}

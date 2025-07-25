@@ -17,10 +17,10 @@ import ScrollToTop from "./components/ScrollToTop";
 
 function AppContent() {
   const location = useLocation();
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 1100);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1070);
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 1100);
+    const handleResize = () => setIsMobile(window.innerWidth < 1070);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);

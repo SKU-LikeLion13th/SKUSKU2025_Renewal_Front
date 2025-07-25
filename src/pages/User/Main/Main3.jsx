@@ -48,7 +48,7 @@ export default function Main3() {
   return (
     <div>
       {/* 소개 문구 */}
-      <div className="hidden sm:flex bg-[#0E0E0E] text-white h-[300px] justify-center items-center text-[20px]">
+      <div className="hidden sm:flex bg-[#0E0E0E] text-white h-[300px] justify-center items-center text-[16px] sm:text-[20px] lg:text-[24px]">
         <p className="fontThin">
           멋쟁이사자처럼 13기에서 진행되는{" "}
           <span className="fontBold">프로그램</span>을 소개합니다
@@ -56,18 +56,18 @@ export default function Main3() {
       </div>
 
       {/* 본문 */}
-      <div className="bg-[#1B1B1B] sm:py-20 py-12 sm:pb-40 pb-10 space-y-20">
-        <p className="text-[#9ABFFF] fontSB text-center sm:text-[18px] text-[9px]">
+      <div className="px-4 sm:px-8 md:px-16 lg:px-14 xl:px-18 bg-[#1B1B1B] sm:py-20 py-12 sm:pb-40 pb-10 space-y-20">
+        <p className="text-[#9ABFFF] fontSB text-center text-[9px] sm:text-[14px] md:text-[18px]">
           @2025 PROGRAM info
         </p>
 
-        <div className="max-w-5xl mx-auto sm:flex sm:flex-col max-sm:grid max-sm:grid-cols-2 sm:gap-40 ">
+        <div className="max-w-5xl mx-auto sm:flex sm:flex-col max-sm:grid max-sm:grid-cols-2 sm:gap-25 ">
           {programs.map((program, idx) => (
             <div
               key={idx}
               className={`flex flex-col sm:flex-row items-center ${
                 idx % 2 === 1 ? "sm:flex-row-reverse" : ""
-              } gap-4 sm:gap-32`}
+              } gap-4 sm:gap-20`}
             >
               <img
                 src={program.img}
@@ -75,14 +75,14 @@ export default function Main3() {
                 className="w-38 sm:w-[45%] sm:rounded-[15px] rounded-sm"
               />
               <div className="flex-1 text-white space-y-4 sm:space-y-6 sm:px-4">
-                <p className="text-[12px] sm:text-[30px] fontSB ">
+                <p className="text-[12px] sm:text-[18px] md:text-[32px] fontSB ">
                   {program.title}
                   <span className="text-[#72A6FF]">{program.highlight}</span>
                 </p>
-                <p className="hidden sm:block text-[#E5E5E5] fontThin text-[11px] sm:text-[15px] whitespace-pre-line">
+                <p className="hidden sm:block text-[#E5E5E5] fontThin text-[11px] sm:text-[12px] md:text-[15px] whitespace-pre-line">
                   {program.desc}
                 </p>
-                <div className="hidden sm:block text-[11px] sm:text-[13px] text-[#E5E5E5] fontThin space-y-1">
+                <div className="hidden sm:block text-[11px] sm:text-[12px] md:text-[13px] text-[#E5E5E5] fontThin space-y-1">
                   <div className="flex items-center gap-2">
                     <img
                       src="/assets/images/Main/place.png"
