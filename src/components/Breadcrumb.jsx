@@ -18,7 +18,7 @@ const sectionMap = {
   assignment: "과제 목록",
   review: "복습 공간",
   LectureManagement: "자료 관리",
-  reviewQuiz: "복습 공간",
+  reviewQuiz: "복습 퀴즈",
 };
 
 const Breadcrumb = () => {
