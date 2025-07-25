@@ -8,10 +8,10 @@ export default function Main1() {
 
       {/* 글 (이미지 위에 배치) */}
       <div className="relative  flex flex-col justify-center h-full text-white ">
-        <div className="sm:font-extrabold fontThin text-[28px] sm:leading-[80px] sm:pl-[15%] pl-6 sm:text-[65px] leading-[35px]">
+        <div className="sm:font-extrabold fontSBold text-[28px] sm:leading-[80px] sm:pl-[15%] pl-6 sm:text-[65px] leading-[35px]">
           <p>상상을 현실로 만드는</p>
           <p>
-            내 손 안에
+            내 손 안에{" "}
             <span className="text-[#3B79FF] block sm:inline fontMedium ">
               스쿠스쿠
             </span>
