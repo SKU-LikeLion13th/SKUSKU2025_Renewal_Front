@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const LectureTable = ({ data }) => {
+const LectureTable = ({ data,track }) => {
   return (
     <table className="min-w-[300px] w-full text-xs sm:text-sm md:text-base text-center border-t-[2.5px] border-t-[#232323]">
       <thead>
@@ -24,7 +24,7 @@ const LectureTable = ({ data }) => {
               >
                 <td className="py-2 border-b border-[#e0e0e0]">{i + 1}</td>
                 <td className="py-2 border-b border-[#e0e0e0] text-left pl-4">
-                  <Link to={`/CyberCampus/lecture-detail/${item.id}`}>
+                  <Link to={`/cybercampus/lecture/${track}/lecture_detail/${item.id}`}>
                     {item.title}
                   </Link>
                 </td>

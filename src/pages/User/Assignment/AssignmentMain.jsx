@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import API from "../../../utils/axios";
 import AssignmentSearchBar from "./AssignmentSearchBar";
 import AssignmentBoard from "./AssignmentBoard";
+import Breadcrumb from "../../../components/Breadcrumb";
 
 export default function AssignmentMain() {
   const [assignments, setAssignments] = useState([]);
@@ -32,8 +33,8 @@ export default function AssignmentMain() {
             item.adminCheck === "PASS"
               ? "확인"
               : item.adminCheck === "NONE_PASS"
-                ? "보류"
-                : "미확인",
+              ? "보류"
+              : "미확인",
           description: item.description,
           track: track,
         }));
@@ -78,7 +79,9 @@ export default function AssignmentMain() {
     <div className="flex mx-auto min-h-screen">
       <div className="flex flex-col w-9/12 my-30 mx-auto justify-start lg:w-8/12">
         <h1 className="text-4xl font-bold my-15">{trackTitle} 과제</h1>
-
+        <div className="mb-8">
+          <Breadcrumb />
+        </div>
         <div className="flex w-full mt-8 justify-center">
           {/* 여기서 현재 페이지에 해당하는 게시물만 전달 */}
           <AssignmentBoard assignments={currentPosts} />

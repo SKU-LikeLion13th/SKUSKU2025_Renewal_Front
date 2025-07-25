@@ -5,6 +5,7 @@ import ReviewBoard from './ReviewBoard';
 import ReviewSearch from './ReviewSearch';
 import ReviewTitle from './ReviewTitle';
 import quizData from '../../../utils/QuizData.json';
+import Breadcrumb from '../../../components/Breadcrumb';
 
 export default function Review() {
   const postsPerPage = 15;
@@ -42,7 +43,7 @@ export default function Review() {
         <ReviewTitle />
 
         <div className='flex justify-start w-full sm:mt-10 mt-8 pb-5'>
-          <ReviewLocation />
+          <Breadcrumb/>
         </div>
 
         <div className='flex justify-center w-full sm:mt-12 mt-8'>

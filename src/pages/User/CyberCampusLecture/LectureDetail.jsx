@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import API from "../../../utils/axios";
+import Breadcrumb from "../../../components/Breadcrumb";
 
 const LectureDetail = () => {
   const { id } = useParams();
@@ -45,8 +46,8 @@ const LectureDetail = () => {
       </h1>
 
       {/* 경로 */}
-      <div className="text-xs sm:text-sm text-gray-500 mb-12">
-        홈 &gt; 사이버캠퍼스 &gt; 자료실 &gt; 다운로드
+      <div className="mb-12">
+        <Breadcrumb/>
       </div>
 
       <hr className="border border-gray-200 mb-12" />

@@ -27,7 +27,7 @@ export default function AssignmentBoard({ assignments }) {
           : "UNREVIEWED",
     };
 
-    navigate(`/cybercampus/assignment/${assignment.id}/${assignment.track}`, {
+    navigate(`/cybercampus/assignment/${assignment.track}/assignment_detail/${assignment.id}`, {
       state: {
         selectedAssignment: selectedAssignmentData,
       },

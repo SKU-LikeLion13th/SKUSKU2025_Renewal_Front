@@ -1,24 +1,53 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
-// 경로에 대한 한글 이름 매핑
 const pathMap = {
-  cybercampus:"사이버캠퍼스",
-  lecture:"강의자료",
+  cybercampus: "사이버캠퍼스",
+  lecture_detail: "강의자료",
+  assignment_detail: "과제",
   admin: "관리자",
+  quiz: "퀴즈",
+};
+
+const sectionMap = {
+  lecture: "자료실",
+  assignment: "과제 목록",
+  review: "복습 공간",
 };
 
 const Breadcrumb = () => {
   const location = useLocation();
-  const pathnames = location.pathname.split("/").filter((x) => x);
+  const rawPathnames = location.pathname.split("/").filter((x) => x);
+
+  // 마지막 segment가 숫자일 경우 제거
+  const trimmed = !isNaN(rawPathnames[rawPathnames.length - 1])
+    ? rawPathnames.slice(0, -1)
+    : rawPathnames;
+
+  let pathnames = [];
+
+  for (let i = 0; i < trimmed.length; i++) {
+    const segment = trimmed[i];
+
+    if (sectionMap[segment]) {
+      const track = trimmed[i + 1];
+      if (track) {
+        pathnames.push(`${track}-${sectionMap[segment]}`);
+        i++; // skip track
+      }
+    } else {
+      pathnames.push(segment);
+    }
+  }
 
   return (
     <nav className="flex text-sm" aria-label="Breadcrumb">
       <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+        {/* 홈 아이콘 */}
         <li className="inline-flex items-center">
           <Link
             to="/"
-            className="inline-flex items-center text-[#999999] hover:text-[#666666] dark:text-gray-400 dark:hover:text-white"
+            className="inline-flex items-center text-[#999999] hover:text-[#666666]"
           >
             <svg
               className="w-3 h-3 me-2.5"
@@ -33,9 +62,28 @@ const Breadcrumb = () => {
         </li>
 
         {pathnames.map((name, index) => {
-          const routeTo = "/" + pathnames.slice(0, index + 1).join("/");
           const isLast = index === pathnames.length - 1;
-          const label = pathMap[name] || decodeURIComponent(name);
+
+          // 라벨 처리
+          let label;
+          if (name.includes("-")) {
+            const [track, section] = name.split("-");
+            label = `${track} ${section}`;
+          } else {
+            label = pathMap[name] || decodeURIComponent(name);
+          }
+
+          // 경로 처리
+          let routeTo;
+          if (name.includes("-")) {
+            const [track, sectionLabel] = name.split("-");
+            const sectionKey = Object.keys(sectionMap).find(
+              (key) => sectionMap[key] === sectionLabel
+            );
+            routeTo = `/cybercampus/${sectionKey}/${track}`;
+          } else {
+            routeTo = "/" + rawPathnames.slice(0, index + 1).join("/");
+          }
 
           return (
             <li key={name}>

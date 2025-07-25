@@ -75,7 +75,7 @@ const ReviewBoard = ({ trackType }) => {
                 className="flex justify-start sm:px-1 px-0.5 sm:text-[13.5px] text-[12px] cursor-pointer"
                 style={{ flex: flexValues[1] }}
                 onClick={() =>
-                  navigate(`/cybercampus/quiz/${quiz.reviewWeekId}`, {
+                  navigate(`/cybercampus/review/${trackType}/quiz/${quiz.reviewWeekId}`, {
                     state: {
                       title: quiz.title,
                       trackType: trackType,

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import API from "../../../utils/axios";
 import LectureControls from "../../Admin/LectureManagement/LectureControls";
 import LectureTable from "./LectureTable";
+import Breadcrumb from "../../../components/Breadcrumb";
 
 const CCLecture = () => {
   const { track } = useParams();
@@ -62,11 +63,11 @@ const CCLecture = () => {
       <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl fontBold mb-10 sm:mb-16">
         {track} 자료실
       </h1>
-      <div className="text-xs sm:text-sm text-gray-500 mb-6">
-        홈 &gt; 사이버캠퍼스 &gt; 자료실
+      <div className="mb-8">
+        <Breadcrumb/>
       </div>
 
-      <LectureTable data={paddedItems} />
+      <LectureTable data={paddedItems} track={track} />
 
       <LectureControls
         totalItems={data.length}

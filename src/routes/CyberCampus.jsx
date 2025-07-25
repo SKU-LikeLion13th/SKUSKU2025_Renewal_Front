@@ -28,12 +28,12 @@ export default function CyberCampus() {
       <Routes>
         <Route path="/" element={<CyberCampusIntro />} />
         <Route path="lecture/:track" element={<CCLecture />} />
-        <Route path="lecture-detail/:id" element={<LectureDetail />} />
+        <Route path="lecture/:track/lecture_detail/:id" element={<LectureDetail />} />
         <Route path="/review/:trackType" element={<Review />} />
-        <Route path="/quiz/:reviewWeekId" element={<Quiz />} />
+        <Route path="/review/:trackType/quiz/:reviewWeekId" element={<Quiz />} />
         <Route path="/assignment/:track" element={<AssignmentMain />} />
         <Route
-          path="/assignment/:assignmentId/:track"
+          path="/assignment/:track/assignment_detail/:assignmentId"
           element={<AssignmentSubmitPage />}
         />
       </Routes>
