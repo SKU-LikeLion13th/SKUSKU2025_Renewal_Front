@@ -7,7 +7,7 @@ import ReviewLocation from '../../User/Review/ReviewLocation';
 import Breadcrumb from '../../../components/Breadcrumb';
 
 export default function AdminReviewUpdate() {
-  const { reviewWeekId, trackType } = useParams(); // URL 파라미터로 받는다고 가정
+  const { reviewWeekId, trackType } = useParams();
   const navigate = useNavigate();
 
   const [title, setTitle] = useState('');
@@ -15,7 +15,11 @@ export default function AdminReviewUpdate() {
   const [questionTypes, setQuestionTypes] = useState([]);
   const [filesByQuestion, setFilesByQuestion] = useState({});
   const [selectedFiles, setSelectedFiles] = useState({});
-  const [quizContents, setQuizContents] = useState([]); // 문제 내용, 답 등 담음
+  const [quizContents, setQuizContents] = useState([]);
+  
+  // 🚩 기능 플래그: 각 문제의 상태와 ID를 추적하는 상태
+  const [questionStates, setQuestionStates] = useState([]); // { reviewQuizId, status, isModified }
+  const [originalQuizData, setOriginalQuizData] = useState([]); // 원본 데이터 보존
 
   // 1. 기존 퀴즈 데이터 불러오기 (수정 모드 초기화)
   useEffect(() => {
@@ -27,30 +31,32 @@ export default function AdminReviewUpdate() {
 
         if (response.status === 200) {
           const data = response.data;
+          
+          // 원본 데이터 보존
+          setOriginalQuizData(data);
 
-          // 제목 세팅 (예시는 첫번째 항목의 제목을 받아오나, 따로 API로 받아야 하면 수정)
-          // API에서 제목이 따로 없으면, 직접 입력 받도록 수정 필요
-          // 여기서는 trackType이 param에 있으니 제목은 빈 문자열 유지
-
-          // 문제 갯수 세팅
           setQuestionCount(data.length);
 
-          // 문제 유형, 내용, 답, 파일, 해설 세팅
           const types = data.map((q) => (q.quizType === 'MULTIPLE_CHOICE' ? '객관식' : '주관식'));
           setQuestionTypes(types);
 
-          setQuizContents(
-            data.map((q) => ({
-              content: q.content,
-              answerChoiceList: q.answerChoiceList || [],
-              answer: q.answer || '',
-              explanation: q.explanation || '',
-              files: q.files ? (Array.isArray(q.files) ? q.files : [q.files]) : [],
-            }))
-          );
+          const contents = data.map((q) => ({
+            content: q.content,
+            answerChoiceList: q.answerChoiceList || [],
+            answer: q.answer || '',
+            explanation: q.explanation || '',
+            files: q.files ? (Array.isArray(q.files) ? q.files : [q.files]) : [],
+          }));
+          setQuizContents(contents);
 
-          // 기존 파일은 실제 File 객체가 아니라 url 정보임. 업로드 파일과는 별도로 관리할 수 있음
-          // 편의를 위해 selectedFiles와 filesByQuestion 초기화는 비워둠
+          // 🚩 초기 상태: 모든 기존 문제는 'KEEP' 상태로 설정
+          const initialStates = data.map((q) => ({
+            reviewQuizId: q.reviewQuizId || q.id, // API 응답에 따라 조정
+            status: 'KEEP',
+            isModified: false
+          }));
+          setQuestionStates(initialStates);
+
           setSelectedFiles({});
           setFilesByQuestion({});
         }
@@ -62,14 +68,57 @@ export default function AdminReviewUpdate() {
     fetchQuiz();
   }, [reviewWeekId]);
 
+  // 🚩 문제 내용이 변경되었는지 확인하는 헬퍼 함수
+  const hasQuestionChanged = (index, newContent) => {
+    if (index >= originalQuizData.length) return true; // 새 문제
+    
+    const original = originalQuizData[index];
+    const current = {
+      content: newContent.content,
+      answerChoiceList: newContent.answerChoiceList,
+      answer: newContent.answer,
+      explanation: newContent.explanation,
+      quizType: questionTypes[index] === '객관식' ? 'MULTIPLE_CHOICE' : 'ESSAY_QUESTION'
+    };
+
+    return (
+      original.content !== current.content ||
+      original.answer !== current.answer ||
+      original.explanation !== current.explanation ||
+      original.quizType !== current.quizType ||
+      JSON.stringify(original.answerChoiceList || []) !== JSON.stringify(current.answerChoiceList || [])
+    );
+  };
+
+  // 🚩 문제 상태 업데이트 함수
+  const updateQuestionStatus = (index, newStatus) => {
+    setQuestionStates(prev => {
+      const updated = [...prev];
+      if (updated[index]) {
+        updated[index].status = newStatus;
+        updated[index].isModified = newStatus === 'UPDATE';
+      }
+      return updated;
+    });
+  };
+
   const handleDeleteQuestion = (index) => {
     if (!window.confirm(`문제 ${index + 1}번을 삭제하시겠습니까?`)) return;
+
+    // 🚩 기존 문제라면 DELETE 상태로 표시 (실제 삭제는 하지 않음)
+    if (index < originalQuizData.length) {
+      updateQuestionStatus(index, 'DELETE');
+      // UI에서는 숨기기 위해 별도 상태 관리 또는 필터링 필요
+      // 여기서는 간단히 삭제 처리
+    }
 
     setQuestionCount((prev) => prev - 1);
 
     setQuestionTypes((prev) => prev.filter((_, i) => i !== index));
     setQuizContents((prev) => prev.filter((_, i) => i !== index));
+    setQuestionStates((prev) => prev.filter((_, i) => i !== index));
 
+    // 파일 상태 재정렬
     setFilesByQuestion((prev) => {
       const updated = {};
       Object.entries(prev).forEach(([key, val]) => {
@@ -91,21 +140,22 @@ export default function AdminReviewUpdate() {
     });
   };
 
-
   const handleQuestionCountChange = (e) => {
     const value = parseInt(e.target.value, 10);
 
     if (!isNaN(value) && value >= 0) {
+      const previousCount = questionCount;
+      console.log(previousCount);
       setQuestionCount(value);
 
-      // 문제 형식 (기존 유지, 부족하면 빈 값 추가)
+      // 문제 형식 업데이트
       setQuestionTypes((prev) => {
         const updated = [...prev];
-        while (updated.length < value) updated.push(''); // 새 문제 형식 추가
-        return updated.slice(0, value); // 필요 이상이면 잘라냄
+        while (updated.length < value) updated.push('');
+        return updated.slice(0, value);
       });
 
-      // 문제 내용 (기존 유지, 부족하면 새 문제 생성)
+      // 문제 내용 업데이트
       setQuizContents((prev) => {
         const updated = [...prev];
         while (updated.length < value) {
@@ -120,7 +170,23 @@ export default function AdminReviewUpdate() {
         return updated.slice(0, value);
       });
 
-      // 문제 수 줄어들면 해당 인덱스 이상 파일 제거
+      // 🚩 문제 상태 업데이트
+      setQuestionStates((prev) => {
+        const updated = [...prev];
+        
+        // 새로 추가된 문제들은 CREATE 상태
+        while (updated.length < value) {
+          updated.push({
+            reviewQuizId: null, // 새 문제는 null
+            status: 'CREATE',
+            isModified: false
+          });
+        }
+        
+        return updated.slice(0, value);
+      });
+
+      // 파일 상태 정리
       setFilesByQuestion((prev) => {
         const copy = { ...prev };
         Object.keys(copy).forEach((key) => {
@@ -138,20 +204,31 @@ export default function AdminReviewUpdate() {
       });
 
     } else {
-      // 유효하지 않은 값이거나 음수일 경우 모두 초기화
       setQuestionCount(0);
       setQuestionTypes([]);
       setQuizContents([]);
+      setQuestionStates([]);
       setFilesByQuestion({});
       setSelectedFiles({});
     }
   };
 
-
   const handleTypeChange = (index, type) => {
     const updatedTypes = [...questionTypes];
     updatedTypes[index] = type;
     setQuestionTypes(updatedTypes);
+
+    // 🚩 기존 문제이고 타입이 변경되었다면 UPDATE 상태로 변경
+    if (index < originalQuizData.length) {
+      const originalType = originalQuizData[index].quizType === 'MULTIPLE_CHOICE' ? '객관식' : '주관식';
+      if (originalType !== type) {
+        updateQuestionStatus(index, 'UPDATE');
+      } else {
+        // 다른 변경사항이 있는지 확인 후 상태 결정
+        const hasOtherChanges = hasQuestionChanged(index, quizContents[index]);
+        updateQuestionStatus(index, hasOtherChanges ? 'UPDATE' : 'KEEP');
+      }
+    }
   };
 
   const handleContentChange = (index, value) => {
@@ -161,6 +238,12 @@ export default function AdminReviewUpdate() {
       content: value,
     };
     setQuizContents(updatedContents);
+
+    // 🚩 기존 문제라면 변경 여부 확인 후 상태 업데이트
+    if (index < originalQuizData.length) {
+      const hasChanged = hasQuestionChanged(index, updatedContents[index]);
+      updateQuestionStatus(index, hasChanged ? 'UPDATE' : 'KEEP');
+    }
   };
 
   const handleExplanationChange = (index, value) => {
@@ -170,33 +253,53 @@ export default function AdminReviewUpdate() {
       explanation: value,
     };
     setQuizContents(updatedContents);
+
+    // 🚩 기존 문제라면 변경 여부 확인 후 상태 업데이트
+    if (index < originalQuizData.length) {
+      const hasChanged = hasQuestionChanged(index, updatedContents[index]);
+      updateQuestionStatus(index, hasChanged ? 'UPDATE' : 'KEEP');
+    }
   };
 
-  // 객관식 보기 변경
   const handleChoiceChange = (questionIndex, choiceIndex, value) => {
     const updatedContents = [...quizContents];
     const answerChoiceList = [...(updatedContents[questionIndex].answerChoiceList || [])];
     answerChoiceList[choiceIndex] = value;
     updatedContents[questionIndex].answerChoiceList = answerChoiceList;
     setQuizContents(updatedContents);
+
+    // 🚩 상태 업데이트
+    if (questionIndex < originalQuizData.length) {
+      const hasChanged = hasQuestionChanged(questionIndex, updatedContents[questionIndex]);
+      updateQuestionStatus(questionIndex, hasChanged ? 'UPDATE' : 'KEEP');
+    }
   };
 
-  // 객관식 정답 선택 변경
   const handleAnswerSelect = (questionIndex, choiceIndex) => {
     const updatedContents = [...quizContents];
     const selectedAnswer = updatedContents[questionIndex].answerChoiceList[choiceIndex] || '';
     updatedContents[questionIndex].answer = selectedAnswer;
     setQuizContents(updatedContents);
+
+    // 🚩 상태 업데이트
+    if (questionIndex < originalQuizData.length) {
+      const hasChanged = hasQuestionChanged(questionIndex, updatedContents[questionIndex]);
+      updateQuestionStatus(questionIndex, hasChanged ? 'UPDATE' : 'KEEP');
+    }
   };
 
-  // 주관식 정답 변경
   const handleSubjectiveAnswerChange = (questionIndex, value) => {
     const updatedContents = [...quizContents];
     updatedContents[questionIndex].answer = value;
     setQuizContents(updatedContents);
+
+    // 🚩 상태 업데이트
+    if (questionIndex < originalQuizData.length) {
+      const hasChanged = hasQuestionChanged(questionIndex, updatedContents[questionIndex]);
+      updateQuestionStatus(questionIndex, hasChanged ? 'UPDATE' : 'KEEP');
+    }
   };
 
-  // 파일 선택 변경
   const handleFileChange = (index, e) => {
     const files = Array.from(e.target.files);
     setSelectedFiles((prev) => ({
@@ -208,23 +311,33 @@ export default function AdminReviewUpdate() {
       ...prev,
       [index]: files,
     }));
+
+    // 🚩 파일 변경도 UPDATE 상태로 처리
+    if (index < originalQuizData.length) {
+      updateQuestionStatus(index, 'UPDATE');
+    }
   };
 
   const handleExistingFileDelete = (questionIndex, fileIndex) => {
     setQuizContents((prev) => {
       const updated = [...prev];
       const files = [...(updated[questionIndex]?.files || [])];
-      files.splice(fileIndex, 1); // 해당 파일 제거
+      files.splice(fileIndex, 1);
       updated[questionIndex].files = files;
       return updated;
     });
+
+    // 🚩 파일 삭제도 UPDATE 상태로 처리
+    if (questionIndex < originalQuizData.length) {
+      updateQuestionStatus(questionIndex, 'UPDATE');
+    }
   };
 
   const handleUpdate = async () => {
     try {
-      // 1) 모든 문제에서 선택한 파일들을 배열로 모으기
+      // 파일 업로드 로직 (기존과 동일)
       const allFiles = [];
-      const questionFileIndices = {}; // 문제별로 파일이 allFiles내 인덱스 시작 위치 기억
+      const questionFileIndices = {};
 
       let fileCountSoFar = 0;
       for (let i = 0; i < questionCount; i++) {
@@ -234,7 +347,6 @@ export default function AdminReviewUpdate() {
         allFiles.push(...filesForQ);
       }
 
-      // 2) presigned URL 요청 (파일이 없으면 빈 배열 보내기)
       const presignedReqBody = allFiles.map((file) => ({
         fileName: file.name,
         mimeType: file.type,
@@ -250,7 +362,6 @@ export default function AdminReviewUpdate() {
         presignedUrls = presignedRes.data;
       }
 
-      // 3) S3에 파일 업로드
       const uploadPromises = allFiles.map((file, idx) =>
         axios.put(presignedUrls[idx].uploadUrl, file, {
           headers: { "Content-Type": file.type },
@@ -258,7 +369,6 @@ export default function AdminReviewUpdate() {
       );
       await Promise.all(uploadPromises);
 
-      // 4) 파일 업로드 후 반환 받은 URL 기반 파일정보 만들기
       const fileInfoList = presignedUrls.map((urlObj, idx) => {
         const file = allFiles[idx];
         const ext = file.type.split('/')[1]?.toUpperCase() || 'UNKNOWN';
@@ -271,14 +381,17 @@ export default function AdminReviewUpdate() {
         };
       });
 
-      // 5) 각 문제별 files 배열 채우기 및 DTO 준비
+      // 🚩 상태 기반으로 DTO 생성
       const reviewQuizDTOList = [];
       for (let index = 0; index < questionCount; index++) {
         const type = questionTypes[index];
         const content = quizContents[index]?.content || "";
         const explanationInput = quizContents[index]?.explanation || "";
+        const questionState = questionStates[index];
 
         const quizData = {
+          reviewQuizId: questionState?.reviewQuizId || null, // 🚩 새 문제는 null, 기존 문제는 ID 유지
+          status: questionState?.status || 'CREATE', // 🚩 상태 추가
           quizType: type === '객관식' ? 'MULTIPLE_CHOICE' : 'ESSAY_QUESTION',
           content,
           answerChoiceList: [],
@@ -301,21 +414,36 @@ export default function AdminReviewUpdate() {
           const startIdx = questionFileIndices[index];
           quizData.files = fileInfoList.slice(startIdx, startIdx + filesForThisQuestion.length);
         } else {
-          // 기존에 있는 파일 url 정보가 있으면 그거 쓰도록
           quizData.files = quizContents[index]?.files || [];
         }
 
         reviewQuizDTOList.push(quizData);
       }
 
-      // 6) payload 준비
+      // 삭제된 문제들도 포함 (DELETE 상태)
+      originalQuizData.forEach((originalQuiz, index) => {
+        if (index >= questionCount || questionStates[index]?.status === 'DELETE') {
+          reviewQuizDTOList.push({
+            reviewQuizId: originalQuiz.reviewQuizId || originalQuiz.id,
+            status: 'DELETE',
+            quizType: originalQuiz.quizType,
+            content: originalQuiz.content,
+            answerChoiceList: originalQuiz.answerChoiceList || [],
+            answer: originalQuiz.answer || '',
+            files: originalQuiz.files || [],
+            explanation: originalQuiz.explanation || '',
+          });
+        }
+      });
+
       const payload = {
         title,
         trackType,
         reviewQuizDTOList,
       };
 
-      // 7) 수정 API 호출
+      console.log('🚩 전송할 데이터:', payload); // 디버깅용
+
       const response = await API.put(`/admin/reviewQuiz/update/${reviewWeekId}`, payload);
 
       if (response.status === 200) {
@@ -333,8 +461,17 @@ export default function AdminReviewUpdate() {
   const renderQuestionBlock = (index) => (
     <div key={index} className='flex flex-col px-10 py-8 sm:px-25 sm:py-20 bg-[#F6F6F6] border-[#232323] border-[0.5px] rounded-[15px] w-full sm:mt-20 mt-10'>
       <div className="flex justify-between items-center mb-5">
-        <div className='flex text-[15px] sm:text-[20px] fontSB'>
+        <div className='flex items-center text-[15px] sm:text-[20px] fontSB'>
           Question {String(index + 1).padStart(2, '0')}.
+          {/* 🚩 상태 표시 배지 */}
+          <span className={`ml-3 px-2 py-1 text-xs rounded ${
+            questionStates[index]?.status === 'CREATE' ? 'bg-green-100 text-green-800' :
+            questionStates[index]?.status === 'UPDATE' ? 'bg-yellow-100 text-yellow-800' :
+            questionStates[index]?.status === 'DELETE' ? 'bg-red-100 text-red-800' :
+            'bg-gray-100 text-gray-800'
+          }`}>
+            {questionStates[index]?.status || 'KEEP'}
+          </span>
         </div>
         <button
           type="button"
@@ -345,6 +482,7 @@ export default function AdminReviewUpdate() {
         </button>
       </div>
 
+      {/* 나머지 렌더링 로직은 동일 */}
       <input
         type="text"
         placeholder='문제를 입력해주세요.'
@@ -410,7 +548,6 @@ export default function AdminReviewUpdate() {
         </>
       )}
 
-      {/* 파일첨부 input 추가 */}
       <div className="flex sm:mt-20 mt-8 sm:text-[20px] text-[15px] fontSB">파일 업로드</div>
       <label
         htmlFor={`file-upload-${index}`}
@@ -473,6 +610,26 @@ export default function AdminReviewUpdate() {
       </div>
 
       <div className='flex w-full flex-col min-h-screen mb-40'>
+        {/* 🚩 상태 요약 정보 표시 */}
+        <div className="flex flex-wrap gap-4 sm:mt-10 mt-5 p-4 bg-blue-50 rounded-lg">
+          <div className="text-sm">
+            <span className="font-semibold">생성: </span>
+            <span className="text-green-600">{questionStates.filter(q => q.status === 'CREATE').length}개</span>
+          </div>
+          <div className="text-sm">
+            <span className="font-semibold">수정: </span>
+            <span className="text-yellow-600">{questionStates.filter(q => q.status === 'UPDATE').length}개</span>
+          </div>
+          <div className="text-sm">
+            <span className="font-semibold">유지: </span>
+            <span className="text-gray-600">{questionStates.filter(q => q.status === 'KEEP').length}개</span>
+          </div>
+          <div className="text-sm">
+            <span className="font-semibold">삭제: </span>
+            <span className="text-red-600">{questionStates.filter(q => q.status === 'DELETE').length}개</span>
+          </div>
+        </div>
+
         <div className='flex sm:mt-20 mt-18 sm:text-[20px] text-[17px] fontBold'>제목 입력</div>
         <input
           type="text"
