@@ -141,9 +141,8 @@ export default function AdminQuizContent() {
           quizData.answer = answer;
         }
 
-        // 주관식 답변 처리 (기존 코드 유지)
         if (type === '주관식') {
-          const answerInput = document.querySelectorAll("input[placeholder='정답을 입력해주세요.']")[index]?.value || "";
+          const answerInput = document.querySelector(`input[name="subjective-answer-${index}"]`)?.value || "";
           quizData.answer = answerInput;
         }
 
