@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import GoogleLoginBtn from "./GoogleLoginBtn";
 import CCBtn from "./CCBtn";
 import { useAuth } from "../utils/AuthContext";
@@ -7,7 +7,6 @@ import { useAuth } from "../utils/AuthContext";
 export default function Header() {
   const [isHovered, setIsHovered] = useState(false);
   const { user, logout } = useAuth();
-  const location = useLocation();
 
   const menuItems = [
     { title: "PROJECT", path: "/project" },
