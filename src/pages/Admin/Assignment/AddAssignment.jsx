@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import API from "../../../utils/axios";
 import axios from "axios";
+import TrackTitle from "../../../components/TrackTitle";
+import Breadcrumb from "../../../components/Breadcrumb";
 
 export default function AddAssignment() {
   const navigate = useNavigate();
@@ -176,9 +178,10 @@ export default function AddAssignment() {
           newFiles: fileData.filter((f) => f.status === "NEW"),
         });
 
-        // await API.put("/admin/assignment/update", assignmentData);
+        await API.put("/admin/assignment/update", assignmentData);
         alert("과제가 수정되었습니다.");
       } else {
+        console.log("등록할 과제 데이터:", assignmentData);
         await API.post("/admin/assignment/upload", assignmentData);
         alert("과제가 등록되었습니다.");
       }
@@ -194,13 +197,16 @@ export default function AddAssignment() {
 
   return (
     <div className="flex mx-auto min-h-screen">
-      <div className="flex flex-col w-9/12 mt-30 mx-auto justify-start lg:w-8/12">
+      <div className="flex flex-col justify-start w-9/12 mx-auto sm:mt-50 mt-30 lg:w-8/12">
         <div className="flex items-center justify-between">
-          <p className="text-4xl font-bold my-15">
-            {isEdit
-              ? `${trackToTitle(track)} 과제 수정`
-              : `${trackToTitle(track)} 과제 등록`}
-          </p>
+          {isEdit ? (
+            <TrackTitle suffix="과제 수정" />
+          ) : (
+            <TrackTitle suffix="과제 등록" />
+          )}
+        </div>
+        <div className="flex justify-start w-full sm:mt-15 mt-8 pb-5 mb-6">
+          <Breadcrumb />
         </div>
         <div className="border-t-2 border-[#232323]">
           <form onSubmit={handleSubmit}>
@@ -375,13 +381,4 @@ export default function AddAssignment() {
       </div>
     </div>
   );
-}
-
-function trackToTitle(track) {
-  const map = {
-    BACKEND: "BACK-END",
-    FRONTEND: "FRONT-END",
-    DESIGN: "DESIGN",
-  };
-  return map[track?.toUpperCase()] || track;
 }

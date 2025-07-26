@@ -26,7 +26,7 @@ export default function AdminAssignmentCheckBoard({
           </div>
         ))}
       </div>
-      <div className="flex w-full flex-col">
+      <div className="flex w-full min-h-[590px] flex-col">
         {assignments.length > 0 ? (
           assignments.map((assignment, index) => (
             <div key={`${assignment.id}-${index}`} className={rowStyle}>

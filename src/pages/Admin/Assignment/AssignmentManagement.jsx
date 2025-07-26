@@ -4,6 +4,8 @@ import API from "../../../utils/axios";
 import AdminAssignmentBoard from "./AdminAssignmentBoard";
 import AdminAssignmentControl from "./AdminAssignmentControl";
 import AdminAssignmentPagination from "./AdminAssignmentPagination";
+import TrackTitle from "../../../components/TrackTitle";
+import Breadcrumb from "../../../components/Breadcrumb";
 
 export default function AssignmentManagement() {
   const navigate = useNavigate();
@@ -16,17 +18,6 @@ export default function AssignmentManagement() {
   const [searchTerm, setSearchTerm] = useState("");
   const postsPerPage = 15;
 
-  const trackToTitle = {
-    BACKEND: "BACK-END",
-    FRONTEND: "FRONT-END",
-    DESIGN: "DESIGN",
-  };
-
-  function getTitleByTrack(track) {
-    return trackToTitle[track?.toUpperCase()] || track;
-  }
-  const displayTrack = getTitleByTrack(track);
-
   useEffect(() => {
     const assignmentList = async () => {
       try {
@@ -38,8 +29,12 @@ export default function AssignmentManagement() {
           description: item.description,
           adminCheck: item.adminCheck,
         }));
-        setAssignments(processed);
-        console.log("과제 목록:", processed);
+
+        // Sort assignments by ID in descending order (most recent first)
+        const sortedAssignments = processed.sort((a, b) => b.id - a.id);
+
+        setAssignments(sortedAssignments);
+        console.log("과제 목록:", sortedAssignments);
       } catch (error) {
         console.error("과제 데이터를 불러오는 데 실패했습니다:", error);
         if (error.response?.status === 404) {
@@ -100,7 +95,7 @@ export default function AssignmentManagement() {
   };
 
   const handleCreateAssignment = () => {
-    navigate(`/admin/assignment/add/${track}`, { state: { isEdit: false } });
+    navigate(`/admin/assignment/${track}/add`, { state: { isEdit: false } });
   };
 
   const handleEditAssignment = async (id) => {
@@ -108,11 +103,10 @@ export default function AssignmentManagement() {
       const response = await API.get(`/assignment/${id}`);
       const assignmentDetail = response.data;
 
-      // assignments 배열에서 title 가져오기 (API 응답에는 title 없음)
       const currentAssignment = assignments.find((a) => a.id === id);
       const title = currentAssignment?.title || "제목 없음";
 
-      navigate(`/admin/assignment/add/${track}`, {
+      navigate(`/admin/assignment/${track}/add`, {
         state: {
           isEdit: true,
           assignmentId: id,
@@ -151,9 +145,13 @@ export default function AssignmentManagement() {
 
   return (
     <div className="flex mx-auto min-h-screen">
-      <div className="flex flex-col w-9/12 mt-30 mx-auto justify-start lg:w-8/12">
+      <div className="flex flex-col justify-start w-9/12 mx-auto sm:mt-50 mt-30 lg:w-8/12">
         <div className="flex items-center justify-between">
-          <h1 className="text-4xl font-bold my-15">{displayTrack} 과제 등록</h1>
+          <TrackTitle suffix="과제 등록" />
+        </div>
+
+        <div className="flex justify-start w-full sm:mt-15 mt-8 pb-5 mb-6">
+          <Breadcrumb />
         </div>
 
         <AdminAssignmentBoard
@@ -163,7 +161,6 @@ export default function AssignmentManagement() {
           onEditAssignment={handleEditAssignment}
         />
 
-        {/* 버튼 영역 */}
         <AdminAssignmentControl
           selectedItems={selectedItems}
           onSelectAll={handleSelectAll}
@@ -171,7 +168,6 @@ export default function AssignmentManagement() {
           onCreateAssignment={handleCreateAssignment}
         />
 
-        {/* 페이지네이션 + 검색 */}
         <AdminAssignmentPagination
           totalPosts={totalPosts}
           totalPages={totalPages}

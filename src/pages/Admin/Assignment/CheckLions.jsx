@@ -3,6 +3,8 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import API from "../../../utils/axios";
 import AdminAssignmentCheckBoard from "./AdminAssignmentCheckBoard";
 import AdminAssignmentPagination from "./AdminAssignmentPagination";
+import TrackTitle from "../../../components/TrackTitle";
+import Breadcrumb from "../../../components/Breadcrumb";
 
 export default function CheckLions() {
   const navigate = useNavigate();
@@ -29,7 +31,7 @@ export default function CheckLions() {
             id: item.submitAssignmentId,
             name: item.lionName || item.name || "이름 없음",
             index: index + 1,
-            passNonePass: item.passNonePass, // 👈 상태 정보 추가
+            passNonePass: item.passNonePass,
             originalData: item,
           };
         });
@@ -45,21 +47,15 @@ export default function CheckLions() {
   }, [assignmentId]);
 
   const handleGradeAssignment = (memberId, lionName) => {
-    console.log("전달받은 memberId:", memberId);
-    console.log("전달받은 lionName:", lionName);
-    console.log("assignments 배열:", assignments);
-
-    // memberId로 해당 assignment 찾기
     const targetAssignment = assignments.find((a) => a.id === memberId);
-    console.log("찾은 assignment:", targetAssignment);
-
     const nameToPass = lionName || targetAssignment?.name || "이름 없음";
-    console.log("최종 전달할 이름:", nameToPass);
 
-    // URL 파라미터 순서를 확인하고 맞춰서 navigate
-    navigate(`/admin/assignment/check/${assignmentId}/${memberId}/${track}`, {
-      state: { lionName: nameToPass, title },
-    });
+    navigate(
+      `/admin/assignmentCheck/${track}/babylions/${assignmentId}/${memberId}`,
+      {
+        state: { lionName: nameToPass, title },
+      }
+    );
   };
 
   const filteredAssignments = assignments.filter((a) =>
@@ -83,37 +79,32 @@ export default function CheckLions() {
     setCurrentPage(1);
   };
 
-  const trackToDisplay = {
-    BACKEND: "BACK-END",
-    FRONTEND: "FRONT-END",
-    DESIGN: "DESIGN",
-  };
-
   return (
     <div className="flex mx-auto min-h-screen">
-      <div className="flex flex-col w-9/12 mt-30 mx-auto justify-start lg:w-8/12">
+      <div className="flex flex-col justify-start w-9/12 mx-auto sm:mt-50 mt-30 lg:w-8/12">
         <div className="flex items-center justify-between">
-          <h1 className="text-4xl font-bold my-15">
-            {trackToDisplay[track] || track} 과제 채점
-          </h1>
+          <TrackTitle suffix="과제 채점" />
         </div>
-        <h1 className="text-xl font-bold mb-6">{title}</h1>
+
+        <div className="flex justify-start w-full sm:mt-15 mt-8 pb-5 mb-6">
+          <Breadcrumb />
+        </div>
+
+        <h1 className="text-xl font-bold mb-10">{title}</h1>
 
         <AdminAssignmentCheckBoard
           assignments={currentPosts}
-          onGradeAssignment={(memberId, name) => {
-            handleGradeAssignment(memberId, name);
-          }}
+          onGradeAssignment={handleGradeAssignment}
           onEditAssignment={(memberId) => {
             const targetAssignment = assignments.find((a) => a.id === memberId);
             const nameToPass = targetAssignment?.name || "이름 없음";
 
             navigate(
-              `/admin/assignment/check/${assignmentId}/${memberId}/${track}`,
+              `/admin/assignmentCheck/${track}/babylions/${assignmentId}/${memberId}`,
               {
                 state: {
                   lionName: nameToPass,
-                  title, // 현재 과제 제목
+                  title,
                 },
               }
             );
@@ -122,6 +113,7 @@ export default function CheckLions() {
           flexValues={["1", "10", "2", "2"]}
           emptyText="제출한 아기사자가 없습니다."
         />
+
         {totalPages > 1 && (
           <AdminAssignmentPagination
             totalPages={totalPages}

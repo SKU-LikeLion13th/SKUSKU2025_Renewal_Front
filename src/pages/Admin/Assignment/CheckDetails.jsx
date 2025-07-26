@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import API from "../../../utils/axios";
+import TrackTitle from "../../../components/TrackTitle";
+import Breadcrumb from "../../../components/Breadcrumb";
 
 export default function CheckDetails() {
   const navigate = useNavigate();
@@ -18,7 +20,6 @@ export default function CheckDetails() {
         setAssignment(res.data);
         setFeedback(res.data.feedback || "");
 
-        // API 응답에 lionName이 있다면 그것을 사용
         console.log("API 응답 데이터:", res.data);
       } catch (error) {
         console.error("과제 조회 실패:", error);
@@ -28,7 +29,6 @@ export default function CheckDetails() {
     fetchAssignment();
   }, [assignmentId, submitId]);
 
-  // AssignmentSubmit과 동일한 파일 다운로드 함수
   const handleFileDownload = async (fileUrl, fileName) => {
     try {
       const response = await fetch(fileUrl);
@@ -45,13 +45,11 @@ export default function CheckDetails() {
       window.URL.revokeObjectURL(blobUrl);
     } catch (error) {
       console.error("파일 다운로드 실패:", error);
-      // fallback: 새 탭에서 파일 열기
       window.open(fileUrl, "_blank");
     }
   };
 
   const handleSubmitFeedback = async (passStatus) => {
-    // 피드백 필수 작성 체크
     if (!feedback.trim()) {
       alert("피드백을 작성해 주세요.");
       return;
@@ -64,14 +62,10 @@ export default function CheckDetails() {
         passNonePass: passStatus,
       };
 
-      console.log("API 요청 데이터:", requestData); // 디버깅용
-
       const response = await API.put(
         `/admin/assignment/check/feedback`,
         requestData
       );
-
-      console.log("API 응답:", response.data); // 디버깅용
 
       const statusText = passStatus === "PASS" ? "통과" : "보류";
       alert(`${statusText} 처리가 완료되었습니다.`);
@@ -79,54 +73,43 @@ export default function CheckDetails() {
       navigate(-1, { replace: true });
     } catch (error) {
       console.error("피드백 처리 실패:", error);
-      console.error("에러 상세:", error.response?.data || error.message);
       alert("피드백 처리에 실패했습니다.");
     }
   };
 
   if (!assignment) return <div>Loading...</div>;
 
-  // API 응답에서 lionName을 가져올 수 있다면 우선 사용
   const displayName = assignment.lionName || lionName;
-
-  // 트랙 이름 매핑 - URL 파라미터의 track 사용
-  const trackToDisplay = {
-    BACKEND: "BACK-END",
-    FRONTEND: "FRONT-END",
-    DESIGN: "DESIGN",
-  };
-
-  // track이 없으면 assignment.track 사용, 둘 다 없으면 기본값
-  const currentTrack = track || assignment?.track || "UNKNOWN";
-  const displayTrack = trackToDisplay[currentTrack] || currentTrack;
 
   return (
     <div className="flex mx-auto min-h-screen">
-      <div className="flex flex-col w-9/12 mt-30 mx-auto justify-start lg:w-8/12">
-        {/* 타이틀 */}
-        <div className="text-4xl font-bold my-15">{displayTrack} 과제 채점</div>
+      <div className="flex flex-col justify-start w-9/12 mx-auto sm:mt-50 mt-30 lg:w-8/12">
+        <div className="flex items-center justify-between">
+          <TrackTitle suffix="과제 채점" />
+        </div>
 
-        <h1 className="text-2xl font-bold mb-6">{assignment.title}</h1>
+        <div className="flex justify-start w-full sm:mt-15 mt-8 pb-5 mb-6">
+          <Breadcrumb />
+        </div>
 
-        {/* 과제 설명 */}
+        <h1 className="text-xl font-bold mb-3">{assignment.title}</h1>
+
         <div
           className="bg-[#F9F9F9] p-8 mt-3 border-t-2 border-[#232323]"
           style={{ whiteSpace: "pre-line" }}>
           {assignment.description}
         </div>
 
-        {/* 제출한 주관식 답변 */}
-        <h2 className="text-2xl font-bold mb-4 mt-10">주관식 답변</h2>
+        <h2 className="text-xl font-bold mb-4 mt-10">주관식 답변</h2>
         <div
           className="w-full p-8 bg-[#F9F9F9] border-t-2 border-[#232323]"
           style={{ whiteSpace: "pre-wrap" }}>
           {assignment.content || "내용이 없습니다."}
         </div>
 
-        {/* 파일 다운로드 (있을 때만) */}
         {assignment.files && assignment.files.length > 0 && (
           <>
-            <h2 className="text-2xl font-bold mb-4 mt-10">제출된 파일</h2>
+            <h2 className="text-xl font-bold mb-4 mt-10">제출된 파일</h2>
             <div className="bg-[#F9F9F9] p-8 mb-6 border-t-2 border-[#232323]">
               {assignment.files.map((file, idx) => (
                 <div
@@ -140,7 +123,6 @@ export default function CheckDetails() {
                     className="underline text-[#4881FF] hover:text-blue-700 transition-colors duration-200">
                     {file.fileName} 다운로드
                   </button>
-                  {/* 파일 크기 정보 표시 (있다면) */}
                   {file.fileSize && (
                     <span className="text-sm text-gray-500">
                       ({(file.fileSize / 1024 / 1024).toFixed(2)} MB)
@@ -152,7 +134,6 @@ export default function CheckDetails() {
           </>
         )}
 
-        {/* 버튼 */}
         <div className="flex justify-between items-center mb-30 mt-10">
           <div className="flex">
             <p className="font-bold flex items-center">
@@ -172,21 +153,18 @@ export default function CheckDetails() {
           <div>
             <button
               className="w-22 p-1.5 mr-5 text-white bg-[#FC6163] rounded-md hover:bg-red-500"
-              onClick={() => handleSubmitFeedback("NONE_PASS")} // 수정: 보류 요청 전달
-            >
+              onClick={() => handleSubmitFeedback("NONE_PASS")}>
               보류
             </button>
             <button
               className="w-22 p-1.5 text-white bg-[#4881FF] rounded-md hover:bg-blue-700"
-              onClick={() => handleSubmitFeedback("PASS")} // 수정: 통과 요청 전달
-            >
+              onClick={() => handleSubmitFeedback("PASS")}>
               통과
             </button>
           </div>
         </div>
 
-        {/* 관리자 피드백 */}
-        <div className="mb-6">
+        <div className="mb-15">
           <textarea
             className="w-full h-34 p-8 bg-[#F9F9F9] border-t-2 border-[#232323] focus:outline-none"
             rows={8}

@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import API from "../../../utils/axios";
 import AssignmentSearchBar from "./AssignmentSearchBar";
 import AssignmentBoard from "./AssignmentBoard";
+import TrackTitle from "../../../components/TrackTitle";
 import Breadcrumb from "../../../components/Breadcrumb";
 
 export default function AssignmentMain() {
@@ -12,14 +13,6 @@ export default function AssignmentMain() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const { track } = useParams();
-
-  const trackNames = {
-    FRONTEND: "FRONT-END",
-    BACKEND: "BACK-END",
-    DESIGN: "DESIGN",
-  };
-
-  const trackTitle = trackNames[track.toUpperCase()] || track;
 
   useEffect(() => {
     const fetchAssignments = async () => {
@@ -38,8 +31,12 @@ export default function AssignmentMain() {
           description: item.description,
           track: track,
         }));
-        setAssignments(processed);
-        console.log("과제 데이터:", data);
+
+        // Sort assignments by ID in descending order (most recent first)
+        const sortedAssignments = processed.sort((a, b) => b.id - a.id);
+
+        setAssignments(sortedAssignments);
+        console.log("과제 데이터:", sortedAssignments);
       } catch (error) {
         console.error("과제 데이터를 불러오는 데 실패했습니다:", error);
         if (error.response?.status === 404) {
@@ -77,13 +74,14 @@ export default function AssignmentMain() {
 
   return (
     <div className="flex mx-auto min-h-screen">
-      <div className="flex flex-col w-9/12 my-30 mx-auto justify-start lg:w-8/12">
-        <h1 className="text-4xl font-bold my-15">{trackTitle} 과제</h1>
-        <div className="mb-8">
+      <div className="flex flex-col justify-start w-9/12 mx-auto sm:mt-50 mt-30 lg:w-8/12">
+        <div className="flex items-center justify-between">
+          <TrackTitle suffix="과제" />
+        </div>
+        <div className="flex justify-start w-full sm:mt-15 mt-8 pb-5 mb-6">
           <Breadcrumb />
         </div>
-        <div className="flex w-full mt-8 justify-center">
-          {/* 여기서 현재 페이지에 해당하는 게시물만 전달 */}
+        <div className="flex w-full justify-center">
           <AssignmentBoard assignments={currentPosts} />
         </div>
 

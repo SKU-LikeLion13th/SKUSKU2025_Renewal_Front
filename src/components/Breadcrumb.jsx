@@ -8,14 +8,18 @@ const pathMap = {
   admin: "관리자",
   quiz: "퀴즈",
   LectureEdit: "자료 수정",
-  LectureUpload:"자료 업로드",
-  reviewUpdate:"복습 퀴즈 수정",
+  LectureUpload: "자료 업로드",
+  reviewUpdate: "복습 퀴즈 수정",
   reviewAdd: "복습 퀴즈 추가",
+  add: "과제 등록",
+  babylions: " 아기사자 채점",
+  submit: "과제 제출",
 };
 
 const sectionMap = {
   lecture: "자료실",
   assignment: "과제 목록",
+  assignmentCheck: "과제 채점",
   review: "복습 공간",
   LectureManagement: "자료 관리",
   reviewQuiz: "복습 퀴즈",
@@ -53,15 +57,13 @@ const Breadcrumb = () => {
         <li className="inline-flex items-center">
           <Link
             to="/"
-            className="inline-flex items-center text-[#999999] hover:text-[#666666]"
-          >
+            className="inline-flex items-center text-[#999999] hover:text-[#666666]">
             <svg
               className="w-3 h-3 me-2.5"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"
-              viewBox="0 0 20 20"
-            >
+              viewBox="0 0 20 20">
               <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
             </svg>
           </Link>
@@ -101,8 +103,7 @@ const Breadcrumb = () => {
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
-                  viewBox="0 0 6 10"
-                >
+                  viewBox="0 0 6 10">
                   <path
                     stroke="currentColor"
                     strokeLinecap="round"
@@ -118,8 +119,7 @@ const Breadcrumb = () => {
                 ) : (
                   <Link
                     to={routeTo}
-                    className="ms-1 text-sm font-medium text-[#B3B3B3] hover:text-[#666666] md:ms-2"
-                  >
+                    className="ms-1 text-sm font-medium text-[#B3B3B3] hover:text-[#666666] md:ms-2">
                     {label}
                   </Link>
                 )}

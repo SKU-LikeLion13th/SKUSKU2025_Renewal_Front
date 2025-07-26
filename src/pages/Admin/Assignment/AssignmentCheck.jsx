@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import API from "../../../utils/axios";
 import AdminAssignmentCheckBoard from "./AdminAssignmentCheckBoard";
 import AdminAssignmentPagination from "./AdminAssignmentPagination";
+import TrackTitle from "../../../components/TrackTitle";
+import Breadcrumb from "../../../components/Breadcrumb";
 
 export default function AssignmentCheck() {
   const navigate = useNavigate();
@@ -15,13 +17,6 @@ export default function AssignmentCheck() {
 
   const postsPerPage = 15;
 
-  const displayTrack =
-    {
-      BACKEND: "BACK-END",
-      FRONTEND: "FRONT-END",
-      DESIGN: "DESIGN",
-    }[track?.toUpperCase()] || track;
-
   useEffect(() => {
     const fetchAssignments = async () => {
       try {
@@ -33,7 +28,11 @@ export default function AssignmentCheck() {
           description: item.description,
           adminCheck: item.adminCheck,
         }));
-        setAssignments(processed);
+
+        // Sort assignments by ID in descending order (most recent first)
+        const sortedAssignments = processed.sort((a, b) => b.id - a.id);
+
+        setAssignments(sortedAssignments);
         setSelectedItems([]);
       } catch (error) {
         console.error("과제 데이터를 불러오는 데 실패했습니다:", error);
@@ -57,7 +56,7 @@ export default function AssignmentCheck() {
       const { data } = await API.get(`/assignment/${id}`);
       const title = assignments.find((a) => a.id === id)?.title || "제목 없음";
 
-      navigate(`/admin/assignment/add/${track}`, {
+      navigate(`/admin/assignment/${track}/add`, {
         state: {
           isEdit: true,
           assignmentId: id,
@@ -75,9 +74,8 @@ export default function AssignmentCheck() {
   };
 
   const handleGradeAssignment = (id) => {
-    // id와 track, 그리고 title을 navigation state로 넘김
     const assignment = assignments.find((a) => a.id === id);
-    navigate(`/admin/assignment/check/${id}/${track}`, {
+    navigate(`/admin/assignmentCheck/${track}/babylions/${id}`, {
       state: {
         title: assignment?.title || "제목 없음",
         track,
@@ -85,7 +83,6 @@ export default function AssignmentCheck() {
     });
   };
 
-  // 페이지네이션 & 검색 처리 함수
   const filteredAssignments = assignments.filter((a) =>
     a.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -109,20 +106,25 @@ export default function AssignmentCheck() {
 
   return (
     <div className="flex mx-auto min-h-screen">
-      <div className="flex flex-col w-9/12 mt-30 mx-auto justify-start lg:w-8/12">
+      <div className="flex flex-col justify-start w-9/12 mx-auto sm:mt-50 mt-30 lg:w-8/12">
         <div className="flex items-center justify-between">
-          <h1 className="text-4xl font-bold my-15">{displayTrack} 과제 채점</h1>
+          <TrackTitle suffix="과제 채점" />
         </div>
 
-        <AdminAssignmentCheckBoard
-          assignments={currentPosts}
-          selectedItems={selectedItems}
-          onSelectItem={handleSelectItem}
-          onEditAssignment={handleEditAssignment}
-          onGradeAssignment={handleGradeAssignment}
-          headers={["번호", "제목", "채점", "수정"]}
-          flexValues={["1", "10", "2", "2"]}
-        />
+        <div className="flex justify-start w-full sm:mt-15 mt-8 pb-5 mb-6">
+          <Breadcrumb />
+        </div>
+        <div className="flex w-full justify-center">
+          <AdminAssignmentCheckBoard
+            assignments={currentPosts}
+            selectedItems={selectedItems}
+            onSelectItem={handleSelectItem}
+            onEditAssignment={handleEditAssignment}
+            onGradeAssignment={handleGradeAssignment}
+            headers={["번호", "제목", "채점", "수정"]}
+            flexValues={["1", "10", "2", "2"]}
+          />
+        </div>
 
         <AdminAssignmentPagination
           totalPosts={totalPosts}

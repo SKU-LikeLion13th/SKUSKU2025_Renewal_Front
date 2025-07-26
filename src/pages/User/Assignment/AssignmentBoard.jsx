@@ -27,11 +27,14 @@ export default function AssignmentBoard({ assignments }) {
           : "UNREVIEWED",
     };
 
-    navigate(`/cybercampus/assignment/${assignment.track}/assignment_detail/${assignment.id}`, {
-      state: {
-        selectedAssignment: selectedAssignmentData,
-      },
-    });
+    navigate(
+      `/cybercampus/assignment/${assignment.track}/submit/${assignment.id}`,
+      {
+        state: {
+          selectedAssignment: selectedAssignmentData,
+        },
+      }
+    );
   };
 
   return (
@@ -48,7 +51,6 @@ export default function AssignmentBoard({ assignments }) {
         ))}
       </div>
 
-      {/* 본문 */}
       <div className="flex w-full min-h-[590px] flex-col">
         {assignments.map((assignment) => {
           const baseStyle = "flex justify-center px-1 text-[13.5px]";

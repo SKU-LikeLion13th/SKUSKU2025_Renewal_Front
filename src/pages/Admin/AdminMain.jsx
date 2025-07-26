@@ -36,8 +36,12 @@ export default function AdminMain() {
         <button onClick={() => handleTrackSelect2("FRONTEND")}>
           프론트엔드 복습하기
         </button>
-        <button onClick={() => handleTrackSelect2("BACKEND")}>백엔드 복습하기</button>
-        <button onClick={() => handleTrackSelect2("DESIGN")}>디자인 복습하기</button>
+        <button onClick={() => handleTrackSelect2("BACKEND")}>
+          백엔드 복습하기
+        </button>
+        <button onClick={() => handleTrackSelect2("DESIGN")}>
+          디자인 복습하기
+        </button>
       </div>
     </div>
   );

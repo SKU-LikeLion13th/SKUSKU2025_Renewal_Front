@@ -22,7 +22,7 @@ export default function AssignmentSubmitPage() {
           files: [],
         };
 
-        // ✅ isSubmit이 true인 경우에만 제출 정보 요청
+        //isSubmit이 true인 경우에만
         if (basicAssignmentData?.isSubmit == "True") {
           const { data } = await API.get(`/assignment/submit/${assignmentId}`);
           console.log("제출 정보:", data);

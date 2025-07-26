@@ -106,7 +106,7 @@ const IntroPart2 = () => {
     let path = "";
     if (isAdmin) {
       if (cardId === "01") path = `/admin/assignment/${urlTrack}`;
-      else if (cardId === "02") path = `/admin/assignment/check/${urlTrack}`;
+      else if (cardId === "02") path = `/admin/assignmentCheck/${urlTrack}`;
       else if (cardId === "03") path = `/admin/LectureManagement/${urlTrack}`;
       else if (cardId === "04") path = `/admin/reviewQuiz/${urlTrack}`;
       navigate(path);
@@ -145,8 +145,7 @@ const IntroPart2 = () => {
               <p className="fontBold text-3xl">SKU LIKELION</p>
               <p
                 style={{ color: currentTrack?.buttonColor }}
-                className="fontBold text-3xl mt-1"
-              >
+                className="fontBold text-3xl mt-1">
                 {currentTrack.name}
               </p>
             </>
@@ -171,8 +170,7 @@ const IntroPart2 = () => {
                   selectedTrack === track
                     ? trackInfo[track].buttonColor
                     : "#ffffff",
-              }}
-            >
+              }}>
               {track}
             </button>
           ))}
@@ -189,9 +187,10 @@ const IntroPart2 = () => {
         {/*위 선택한 트랙의 어디로 갈래?*/}
         <div
           className={`${
-            isAdmin ? "grid grid-cols-2 gap-3 sm:flex sm:gap-8 md:gap-20" : "flex gap-4 sm:gap-8 md:gap-20"
-          }`}
-        >
+            isAdmin
+              ? "grid grid-cols-2 gap-3 sm:flex sm:gap-8 md:gap-20"
+              : "flex gap-4 sm:gap-8 md:gap-20"
+          }`}>
           {baseCards.map((c, idx) => (
             <TaskCard
               key={c.id}
