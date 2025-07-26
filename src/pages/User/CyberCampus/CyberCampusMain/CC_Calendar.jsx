@@ -45,7 +45,6 @@ const CC_Calendar = () => {
           current.setDate(current.getDate() + 1);
         }
       });
-
       setEvents(eventMap);
     } catch (err) {
       console.error("일정 불러오기 실패:", err);

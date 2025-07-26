@@ -2,9 +2,16 @@ export default function GoogleLoginBtn({ isHovered }) {
   const handleLogin = () => {
     const currentPath = location.pathname + location.search;
     localStorage.setItem("redirectAfterLogin", currentPath);
+    const isLocal = window.location.hostname === 'localhost';
+
+    const frontendRedirectUri = isLocal
+      ? 'http://localhost:5173/'
+      : 'https://renewal.sku-sku.com/';
+
     window.location.href =
-      "https://backend.sku-sku.com/oauth2/authorization/google";
-  };
+      `https://backend.sku-sku.com/oauth2/authorization/google?state=${encodeURIComponent(frontendRedirectUri)}`;
+
+    };
 
   return (
     <div
