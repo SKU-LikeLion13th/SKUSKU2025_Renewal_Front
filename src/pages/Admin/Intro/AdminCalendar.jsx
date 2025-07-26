@@ -70,7 +70,8 @@ const AdminCalendar = () => {
     setAddModalIsOpen(true);
   };
 
-  //이벤트 수정 및 삭제 모달
+  //모달 나왔을때 뒤 스크롤 막는 코드
+  /*
   useEffect(() => {
     if (modalIsOpen) {
       document.body.style.overflow = "hidden";
@@ -81,7 +82,7 @@ const AdminCalendar = () => {
     return () => {
       document.body.style.overflow = "";
     };
-  }, [modalIsOpen]);
+  }, [modalIsOpen]);*/
 
   const handleDateClick = (date) => {
     const formattedDate = date.toISOString().split("T")[0];

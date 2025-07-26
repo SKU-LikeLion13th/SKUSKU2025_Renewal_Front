@@ -58,7 +58,8 @@ const CC_Calendar = () => {
     fetchEvents(currentYear, currentMonth);
   }, [value]);
 
-  useEffect(() => {
+  //모달 나왔을때 뒤에 스크롤 막는 코드
+  /*useEffect(() => {
     if (modalIsOpen) {
       document.body.style.overflow = "hidden";
     } else {
@@ -68,7 +69,7 @@ const CC_Calendar = () => {
     return () => {
       document.body.style.overflow = "";
     };
-  }, [modalIsOpen]);
+  }, [modalIsOpen]);*/
 
   const handleDateClick = (date) => {
     const formattedDate = date.toISOString().split("T")[0];
