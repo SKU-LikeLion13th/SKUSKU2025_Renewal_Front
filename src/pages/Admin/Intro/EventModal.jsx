@@ -53,10 +53,7 @@ const EventModal = ({ date, onClose, onSaved, initialData }) => {
       } else {
         await axios.post(
           "http://backend.sku-sku.com/admin/schedule/add",
-          formData,
-          {
-            withCredentials: true,
-          }
+          formData
         );
         alert("일정을 성공적으로 등록하였습니다!");
       }
