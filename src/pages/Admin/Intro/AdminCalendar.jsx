@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import images from "../../../utils/images";
 import Calendar from "react-calendar";
-import axios from "axios";
+import axios from "../../../utils/axios";
 import EventModal from "./EventModal";
 
 const AdminCalendar = () => {
@@ -20,7 +20,7 @@ const AdminCalendar = () => {
 
   const fetchEvents = useCallback(async (year, month) => {
     try {
-      const res = await axios.get("http://backend.sku-sku.com/schedules", {
+      const res = await axios.get("/schedules", {
         params: { year, month },
       });
       const data = res.data.calendarSchedule;
@@ -114,7 +114,7 @@ const AdminCalendar = () => {
     try {
       await Promise.all(
         checkedEvents.map((id) =>
-          axios.delete(`http://backend.sku-sku.com/admin/schedule/${id}`)
+          axios.delete(`/admin/schedule/${id}`)
         )
       );
       alert("성공적으로 삭제되었습니다!");

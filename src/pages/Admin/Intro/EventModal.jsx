@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../../../utils/axios";
 
 const colors = [
   "#FFC2C2",
@@ -45,14 +45,14 @@ const EventModal = ({ date, onClose, onSaved, initialData }) => {
   const handleSave = async () => {
     try {
       if (initialData) {
-        await axios.put(`http://backend.sku-sku.com/admin/schedule/update`, {
+        await axios.put(`/admin/schedule/update`, {
           id: initialData.id,
           ...formData,
         });
         alert("일정을 성공적으로 수정하였습니다!");
       } else {
         await axios.post(
-          "http://backend.sku-sku.com/admin/schedule/add",
+          "/admin/schedule/add",
           formData
         );
         alert("일정을 성공적으로 등록하였습니다!");

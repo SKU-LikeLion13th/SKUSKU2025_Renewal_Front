@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
-import axios from "axios";
+import axios from "../../../../utils/axios";
 
 const CC_Calendar = () => {
   const [value, setValue] = useState(new Date());
@@ -10,7 +10,7 @@ const CC_Calendar = () => {
 
   const fetchEvents = async (year, month) => {
     try {
-      const res = await axios.get("http://backend.sku-sku.com/schedules", {
+      const res = await axios.get("/schedules", {
         params: { year, month },
       });
       const data = res.data.calendarSchedule;
