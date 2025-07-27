@@ -11,44 +11,49 @@ const ReviewBoard = ({ trackType }) => {
   useEffect(() => {
     const updateFlexValues = () => {
       if (window.innerWidth < 640) {
-        // sm breakpoint 미만
         setFlexValues(["1", "5.5", "1.75", "1.75"]);
       } else {
         setFlexValues(["1", "7", "1", "1"]);
       }
     };
 
-    updateFlexValues(); // 초기 세팅
+    updateFlexValues();
     window.addEventListener("resize", updateFlexValues);
 
     return () => window.removeEventListener("resize", updateFlexValues);
   }, []);
 
-  useEffect(() => {
-    const fetchQuizzes = async () => {
-      try {
-        const response = await API.get(`/reviewWeek/${trackType}`);
-        console.log("받아온 데이터:", response.data);
+    useEffect(() => {
+      const fetchQuizzes = async () => {
+        try {
+          const response = await API.get(`/reviewWeek/${trackType}`);
+          console.log("받아온 데이터 (정렬 전):", response.data);
+          console.log(response.data.map(d => d.reviewWeekId));
 
-        const quizList = response.data.map((quiz, index) => ({
-          Id: index + 1,
-          title: quiz.title,
-          score: quiz.score,
-          total: quiz.total,
-          IsSubmit: quiz.isSubmit,
-          reviewWeekId: quiz.reviewWeekId,
-        }));
+          const sortedResponseData = [...response.data].sort((a, b) => {
+            return Number(b.reviewWeekId) - Number(a.reviewWeekId);
+          });
 
-        setQuizzes(quizList);
-      } catch (error) {
-        console.error("데이터 가져오기 실패:", error);
+          const quizList = sortedResponseData.map((quiz, index) => ({
+            Id: index + 1,
+            title: quiz.title,
+            score: quiz.score,
+            total: quiz.total,
+            IsSubmit: quiz.isSubmit,
+            reviewWeekId: quiz.reviewWeekId,
+          }));
+          
+
+          setQuizzes(quizList);
+        } catch (error) {
+          console.error("데이터 가져오기 실패:", error);
+        }
+      };
+
+      if (trackType) {
+        fetchQuizzes();
       }
-    };
-
-    if (trackType) {
-      fetchQuizzes(); // 함수에 파라미터 직접 넘기지 않아도 됨 (useEffect에서 접근 가능)
-    }
-  }, [trackType]); // trackType이 바뀌면 다시 호출됨
+    }, [trackType]);
 
   return (
     <div className="flex flex-col items-center w-full">

@@ -17,11 +17,9 @@ export default function AdminReviewUpdate() {
   const [selectedFiles, setSelectedFiles] = useState({});
   const [quizContents, setQuizContents] = useState([]);
   
-  // 🚩 기능 플래그: 각 문제의 상태와 ID를 추적하는 상태
-  const [questionStates, setQuestionStates] = useState([]); // { reviewQuizId, status, isModified }
-  const [originalQuizData, setOriginalQuizData] = useState([]); // 원본 데이터 보존
+  const [questionStates, setQuestionStates] = useState([]); 
+  const [originalQuizData, setOriginalQuizData] = useState([]);
 
-  // 1. 기존 퀴즈 데이터 불러오기 (수정 모드 초기화)
   useEffect(() => {
     if (!reviewWeekId) return;
 
@@ -32,7 +30,6 @@ export default function AdminReviewUpdate() {
         if (response.status === 200) {
           const data = response.data;
           
-          // 원본 데이터 보존
           setOriginalQuizData(data);
 
           setQuestionCount(data.length);
@@ -49,9 +46,8 @@ export default function AdminReviewUpdate() {
           }));
           setQuizContents(contents);
 
-          // 🚩 초기 상태: 모든 기존 문제는 'KEEP' 상태로 설정
           const initialStates = data.map((q) => ({
-            reviewQuizId: q.reviewQuizId || q.id, // API 응답에 따라 조정
+            reviewQuizId: q.reviewQuizId || q.id,
             status: 'KEEP',
             isModified: false
           }));
@@ -68,9 +64,8 @@ export default function AdminReviewUpdate() {
     fetchQuiz();
   }, [reviewWeekId]);
 
-  // 🚩 문제 내용이 변경되었는지 확인하는 헬퍼 함수
   const hasQuestionChanged = (index, newContent) => {
-    if (index >= originalQuizData.length) return true; // 새 문제
+    if (index >= originalQuizData.length) return true;
     
     const original = originalQuizData[index];
     const current = {
@@ -312,7 +307,6 @@ export default function AdminReviewUpdate() {
       [index]: files,
     }));
 
-    // 🚩 파일 변경도 UPDATE 상태로 처리
     if (index < originalQuizData.length) {
       updateQuestionStatus(index, 'UPDATE');
     }
@@ -327,15 +321,55 @@ export default function AdminReviewUpdate() {
       return updated;
     });
 
-    // 🚩 파일 삭제도 UPDATE 상태로 처리
     if (questionIndex < originalQuizData.length) {
       updateQuestionStatus(questionIndex, 'UPDATE');
     }
   };
 
   const handleUpdate = async () => {
+    if (!title.trim()) {
+      alert("제목을 입력해주세요.");
+      return;
+    }
+
+    for (let index = 0; index < questionCount; index++) {
+      const state = questionStates[index];
+      const type = questionTypes[index];
+      const content = quizContents[index]?.content?.trim();
+      const answer = quizContents[index]?.answer?.trim();
+
+      if (state.status === 'CREATE') {
+        if (!content) {
+          alert(`${index + 1}번 문제의 내용을 입력해주세요.`);
+          return;
+        }
+
+        if (!type) {
+          alert(`${index + 1}번 문제의 형식을 선택해주세요.`);
+          return;
+        }
+
+        if (type === '객관식') {
+          const choices = quizContents[index]?.answerChoiceList || [];
+          const nonEmptyChoices = choices.filter((c) => c.trim() !== '');
+          if (nonEmptyChoices.length < 2) {
+            alert(`${index + 1}번 객관식 문제는 보기 2개 이상이 필요합니다.`);
+            return;
+          }
+          if (!answer) {
+            alert(`${index + 1}번 객관식 문제의 정답을 선택해주세요.`);
+            return;
+          }
+        }
+
+        if (type === '주관식' && !answer) {
+          alert(`${index + 1}번 주관식 문제의 정답을 입력해주세요.`);
+          return;
+        }
+      }
+    }
+
     try {
-      // 파일 업로드 로직 (기존과 동일)
       const allFiles = [];
       const questionFileIndices = {};
 
@@ -381,7 +415,6 @@ export default function AdminReviewUpdate() {
         };
       });
 
-      // 🚩 상태 기반으로 DTO 생성
       const reviewQuizDTOList = [];
       for (let index = 0; index < questionCount; index++) {
         const type = questionTypes[index];
@@ -420,7 +453,6 @@ export default function AdminReviewUpdate() {
         reviewQuizDTOList.push(quizData);
       }
 
-      // 삭제된 문제들도 포함 (DELETE 상태)
       originalQuizData.forEach((originalQuiz, index) => {
         if (index >= questionCount || questionStates[index]?.status === 'DELETE') {
           reviewQuizDTOList.push({
@@ -442,7 +474,7 @@ export default function AdminReviewUpdate() {
         reviewQuizDTOList,
       };
 
-      console.log('🚩 전송할 데이터:', payload); // 디버깅용
+      console.log('🚩 전송할 데이터:', payload);
 
       const response = await API.put(`/admin/reviewQuiz/update/${reviewWeekId}`, payload);
 
@@ -463,15 +495,6 @@ export default function AdminReviewUpdate() {
       <div className="flex justify-between items-center mb-5">
         <div className='flex items-center text-[15px] sm:text-[20px] fontSB'>
           Question {String(index + 1).padStart(2, '0')}.
-          {/* 🚩 상태 표시 배지 */}
-          <span className={`ml-3 px-2 py-1 text-xs rounded ${
-            questionStates[index]?.status === 'CREATE' ? 'bg-green-100 text-green-800' :
-            questionStates[index]?.status === 'UPDATE' ? 'bg-yellow-100 text-yellow-800' :
-            questionStates[index]?.status === 'DELETE' ? 'bg-red-100 text-red-800' :
-            'bg-gray-100 text-gray-800'
-          }`}>
-            {questionStates[index]?.status || 'KEEP'}
-          </span>
         </div>
         <button
           type="button"
@@ -610,25 +633,6 @@ export default function AdminReviewUpdate() {
       </div>
 
       <div className='flex w-full flex-col min-h-screen mb-40'>
-        {/* 🚩 상태 요약 정보 표시 */}
-        <div className="flex flex-wrap gap-4 sm:mt-10 mt-5 p-4 bg-blue-50 rounded-lg">
-          <div className="text-sm">
-            <span className="font-semibold">생성: </span>
-            <span className="text-green-600">{questionStates.filter(q => q.status === 'CREATE').length}개</span>
-          </div>
-          <div className="text-sm">
-            <span className="font-semibold">수정: </span>
-            <span className="text-yellow-600">{questionStates.filter(q => q.status === 'UPDATE').length}개</span>
-          </div>
-          <div className="text-sm">
-            <span className="font-semibold">유지: </span>
-            <span className="text-gray-600">{questionStates.filter(q => q.status === 'KEEP').length}개</span>
-          </div>
-          <div className="text-sm">
-            <span className="font-semibold">삭제: </span>
-            <span className="text-red-600">{questionStates.filter(q => q.status === 'DELETE').length}개</span>
-          </div>
-        </div>
 
         <div className='flex sm:mt-20 mt-18 sm:text-[20px] text-[17px] fontBold'>제목 입력</div>
         <input
