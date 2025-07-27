@@ -17,7 +17,7 @@ export default function ReviewTitle() {
 
   return (
     <div>
-      <div className='flex fontBold sm:text-[35px] text-[28px]'>
+      <div className='flex fontBold sm:text-[35px] text-[23px]'>
         {displayTrack ? `${displayTrack} 복습공간` : '복습공간 관리'}
       </div>
     </div>

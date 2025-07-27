@@ -8,6 +8,7 @@ export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, 
   const [selectedAnswer, setSelectedAnswer] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
   const [modalImageSrc, setModalImageSrc] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { trackType } = useParams();
 
   const openImageModal = (src) => {
@@ -49,7 +50,8 @@ export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, 
   };
 
   const handleSubmitAnswers = async () => {
-    // 문제 중에 답변이 없거나 빈 문자열인 문제 확인
+    if (isSubmitting) return;
+
     const unanswered = quiz.questions.some(q => !selectedAnswer[q.id] || selectedAnswer[q.id].trim() === "");
 
     if (unanswered) {
@@ -68,6 +70,8 @@ export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, 
     };
 
     try {
+        setIsSubmitting(true);
+        
         const response = await API.post("/reviewQuiz/solve", payload);
 
         if (response.status === 200) {
@@ -76,10 +80,12 @@ export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, 
           navigate(`/cybercampus/review/${trackType}`);
         } else {
           alert("제출에 실패했습니다.");
+          setIsSubmitting(false);
         }
       } catch (error) {
         console.error("제출 중 오류:", error);
         alert("제출 중 오류가 발생했습니다.");
+        setIsSubmitting(false);
       }
   };
 
@@ -182,10 +188,13 @@ export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, 
               </button>
             ) : (
               <button
-                className="flex px-6 py-1.5 my-4 text-[14px] text-white bg-[#4881FF] rounded-[5.95px] ml-auto"
+                className={`flex px-6 py-1.5 my-4 text-[14px] text-white rounded-[5.95px] ml-auto ${
+                  isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-[#4881FF]"
+                }`}
                 onClick={handleSubmitAnswers}
+                disabled={isSubmitting}
               >
-                답안 제출하기
+                {isSubmitting ? "제출 중..." : "답안 제출하기"}
               </button>
             )}
           </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
-import axios from "../../../utils/axios";
+import API from "../../../utils/axios";
 import AdminReviewTitle from "./AdminReviewTitle";
 import AdminReviewBoard from "./AdminReviewBoard";
 import AdminReviewSearch from "./AdminReviewSearch";
@@ -16,11 +16,10 @@ export default function AdminReview() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  // 데이터 불러오기
   useEffect(() => {
     const fetchReviewQuizzes = async () => {
       try {
-        const response = await axios.get(`/reviewWeek/${trackType}`);
+        const response = await API.get(`/reviewWeek/${trackType}`);
 
         const quizList = [...response.data]
         .sort((a, b) => Number(b.reviewWeekId) - Number(a.reviewWeekId)) // 최신순 정렬

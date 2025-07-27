@@ -69,7 +69,7 @@ const ReviewBoard = ({ trackType }) => {
         ))}
       </div>
 
-      <div className="flex w-full min-h-[590px] flex-col">
+      <div className="flex w-full min-h-[250px] sm:min-h-[590px] mb-5 flex-col">
         {quizzes.length > 0 ? (
           quizzes.map((quiz) => (
             <div key={quiz.reviewWeekId} className="flex w-full border-b border-b-[#E0E0E0] p-2">
@@ -105,7 +105,7 @@ const ReviewBoard = ({ trackType }) => {
           ))
         ) : (
           <div className="flex justify-center items-center h-full text-[#888] text-sm sm:text-base py-10">
-            문제가 없습니다.
+            등록된 복습퀴즈가 없습니다.
           </div>
         )}
       </div>
