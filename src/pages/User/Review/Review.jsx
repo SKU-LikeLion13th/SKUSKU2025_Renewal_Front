@@ -4,7 +4,7 @@ import ReviewLocation from './ReviewLocation';
 import ReviewBoard from './ReviewBoard';
 import ReviewSearch from './ReviewSearch';
 import ReviewTitle from './ReviewTitle';
-import quizData from '../../../utils/QuizData.json';
+import API from '../../../utils/axios';
 import Breadcrumb from '../../../components/Breadcrumb';
 
 export default function Review() {
@@ -15,11 +15,33 @@ export default function Review() {
   const { trackType } = useParams();
 
   useEffect(() => {
-    setQuizzes(quizData);
-  }, []);
+    const fetchQuizzes = async () => {
+      try {
+        const response = await API.get(`/reviewWeek/${trackType}`);
+        const sortedQuizzes = [...response.data].sort(
+          (a, b) => Number(b.reviewWeekId) - Number(a.reviewWeekId)
+        );
+        setQuizzes(sortedQuizzes);
+      } catch (error) {
+        console.error("퀴즈 데이터 가져오기 실패:", error);
+      }
+    };
 
-  const totalPosts = quizzes.length;
+    if (trackType) {
+      fetchQuizzes();
+    }
+  }, [trackType]);
+
+  const filteredQuizzes = quizzes.filter((quiz) =>
+    quiz.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const totalPosts = filteredQuizzes.length;
   const totalPages = Math.ceil(totalPosts / postsPerPage);
+  const currentPosts = filteredQuizzes.slice(
+    (currentPage - 1) * postsPerPage,
+    currentPage * postsPerPage
+  );
 
   const handlePageChange = (pageNumber) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -29,13 +51,8 @@ export default function Review() {
 
   const handleSearch = (term) => {
     setSearchTerm(term);
+    setCurrentPage(1); // 검색하면 첫 페이지로
   };
-
-  const filteredQuizzes = quizzes.filter((quiz) =>
-    quiz.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const currentPosts = filteredQuizzes.slice((currentPage - 1) * postsPerPage, currentPage * postsPerPage);
 
   return (
     <div className='flex min-h-screen mx-auto'>
@@ -43,7 +60,7 @@ export default function Review() {
         <ReviewTitle />
 
         <div className='flex justify-start w-full sm:mt-10 mt-8 pb-5'>
-          <Breadcrumb/>
+          <Breadcrumb />
         </div>
 
         <div className='flex justify-center w-full sm:mt-12 mt-8'>
@@ -52,10 +69,10 @@ export default function Review() {
 
         <div className='flex w-full'>
           <ReviewSearch 
-            totalPosts={filteredQuizzes.length} 
-            totalPages={Math.ceil(filteredQuizzes.length / postsPerPage)} 
-            currentPage={currentPage} 
-            onPageChange={handlePageChange} 
+            totalPosts={totalPosts}
+            totalPages={totalPages}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
             onSearch={handleSearch}
           />
         </div>

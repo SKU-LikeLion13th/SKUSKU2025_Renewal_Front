@@ -73,7 +73,7 @@ export default function AdminReviewBoard({ posts, trackType, setAllPosts }) {
             </div>
           ))
         ) : (
-          <div className="flex justify-center p-10 text-gray-500">등록된 과제가 없습니다.</div>
+          <div className="flex justify-center p-10 text-gray-500">등록된 복습퀴즈가 없습니다.</div>
         )}
 
         <div className="flex justify-between w-full mt-10 text-[14px] fontLight">

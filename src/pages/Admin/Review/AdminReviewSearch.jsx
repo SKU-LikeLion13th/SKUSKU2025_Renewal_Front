@@ -50,27 +50,34 @@ export default function AdminReviewSearch({
   return (
     <div className="flex w-full">
       <div className="flex justify-between w-full p-2 items-center sm:text-[14px] text-[10px]">
-        {/* 게시물 수 */}
-        <div className="flex items-center w-fit">
-          <div className="flex mr-3">전체 게시물 수: {totalPosts}</div>
-          <div className="flex mr-3">전체 페이지: {totalPages}</div>
-          <input
-            type="text"
-            value={inputPage}
-            onChange={handlePageInputChange}
-            onKeyDown={handleKeyDown}
-            placeholder="페이지"
-            className="flex sm:w-[50px] w-[30px] py-1 px-2 mr-3 text-center border-[#D8D8D8] border-[1.8px] rounded-[5.14px]"
-          />
-          <button
-            onClick={handlePageChange}
-            className="w-[60px] sm:py-1.25 sm:px-3 px-2 py-1.5 items-center text-center sm:text-[13.5px] text-[8px] border-[#D8D8D8] border-[1.8px] rounded-[5.14px]"
-          >
-            보기
-          </button>
+        <div className="flex sm:flex-row flex-col items-start">
+          <div className="flex mr-3">
+            전체 게시물: <span className="text-[#3B79FF] ml-1">{totalPosts}</span>
+          </div>
+
+          <div className="flex mr-3 sm:mb-0 mb-0.5">
+            전체 페이지: <span className="text-[#FF7816] ml-1">{totalPages}</span>
+          </div>
+
+          <div className="flex">
+            <input
+              type="text"
+              value={inputPage}
+              onChange={handlePageInputChange}
+              onKeyDown={handleKeyDown}
+              placeholder="페이지"
+              className="flex sm:w-[50px] w-[30px] sm:py-1 sm:px-2 py-0.5 px-1 mr-3 text-center border-[#D8D8D8] border-[1.8px] rounded-[5.14px]"
+            />
+            <button
+              onClick={handlePageChange}
+              className="sm:w-[60px] w-[50px] sm:py-1.25 sm:px-3 px-1 py-0.5 items-center text-center sm:text-[13.5px] text-[8px] border-[#D8D8D8] border-[1.8px] rounded-[5.14px]"
+            >
+              보기
+            </button>
+          </div>
         </div>
 
-        <div className="flex items-center justify-center w-[60px] sm:w-fit px-4 sm:text-[14px] text-[10px] font-medium">
+        <div className="flex items-center justify-center w-[70px] sm:w-fit px-4 sm:text-[14px] text-[10px] font-medium">
           - {inputPage} -
         </div>
 

@@ -46,7 +46,7 @@ export default function Quiz() {
 
   return (
     <div className="flex min-h-screen mx-auto">
-      <div className="flex flex-col justify-start w-9/12 mx-auto mt-50 lg:w-8/12">
+      <div className="flex flex-col justify-start w-9/12 mx-auto mt-30 lg:w-8/12">
 
         <ReviewTitle />
 
