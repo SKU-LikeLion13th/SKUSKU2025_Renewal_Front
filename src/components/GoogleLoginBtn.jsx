@@ -2,8 +2,11 @@ export default function GoogleLoginBtn({ isHovered }) {
   const handleLogin = () => {
     const currentPath = location.pathname + location.search;
     localStorage.setItem("redirectAfterLogin", currentPath);
-    window.location.href =
-      "https://backend.sku-sku.com/oauth2/authorization/google";
+    const origin = location.origin;
+    const path = location.pathname + location.search;
+    const fullRedirect = origin + path;
+    const encodedRedirect = encodeURIComponent(fullRedirect);
+    window.location.href = `https://backend.sku-sku.com/oauth2/authorization/google?state=${encodedRedirect}`;
   };
 
   return (
