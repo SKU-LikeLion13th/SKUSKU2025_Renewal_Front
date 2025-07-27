@@ -176,7 +176,7 @@ export default function AssignmentSubmit({ assignment }) {
 
         // 변경사항이 없으면 빈 배열로 전송
         const submitPayload = {
-          submitAssignmentId: assignment.assignmentId,
+          assignmentId: assignment.assignmentId,
           content: content,
           files: fileData,
         };
