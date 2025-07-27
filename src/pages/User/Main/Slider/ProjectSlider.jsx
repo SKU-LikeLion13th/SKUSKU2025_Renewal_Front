@@ -3,19 +3,22 @@ import API from "../../../../utils/axios";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
+import "swiper/css";
 
 const ProjectItem = ({ title, subtitle, image, url }) => (
   <a
     href={url}
-    className="flex justify-center items-center w-full"
+    className="flex justify-center items-center w-full md:mx-30 mx-10"
     target="_blank"
     rel="noopener noreferrer"
   >
-    <div className="relative w-[90%] mx-2 rounded-[10px] overflow-hidden aspect-[4/3] md:aspect-[16/9]">
+    <div className="relative w-full rounded-[10px] overflow-hidden aspect-[16/9]">
       <div
         className="absolute inset-0 bg-center bg-cover rounded-[15px]"
         style={{
-          backgroundImage: `url(data:image/png;base64,${image})`,
+          backgroundImage: `url(${image})`,
         }}
       >
         <div className="absolute inset-0 bg-black opacity-50 rounded-[15px]" />
@@ -42,6 +45,7 @@ export default function ProjectSlider() {
     API.get("/project/all")
       .then((response) => {
         setProjects(response.data);
+        console.log(response.data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -49,42 +53,49 @@ export default function ProjectSlider() {
       });
   }, []);
 
-  const settings = {
-    arrows: false,
-    rows: 1,
-    slidesToShow: 3,
-    dots: false,
-    infinite: true,
-    pauseOnHover: false,
-    pauseOnFocus: false,
-    draggable: true,
-    autoplay: true,
-    autoplaySpeed: 4000,
-    fade: false,
-    responsive: [
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 3,
-        },
-      },
-    ],
-  };
+  const extendedProjects =
+    projects.length < 6 ? [...projects, ...projects, ...projects] : projects;
 
   return (
-    <div className="flex justify-center items-center py-6">
-      <div className="w-full">
-        <Slider {...settings}>
+    <div className="flex justify-center items-center">
+      <div className="w-full h-auto">
+        <Swiper
+          modules={[Autoplay]}
+          slidesPerView={3.5}
+          freeMode={true}
+          loop={true}
+          loopedSlides={extendedProjects.length}
+          autoplay={{
+            delay: 0,
+            disableOnInteraction: false,
+          }}
+          speed={4000}
+          breakpoints={{
+            640: {
+              slidesPerView: 1.5,
+            },
+            768: {
+              slidesPerView: 2,
+            },
+            1024: {
+              slidesPerView: 3,
+            },
+            1280: {
+              slidesPerView: 4,
+            },
+          }}
+        >
           {projects.map((project) => (
-            <ProjectItem
-              key={project.id}
-              title={project.title}
-              subtitle={project.subTitle}
-              image={project.image}
-              url={project.url}
-            />
+            <SwiperSlide key={project.id} className="px-6">
+              <ProjectItem
+                title={project.title}
+                subtitle={project.subTitle}
+                image={project.imageUrl}
+                url={project.url}
+              />
+            </SwiperSlide>
           ))}
-        </Slider>
+        </Swiper>
       </div>
     </div>
   );
