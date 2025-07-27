@@ -1,21 +1,19 @@
 import React from "react";
-import TeamSection from "./TeamSection"; // 섹션 박스 컴포넌트
+import TeamSection from "./TeamSection";
+import images from "../../../utils/images";
 
 export default function Team13() {
   return (
     <div className="space-y-6">
-      {/* 대표/부대표와 디자인팀 - 큰 화면에서는 나란히, 작은 화면에서는 세로로 */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         <TeamSection title="대표/부대표" members={leader} />
         <TeamSection title="디자인(UX/UI)팀" members={design} />
       </div>
 
-      {/* 프론트엔드팀 - 전체 너비 */}
       <div className="w-full">
         <TeamSection title="프론트엔드팀" members={frontend} />
       </div>
 
-      {/* 백엔드팀 - 전체 너비 */}
       <div className="w-full">
         <TeamSection title="백엔드팀" members={backend} />
       </div>
@@ -23,13 +21,12 @@ export default function Team13() {
   );
 }
 
-// 각 팀 멤버 데이터
 const leader = [
   {
     name: "한민규",
     role: "대표",
     department: "컴퓨터공학과 21",
-    img: "public/assets/images/Team/한민규.png",
+    img: `${images.한민규}`,
     imgWidth: "130px",
     imgHeight: "130px",
   },
@@ -37,7 +34,7 @@ const leader = [
     name: "신민서",
     role: "부대표",
     department: "미디어소프트웨어학과 22",
-    img: "public/assets/images/Team/신민서.png",
+    img: `${images.신민서}`,
     imgWidth: "130px",
     imgHeight: "130px",
   },
@@ -48,7 +45,7 @@ const design = [
     name: "서민주",
     role: "파트장",
     department: "관광학과 22",
-    img: "public/assets/images/Team/서민주.png",
+    img: `${images.서민주}`,
     imgWidth: "130px",
     imgHeight: "130px",
   },
@@ -56,7 +53,7 @@ const design = [
     name: "오한솔",
     role: "운영진",
     department: "관광학과 22",
-    img: "public/assets/images/Team/오한솔.png",
+    img: `${images.오한솔}`,
     imgWidth: "130px",
     imgHeight: "130px",
   },
@@ -67,7 +64,7 @@ const frontend = [
     name: "최유정",
     role: "파트장",
     department: "미디어소프트웨어학과 21",
-    img: "public/assets/images/Team/최유정.png",
+    img: `${images.최유정}`,
     imgWidth: "130px",
     imgHeight: "130px",
   },
@@ -75,7 +72,7 @@ const frontend = [
     name: "이호연",
     role: "운영진",
     department: "미디어소프트웨어학과 21",
-    img: "public/assets/images/Team/이호연.png",
+    img: `${images.이호연}`,
     imgWidth: "130px",
     imgHeight: "130px",
   },
@@ -83,7 +80,7 @@ const frontend = [
     name: "구혜원",
     role: "운영진",
     department: "미디어소프트웨어학과 22",
-    img: "public/assets/images/Team/구혜원.png",
+    img: `${images.구혜원}`,
     imgWidth: "130px",
     imgHeight: "130px",
   },
@@ -94,7 +91,7 @@ const backend = [
     name: "박준범",
     role: "파트장",
     department: "컴퓨터공학과 21",
-    img: "public/assets/images/Team/박준범.png",
+    img: `${images.박준범}`,
     imgWidth: "130px",
     imgHeight: "130px",
   },
@@ -102,7 +99,7 @@ const backend = [
     name: "권오현",
     role: "운영진",
     department: "컴퓨터공학과 23",
-    img: "public/assets/images/Team/권오현.png",
+    img: `${images.권오현}`,
     imgWidth: "130px",
     imgHeight: "130px",
   },
@@ -110,7 +107,7 @@ const backend = [
     name: "노주희",
     role: "운영진",
     department: "미디어소프트웨어학과 22",
-    img: "public/assets/images/Team/노주희.png",
+    img: `${images.노주희}`,
     imgWidth: "150px",
     imgHeight: "150px",
   },
