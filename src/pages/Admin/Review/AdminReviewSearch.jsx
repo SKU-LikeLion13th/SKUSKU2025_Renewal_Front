@@ -48,7 +48,7 @@ export default function AdminReviewSearch({
   };
 
   return (
-    <div className="flex w-full">
+    <div className="flex w-full mb-20">
       <div className="flex justify-between w-full p-2 items-center sm:text-[14px] text-[10px]">
         <div className="flex sm:flex-row flex-col items-start">
           <div className="flex mr-3">
