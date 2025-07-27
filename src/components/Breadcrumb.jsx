@@ -30,11 +30,8 @@ const Breadcrumb = () => {
   const rawPathnames = location.pathname.split("/").filter((x) => x);
   const isAdmin = rawPathnames.includes("admin");
 
-  // 마지막 segment가 숫자일 경우 제거
-  const trimmed = !isNaN(rawPathnames[rawPathnames.length - 1])
-    ? rawPathnames.slice(0, -1)
-    : rawPathnames;
-
+//숫자제거
+  const trimmed = rawPathnames.filter((x) => isNaN(x));
   let pathnames = [];
 
   for (let i = 0; i < trimmed.length; i++) {

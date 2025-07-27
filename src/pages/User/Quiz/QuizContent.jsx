@@ -32,7 +32,6 @@ export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, 
         ...prev,
         [id]: answer,
       };
-      console.log("답안 저장:", updated); // ← 확인용
       return updated;
     });
   };
