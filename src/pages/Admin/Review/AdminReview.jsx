@@ -21,14 +21,17 @@ export default function AdminReview() {
     const fetchReviewQuizzes = async () => {
       try {
         const response = await axios.get(`/reviewWeek/${trackType}`);
-        // response.data 가 배열이라고 가정
-        const quizList = response.data.map((quiz) => ({
+
+        const quizList = [...response.data]
+        .sort((a, b) => Number(b.reviewWeekId) - Number(a.reviewWeekId)) // 최신순 정렬
+        .map((quiz) => ({
           reviewWeekId: quiz.reviewWeekId,
           title: quiz.title,
           score: quiz.score,
           total: quiz.total,
           isSubmit: quiz.isSubmit,
         }));
+
         setAllPosts(quizList);
         setCurrentPage(1);
         setSearchTerm("");
