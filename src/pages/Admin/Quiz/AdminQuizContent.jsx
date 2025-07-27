@@ -62,6 +62,75 @@ export default function AdminQuizContent() {
     try {
       const title = document.querySelector("input[placeholder='제목을 입력해주세요.']").value;
 
+      if (!title) {
+        alert("제목을 입력해주세요.");
+        return;
+      }
+
+      // 문제 수 유효성 검사
+      if (questionCount < 1) {
+        alert("문제는 최소 1개 이상이어야 합니다.");
+        return;
+      }
+
+      // 문제별 유효성 검사
+      for (let i = 0; i < questionCount; i++) {
+        const content = document.querySelectorAll("input[placeholder='문제를 입력해주세요.']")[i]?.value.trim();
+        const type = questionTypes[i];
+
+        if (!content) {
+          alert(`문제 ${i + 1}의 내용을 입력해주세요.`);
+          return;
+        }
+
+        if (!type) {
+          alert(`문제 ${i + 1}의 형식을 선택해주세요.`);
+          return;
+        }
+      }
+
+      for (let i = 0; i < questionCount; i++) {
+        const content = document.querySelectorAll("input[placeholder='문제를 입력해주세요.']")[i]?.value.trim();
+        const type = questionTypes[i];
+
+        if (!content) {
+          alert(`문제 ${i + 1}의 내용을 입력해주세요.`);
+          return;
+        }
+
+        if (!type) {
+          alert(`문제 ${i + 1}의 형식을 선택해주세요.`);
+          return;
+        }
+
+        if (type === '객관식') {
+          const choiceInputs = document.querySelectorAll(`input[name="answer-${i}"]`);
+          const textInputs = Array.from(choiceInputs).map((input) =>
+            input.parentElement.querySelector('input[type="text"]').value.trim()
+          );
+          const hasAtLeastOneChoice = textInputs.some(text => text !== "");
+          const selectedAnswer = Array.from(choiceInputs).some((input) => input.checked);
+
+          if (!hasAtLeastOneChoice) {
+            alert(`문제 ${i + 1}의 보기를 하나 이상 입력해주세요.`);
+            return;
+          }
+
+          if (!selectedAnswer) {
+            alert(`문제 ${i + 1}의 정답을 선택해주세요.`);
+            return;
+          }
+        }
+
+        if (type === '주관식') {
+          const subjectiveAnswer = document.querySelector(`input[name="subjective-answer-${i}"]`)?.value.trim();
+          if (!subjectiveAnswer) {
+            alert(`문제 ${i + 1}의 주관식 정답을 입력해주세요.`);
+            return;
+          }
+        }
+      }
+
       // 1) 모든 문제에서 선택한 파일들을 배열로 모으기
       const allFiles = [];
       const questionFileIndices = {}; // 문제별로 파일이 allFiles내 인덱스 시작 위치 기억
