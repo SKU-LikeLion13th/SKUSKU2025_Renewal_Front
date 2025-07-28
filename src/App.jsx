@@ -9,10 +9,7 @@ import { useState, useEffect } from "react";
 import User from "./routes/User";
 import Admin from "./routes/Admin";
 import "./css/App.css";
-import Header from "./components/Header";
-import HeaderMobile from "./components/HeaderMobile";
 import CyberCampus from "./routes/CyberCampus";
-import CCHeader from "./components/CCHeader";
 import ScrollToTop from "./components/ScrollToTop";
 
 function AppContent() {
