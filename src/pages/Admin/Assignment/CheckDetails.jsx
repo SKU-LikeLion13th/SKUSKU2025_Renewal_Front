@@ -46,6 +46,7 @@ export default function CheckDetails() {
       window.URL.revokeObjectURL(blobUrl);
     } catch (error) {
       console.error("파일 다운로드 실패:", error);
+      // 다운로드가 실패하면 새 탭에서 열기
       window.open(fileUrl, "_blank");
     }
   };
@@ -127,13 +128,13 @@ export default function CheckDetails() {
               {assignment.files.map((file, idx) => (
                 <div
                   key={idx}
-                  className="mb-1 flex justify-between items-center">
+                  className="mb-2 flex justify-between items-center">
                   <button
                     type="button"
                     onClick={() =>
                       handleFileDownload(file.fileUrl, file.fileName)
                     }
-                    className="underline text-[#4881FF] hover:text-blue-700 transition-colors duration-200">
+                    className="underline text-[#4881FF] hover:text-blue-700 transition-colors duration-200 text-xs sm:text-sm">
                     {file.fileName} 다운로드
                   </button>
                 </div>
