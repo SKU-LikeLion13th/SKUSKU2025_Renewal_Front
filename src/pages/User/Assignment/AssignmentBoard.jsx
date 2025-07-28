@@ -70,9 +70,7 @@ export default function AssignmentBoard({ assignments }) {
       </div>
 
       <div
-        className={`flex w-full flex-col ${
-          isSmallScreen ? "min-h-[300px]" : "min-h-[550px]"
-        }`}>
+        className={`flex w-full flex-col ${!isSmallScreen && "min-h-[550px]"}`}>
         {assignments.map((assignment) => {
           const baseStyle = `flex justify-center px-1 ${textSize}`;
           // 제출 여부 스타일 (예: 제출/미제출)

@@ -210,9 +210,9 @@ export default function AddAssignment() {
         </div>
         <div className="border-t-2 border-[#232323]">
           <form onSubmit={handleSubmit}>
-            <div className="w-2/5">
+            <div className="w-full lg:w-2/5">
               <div className="mt-8">
-                <label className="text-xl font-bold mb-4 block">
+                <label className="font-bold mb-4 block text-lg sm:text-xl">
                   과제 제목
                 </label>
                 <input
@@ -220,24 +220,24 @@ export default function AddAssignment() {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="과제 제목을 입력하세요."
-                  className="w-full border border-gray-300 rounded p-3 text-base"
+                  className="w-full border border-gray-300 rounded p-3 text-sm sm:text-base"
                 />
               </div>
 
               <div className="mt-8">
-                <label className="text-xl font-bold mb-4 block">
+                <label className="font-bold mb-4 block text-lg sm:text-xl">
                   과제 설명
                 </label>
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="과제 설명을 입력하세요."
-                  className="w-full border border-gray-300 rounded p-3 h-36 text-base"
+                  className="w-full border border-gray-300 rounded p-3 h-36 text-sm sm:text-base"
                 />
               </div>
 
               <div className="mt-8">
-                <label className="text-xl font-bold mb-4 block">
+                <label className="font-bold mb-4 block text-lg sm:text-xl">
                   문제 형식
                 </label>
                 <div className="flex justify-evenly items-center border border-gray-300 rounded p-4">
@@ -250,7 +250,9 @@ export default function AddAssignment() {
                       onChange={() => setFileFormat("Subjective")}
                       className="w-5 h-5"
                     />
-                    <label htmlFor="subjective" className="text-base">
+                    <label
+                      htmlFor="subjective"
+                      className="text-sm sm:text-base">
                       주관식
                     </label>
                   </div>
@@ -263,7 +265,9 @@ export default function AddAssignment() {
                       onChange={() => setFileFormat("file")}
                       className="w-5 h-5"
                     />
-                    <label htmlFor="fileUpload" className="text-base">
+                    <label
+                      htmlFor="fileUpload"
+                      className="text-sm sm:text-base">
                       파일첨부
                     </label>
                   </div>
@@ -272,8 +276,10 @@ export default function AddAssignment() {
 
               {fileFormat === "file" && (
                 <div className="mt-8">
-                  <div className="flex gap-4 items-center">
-                    <label className="text-xl font-bold">파일 업로드</label>
+                  <div className="flex flex-col gap-4 sm:items-center sm:flex sm:flex-row">
+                    <label className="font-bold text-lg sm:text-xl">
+                      파일 업로드
+                    </label>
                     <div
                       className="flex items-center border border-[#7D7D7D] rounded py-1.5 px-4"
                       onDragOver={handleDragOver}
@@ -290,14 +296,14 @@ export default function AddAssignment() {
                         type="button"
                         onClick={handleFileSelectClick}
                         disabled={isUploading}
-                        className={`text-[#353535] underline ${
+                        className={`text-sm text-[#353535] underline ${
                           isUploading
                             ? "cursor-not-allowed opacity-50"
                             : "cursor-pointer"
                         }`}>
                         {isUploading ? "업로드 중..." : "파일선택"}
                       </button>
-                      <span className="ml-3 text-[#A6A6A6] text-sm">
+                      <span className="ml-3 text-[#A6A6A6] text-xs">
                         또는 여기로 파일을 끌어오세요.
                       </span>
                     </div>
@@ -313,24 +319,12 @@ export default function AddAssignment() {
                         return (
                           <div
                             key={index}
-                            className={`px-3 py-1 rounded-full text-sm flex items-center ${
+                            className={`px-3 py-1 rounded-full text-xs flex items-center sm:text-sm ${
                               isOriginalFile
                                 ? "bg-blue-100 border border-blue-300"
                                 : "bg-gray-100"
                             }`}>
-                            <span
-                              title={`${fileName} (${Math.round(
-                                fileSize / 1024
-                              )}KB)${
-                                isOriginalFile ? " - 기존 파일" : " - 새 파일"
-                              }`}>
-                              {fileName}
-                              {isOriginalFile && (
-                                <span className="ml-1 text-blue-600 text-xs">
-                                  기존
-                                </span>
-                              )}
-                            </span>
+                            <span>{fileName}</span>
                             <button
                               type="button"
                               onClick={() => handleRemoveFile(index)}
@@ -342,29 +336,15 @@ export default function AddAssignment() {
                       })}
                     </div>
                   )}
-
-                  {/* 삭제 예정 파일들 표시 (개발자 확인용, 필요시 제거 가능) */}
-                  {isEdit && deletedFiles.length > 0 && (
-                    <div className="mt-2 text-red-600 text-sm">
-                      삭제 예정:{" "}
-                      {deletedFiles.map((f) => f.fileName || f.name).join(", ")}
-                    </div>
-                  )}
                 </div>
               )}
             </div>
 
-            <div className="my-10 flex justify-end gap-4 w-full">
-              <button
-                type="button"
-                className="min-w-25 py-1.5 cursor-pointer text-[#838383] bg-[#E9E9E9] rounded-md"
-                onClick={() => navigate(-1)}>
-                나가기
-              </button>
+            <div className="my-10 flex justify-end gap-4 w-full text-sm sm:text-base">
               <button
                 type="submit"
                 disabled={isUploading}
-                className={`min-w-25 py-1.5 rounded-md text-white ${
+                className={`px-3 py-1.5 rounded-md text-white sm:min-w-25 ${
                   isUploading
                     ? "bg-gray-400 cursor-not-allowed"
                     : "bg-[#3B79FF] cursor-pointer"
@@ -374,6 +354,12 @@ export default function AddAssignment() {
                   : isEdit
                   ? "수정하기"
                   : "등록하기"}
+              </button>
+              <button
+                type="button"
+                className="px-5 py-1.5 cursor-pointer text-[#838383] bg-[#E9E9E9] rounded-md sm:min-w-25 "
+                onClick={() => navigate(-1)}>
+                나가기
               </button>
             </div>
           </form>

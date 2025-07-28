@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import API from "../../../utils/axios";
 import AdminAssignmentCheckBoard from "./AdminAssignmentCheckBoard";
-import AdminAssignmentPagination from "./AdminAssignmentPagination";
+import ReviewSearch from "../../User/Review/ReviewSearch";
 import TrackTitle from "../../../components/TrackTitle";
 import Breadcrumb from "../../../components/Breadcrumb";
 
@@ -114,7 +114,7 @@ export default function AssignmentCheck() {
         <div className="flex justify-start w-full sm:mt-15 mt-8 pb-5 mb-6">
           <Breadcrumb />
         </div>
-        <div className="flex w-full justify-center">
+        <div className="flex w-full justify-center mb-7">
           <AdminAssignmentCheckBoard
             assignments={currentPosts}
             selectedItems={selectedItems}
@@ -126,7 +126,7 @@ export default function AssignmentCheck() {
           />
         </div>
 
-        <AdminAssignmentPagination
+        <ReviewSearch
           totalPosts={totalPosts}
           totalPages={totalPages}
           currentPage={currentPage}

@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import API from "../../../utils/axios";
 import AdminAssignmentBoard from "./AdminAssignmentBoard";
 import AdminAssignmentControl from "./AdminAssignmentControl";
-import AdminAssignmentPagination from "./AdminAssignmentPagination";
+import ReviewSearch from "../../User/Review/ReviewSearch";
 import TrackTitle from "../../../components/TrackTitle";
 import Breadcrumb from "../../../components/Breadcrumb";
 
@@ -30,7 +30,6 @@ export default function AssignmentManagement() {
           adminCheck: item.adminCheck,
         }));
 
-        // Sort assignments by ID in descending order (most recent first)
         const sortedAssignments = processed.sort((a, b) => b.id - a.id);
 
         setAssignments(sortedAssignments);
@@ -168,7 +167,7 @@ export default function AssignmentManagement() {
           onCreateAssignment={handleCreateAssignment}
         />
 
-        <AdminAssignmentPagination
+        <ReviewSearch
           totalPosts={totalPosts}
           totalPages={totalPages}
           currentPage={currentPage}

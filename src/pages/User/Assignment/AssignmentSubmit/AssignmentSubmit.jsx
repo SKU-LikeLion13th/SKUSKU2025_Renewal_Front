@@ -4,8 +4,10 @@ import API from "../../../../utils/axios";
 import axios from "axios";
 import TrackTitle from "../../../../components/TrackTitle";
 import Breadcrumb from "../../../../components/Breadcrumb";
+import { useNavigate } from "react-router-dom";
 
 export default function AssignmentSubmit({ assignment }) {
+  const navigate = useNavigate();
   const [content, setContent] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submittedContent, setSubmittedContent] = useState("");
@@ -192,6 +194,10 @@ export default function AssignmentSubmit({ assignment }) {
         await API.put("/assignment/update", submitPayload);
         alert("과제가 수정되었습니다.");
 
+        navigate(`/cybercampus/assignment/${assignment.track}`, {
+          replace: true,
+        });
+
         // 수정 완료 후 상태 업데이트
         // 기존 파일들에서 삭제된 것들 제외하고, 새로 업로드된 것들 추가
         const remainingFiles = (assignment.files || []).filter(
@@ -231,6 +237,10 @@ export default function AssignmentSubmit({ assignment }) {
         setSubmittedContent(content);
         setSubmittedFiles(fileData);
         setFiles([]);
+
+        navigate(`/cybercampus/assignment/${assignment.track}`, {
+          replace: true,
+        });
       }
     } catch (err) {
       console.error("과제 제출/수정 중 오류:", err);
@@ -283,7 +293,7 @@ export default function AssignmentSubmit({ assignment }) {
           // 제출 완료 상태 (읽기 모드)
           <div className="mb-13">
             <div
-              className="w-full bg-[#F9F9F9] border-t-2 border-[#232323] min-h-64 p-5 text-sm sm:text-base sm:p-8"
+              className="w-full bg-[#F9F9F9] border-t-2 border-[#232323] min-h-10 p-5 text-sm sm:text-base sm:p-8"
               style={{ whiteSpace: "pre-line" }}>
               {submittedContent}
             </div>
@@ -331,7 +341,7 @@ export default function AssignmentSubmit({ assignment }) {
             {/* 텍스트 제출 */}
             <div className="mb-6">
               <textarea
-                className="w-full h-64 bg-[#F9F9F9] border-t-2 border-[#232323] focus:outline-none p-5 text-sm sm:text-base sm:p-8"
+                className="w-full h-50 bg-[#F9F9F9] border-t-2 border-[#232323] focus:outline-none p-5 text-sm sm:text-base sm:p-8"
                 placeholder="답안을 작성하세요."
                 value={content}
                 onChange={handleContentChange}
@@ -341,7 +351,7 @@ export default function AssignmentSubmit({ assignment }) {
             {/* 파일 업로드 영역 */}
             {canUploadFiles && (
               <>
-                <h1 className="text-base sm:text-2xl font-bold mb-6">
+                <h1 className="text-base sm:text-2xl font-bold mb-3 sm:mb-6">
                   파일 업로드
                 </h1>
 
@@ -373,7 +383,7 @@ export default function AssignmentSubmit({ assignment }) {
                       {files.map((f, idx) => (
                         <div
                           key={idx}
-                          className="flex justify-between items-center">
+                          className="flex justify-between items-center mb-1">
                           <span className="underline text-[#4881FF] hover:text-blue-700 flex items-center">
                             {f.name}
                           </span>
@@ -388,16 +398,8 @@ export default function AssignmentSubmit({ assignment }) {
                     </div>
                   )}
 
-                  {/* 삭제 예정 파일들 표시 (수정 모드일 때만) */}
-                  {/* {isEditMode && deletedFiles.length > 0 && (
-                    <div className="mb-4 text-red-600 text-xs">
-                      삭제 예정:{" "}
-                      {deletedFiles.map((f) => f.fileName).join(", ")}
-                    </div>
-                  )} */}
-
                   <div
-                    className="text-gray-500 cursor-pointer hover:text-gray-700 text-xs sm:text-sm mb-2"
+                    className="text-gray-500 cursor-pointer hover:text-gray-700 text-xs sm:text-sm mb-1"
                     onClick={() => fileInputRef.current?.click()}>
                     <span className="underline font-semibold">파일선택</span>{" "}
                     또는 여기로 파일을 끌어오세요.

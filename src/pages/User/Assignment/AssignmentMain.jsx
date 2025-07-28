@@ -81,7 +81,7 @@ export default function AssignmentMain() {
         <div className="flex justify-start w-full sm:mt-15 mt-8 pb-5 mb-6">
           <Breadcrumb />
         </div>
-        <div className="flex w-full justify-center">
+        <div className="flex w-full justify-center mb-7">
           <AssignmentBoard assignments={currentPosts} />
         </div>
 
