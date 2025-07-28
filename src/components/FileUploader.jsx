@@ -24,7 +24,7 @@ const FileUploader = ({ onUploadComplete, error }) => {
   return (
     <div className="flex mb-6 items-center justify-between">
       <div className="flex sm:items-center flex-col  sm:flex-row">
-        <h3 className="text-lg sm:text-xl fontSB sm:fontBold mb-4">
+        <h3 className="text-lg sm:text-xl fontSB sm:fontBold mr-4 mb-4">
           파일 업로드
         </h3>
         <div

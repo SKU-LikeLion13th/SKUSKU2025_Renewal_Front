@@ -10,12 +10,15 @@ export default function CCHeader() {
   const [isHovered, setIsHovered] = useState(false);
   const { user, logout } = useAuth();
   const location = useLocation();
+  const isAdmin = location.pathname.startsWith("/admin");
 
   const menuItems = [
-    { title: "PROJECT", path: "/project" },
-    { title: "TEAM", path: "/team" },
-    { title: "COMMUNITY", path: "/community" },
+    { title: "PROJECT", path: "project" },
+    { title: "TEAM", path: "team" },
+    { title: "COMMUNITY", path: "community" },
   ];
+
+  const basePath = isAdmin ? "admin" : "";
 
   function getColorByTrack(track) {
     switch (track) {
@@ -64,7 +67,11 @@ export default function CCHeader() {
                 } cursor-pointer relative`}
               >
                 {item.path ? (
-                  <Link to={item.path}>{item.title}</Link>
+                  <Link
+                    to={`/${[basePath, item.path].filter(Boolean).join("/")}`}
+                  >
+                    {item.title}
+                  </Link>
                 ) : (
                   item.title
                 )}

@@ -98,12 +98,12 @@ const AdminCCLectureUpload = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 mt-28 pb-24">
-      <h1 className="text-2xl sm:text-4xl fontBold sm:mb-20 mb-10">
+    <div className="w-10/12 max-w-5xl mx-auto px-4 sm:px-6 mt-32 md:mt-52 pb-24">
+      <h1 className="text-2xl sm:text-4xl fontBold sm:mb-20 mb-10 ">
         {track} 자료 등록
       </h1>
       <div className="mb-8">
-        <Breadcrumb/>
+        <Breadcrumb />
       </div>
       <div className="border border-gray-200 mb-12"></div>
 

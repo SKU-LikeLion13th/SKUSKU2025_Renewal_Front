@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import API from "../../../../utils/axios";
-import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -10,30 +9,22 @@ import "swiper/css";
 const ProjectItem = ({ title, subtitle, image, url }) => (
   <a
     href={url}
-    className="flex justify-center items-center w-[100%] lg:w-full md:mx-20 mx-10"
+    className="flex justify-center items-center w-full"
     target="_blank"
     rel="noopener noreferrer"
   >
-    <div className="relative w-[100%] md:w-full rounded-[10px] overflow-hidden aspect-[16/9]">
-      <div
-        className="absolute inset-0 bg-center bg-cover rounded-[15px]"
-        style={{
-          backgroundImage: `url(${image})`,
-        }}
-      >
-        <div className="absolute inset-0 bg-black opacity-50 md:rounded-[15px] rounded-[4px]" />
+    <div
+      className="w-full aspect-[16/9] rounded-[10px] overflow-hidden md:mx-25 mx-10 bg-cover bg-center flex flex-col justify-end p-4"
+      style={{
+        backgroundImage: `linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent), url(${image})`,
+      }}
+    >
+      <div className="text-[10px] sm:text-base md:text-lg lg:text-xl xl:text-2xl fontEB text-white">
+        {title}
       </div>
-      <div
-        className="relative z-10 flex flex-col justify-end h-full 
-                      md:pb-4 pb-1 md:pl-5 pl-2 text-start"
-      >
-        <div className="text-[10px] sm:text-base md:text-lg lg:text-xl xl:text-2xl fontEB text-white">
-          {title}
-        </div>
-        <p className="md:pt-1 sm:pt-2 text-[8px] sm:text-sm md:text-base lg:text-lg text-white fontRegular">
-          {subtitle}
-        </p>
-      </div>
+      <p className="pt-1 text-[8px] sm:text-sm md:text-base lg:text-lg text-white fontRegular">
+        {subtitle}
+      </p>
     </div>
   </a>
 );
@@ -58,13 +49,13 @@ export default function ProjectSlider() {
 
   return (
     <div className="flex justify-center items-center">
-      <div className="w-full h-auto">
+      <div className="w-full">
         <Swiper
           modules={[Autoplay]}
-          slidesPerView={3.4}
+          slidesPerView={1.2} // 기본값
+          spaceBetween={-40}
           freeMode={true}
           loop={true}
-          // loopedSlides={extendedProjects.length}
           autoplay={{
             delay: 0,
             disableOnInteraction: false,
@@ -72,21 +63,25 @@ export default function ProjectSlider() {
           speed={4000}
           breakpoints={{
             640: {
-              slidesPerView: 1.5,
+              slidesPerView: 1.2,
+              spaceBetween: 12,
             },
             768: {
-              slidesPerView: 2,
+              slidesPerView: 1.6,
+              spaceBetween: 16,
             },
             1024: {
-              slidesPerView: 3,
+              slidesPerView: 2.2,
+              spaceBetween: 20,
             },
             1280: {
-              slidesPerView: 4,
+              slidesPerView: 2.8,
+              spaceBetween: 24,
             },
           }}
         >
           {projects.map((project) => (
-            <SwiperSlide key={project.id} className="md:px-6 px-1">
+            <SwiperSlide key={project.id} className="h-auto">
               <ProjectItem
                 title={project.title}
                 subtitle={project.subTitle}
