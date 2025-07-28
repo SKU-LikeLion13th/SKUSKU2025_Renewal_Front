@@ -60,7 +60,7 @@ export default function CCHeader() {
               <div
                 key={index}
                 className={`fontMedium text-[16px] ${
-                  isHovered ? "text-[#fff]" : "text-white"
+                  isHovered ? "text-[#fff]" : "text-black"
                 } cursor-pointer relative`}
               >
                 {item.path ? (
@@ -123,21 +123,31 @@ export default function CCHeader() {
 
           {user ? (
             <div className="flex items-center justify-center ">
-              <div className="flex items-center">
+              <div
+                className={`flex items-center justify-center fontMedium text-[16px] ${
+                  isHovered ? "text-[#fff]" : "text-black"
+                } cursor-pointer relative`}
+              >
                 {/** 색상 조건 설정 */}
                 <div
                   style={{ backgroundColor: getColorByTrack(user.track) }}
-                  className="flex items-center justify-center w-[30px] h-[30px] rounded-full"
+                  className="flex items-center justify-center w-[30px] h-[30px] rounded-full "
                 >
                   🦁
                 </div>
                 <span className="px-2 text-xs">{user.track}</span>
                 <span className="font-bold">{user.name}님</span>
+                <div
+                  className={`flex mx-2 ${
+                    isHovered ? "text-[#fff]" : "text-black"
+                  } cursor-pointer relative`}
+                >
+                  |
+                </div>
+                <button onClick={logout} className="text-xs">
+                  LOGOUT
+                </button>
               </div>
-              <div className="px-2 text-[#fff]">|</div>
-              <button onClick={logout} className="text-xs">
-                LOGOUT
-              </button>
             </div>
           ) : (
             // user가 없으면 로그인 버튼을 표시
