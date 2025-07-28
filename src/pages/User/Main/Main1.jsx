@@ -1,11 +1,9 @@
-import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 export default function Main1() {
-  const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate("/admin");
+    window.location.href = "/admin"; // 새로고침 포함하여 이동
   };
 
   return (
