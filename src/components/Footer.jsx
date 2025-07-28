@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Footer() {
   return (
     <div className="bg-[#0B0B0B] text-white px-12 pt-16 ">

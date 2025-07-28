@@ -59,15 +59,17 @@ const CCLecture = () => {
   ];
 
   return (
-    <div className="w-full max-w-[90%] sm:max-w-2xl md:max-w-3xl lg:max-w-5xl mx-auto mt-24 sm:mt-44 pb-10 px-6 sm:px-4">
-      <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl fontBold mb-10 sm:mb-16">
+    <div className="lex flex-col justify-start w-9/12 mx-auto sm:mt-50 mt-30 lg:w-8/12">
+      <h1 className="flex fontBold sm:text-[35px] text-[23px]">
         {track} 자료실
       </h1>
-      <div className="mb-8">
-        <Breadcrumb/>
+      <div className="flex justify-start w-full sm:mt-15 mt-8 pb-5">
+        <Breadcrumb />
       </div>
 
-      <LectureTable data={paddedItems} track={track} />
+      <div className="flex justify-center w-full mt-8">
+        <LectureTable data={paddedItems} track={track} />
+      </div>
 
       <LectureControls
         totalItems={data.length}
