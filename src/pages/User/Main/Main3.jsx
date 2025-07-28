@@ -1,3 +1,104 @@
+import React, { useState, useEffect, useRef } from "react";
+import { ProgramCard } from "../../../components/ProgramCard";
+
+const useInView = (options) => {
+  const ref = useRef(null);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    if (!ref.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setInView(entry.isIntersecting);
+      },
+      options
+    );
+
+    observer.observe(ref.current);
+
+    return () => {
+      if (ref.current) observer.unobserve(ref.current);
+    };
+  }, [ref, options]);
+
+  return [ref, inView];
+};
+
+const TypingTextComponent = ({ fullText, highlightText, frame, flag, className = "" }) => {
+  const [typingText, setTypingText] = useState("");
+  const textIndex = useRef(0);
+  const lastTimeStamp = useRef(null);
+  const animationFrameId = useRef(null);
+
+  const animate = (timeStamp) => {
+    if (!lastTimeStamp.current) lastTimeStamp.current = timeStamp;
+    const elapsed = timeStamp - lastTimeStamp.current;
+
+    if (elapsed > frame) {
+      lastTimeStamp.current = timeStamp;
+
+      setTypingText((prev) => {
+        if (textIndex.current >= fullText.length) return prev;
+        const nextText = prev + fullText[textIndex.current];
+        textIndex.current += 1;
+        return nextText;
+      });
+    }
+
+    if (textIndex.current < fullText.length) {
+      animationFrameId.current = requestAnimationFrame(animate);
+    }
+  };
+
+  useEffect(() => {
+    if (flag) {
+      textIndex.current = 0;
+      lastTimeStamp.current = null;
+      setTypingText("");
+      animationFrameId.current = requestAnimationFrame(animate);
+    } else {
+      if (animationFrameId.current) {
+        cancelAnimationFrame(animationFrameId.current);
+      }
+      setTypingText("");
+      textIndex.current = 0;
+      lastTimeStamp.current = null;
+    }
+    return () => {
+      if (animationFrameId.current) {
+        cancelAnimationFrame(animationFrameId.current);
+      }
+    };
+  }, [flag, fullText, frame]);
+
+  // 강조 텍스트가 포함된 상태에서 렌더링할 때는 이렇게 분할해서 하이라이트 처리
+  const renderWithHighlight = () => {
+    if (!typingText) return null;
+
+    const highlightStart = typingText.indexOf(highlightText);
+    if (highlightStart === -1) {
+      // 아직 강조 텍스트가 안나왔거나 완성 안된 경우 그냥 전체 출력
+      return typingText;
+    }
+
+    // 강조 텍스트 앞/강조/강조 뒤로 분할
+    const before = typingText.slice(0, highlightStart);
+    const highlight = typingText.slice(highlightStart, highlightStart + highlightText.length);
+    const after = typingText.slice(highlightStart + highlightText.length);
+
+    return (
+      <>
+        {before}
+        <span className="fontBold ml-1.5">{highlight}</span>
+        {after}
+      </>
+    );
+  };
+
+  return <p className={className}>{renderWithHighlight()}</p>;
+};
+
 export default function Main3() {
   const programs = [
     {
@@ -45,70 +146,36 @@ export default function Main3() {
     },
   ];
 
+  const beforeText = "멋쟁이사자처럼 13기에서 진행되는 ";
+  const highlightText = "프로그램";
+  const afterText = "을 소개합니다.";
+  const fullText = beforeText + highlightText + afterText;
+
+  const [textRef, inView] = useInView({ threshold: 0.5 });
+
   return (
     <div>
-      {/* 소개 문구 */}
-      <div className="hidden sm:flex bg-[#0E0E0E] text-white h-[300px] justify-center items-center text-[16px] sm:text-[20px] lg:text-[24px]">
-        <p className="fontThin">
-          멋쟁이사자처럼 13기에서 진행되는{" "}
-          <span className="fontBold">프로그램</span>을 소개합니다
-        </p>
+      <div
+        ref={textRef}
+        className="hidden sm:flex bg-[#0E0E0E] text-white h-[300px] justify-center items-center text-[16px] sm:text-[20px] lg:text-[24px]"
+      >
+        <TypingTextComponent
+          fullText={fullText}
+          highlightText={highlightText}
+          frame={50}
+          flag={inView}
+          className="fontThin flex"
+        />
       </div>
 
-      {/* 본문 */}
       <div className="px-4 sm:px-8 md:px-16 lg:px-14 xl:px-18 bg-[#1B1B1B] sm:py-20 py-12 sm:pb-40 pb-10 space-y-20">
         <p className="text-[#9ABFFF] fontSB text-center text-[9px] sm:text-[14px] md:text-[18px]">
           @2025 PROGRAM info
         </p>
 
-        <div className="max-w-5xl mx-auto sm:flex sm:flex-col max-sm:grid max-sm:grid-cols-2 sm:gap-25 ">
+        <div className="max-w-5xl mx-auto sm:flex sm:flex-col max-sm:grid max-sm:grid-cols-2 sm:gap-25">
           {programs.map((program, idx) => (
-            <div
-              key={idx}
-              className={`flex flex-col sm:flex-row items-center ${
-                idx % 2 === 1 ? "sm:flex-row-reverse" : ""
-              } gap-4 sm:gap-20`}
-            >
-              <img
-                src={program.img}
-                alt={program.highlight}
-                className="w-38 sm:w-[45%] sm:rounded-[15px] rounded-sm"
-              />
-              <div className="flex-1 text-white space-y-4 sm:space-y-6 sm:px-4">
-                <p className="text-[12px] sm:text-[18px] md:text-[32px] fontSB ">
-                  {program.title}
-                  <span className="text-[#72A6FF]">{program.highlight}</span>
-                </p>
-                <p className="hidden sm:block text-[#E5E5E5] fontThin text-[11px] sm:text-[12px] md:text-[15px] whitespace-pre-line">
-                  {program.desc}
-                </p>
-                <div className="hidden sm:block text-[11px] sm:text-[12px] md:text-[13px] text-[#E5E5E5] fontThin space-y-1">
-                  <div className="flex items-center gap-2">
-                    <img
-                      src="/assets/images/Main/place.png"
-                      alt="장소"
-                      className="w-3"
-                    />
-                    <p>{program.place}</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <img
-                      src="/assets/images/Main/date.png"
-                      alt="시간"
-                      className="w-3"
-                    />
-                    <p>
-                      {program.time}{" "}
-                      {program.note && (
-                        <span className="text-[11px] sm:text-[12px]">
-                          {program.note}
-                        </span>
-                      )}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <ProgramCard key={idx} program={program} idx={idx} />
           ))}
         </div>
       </div>
