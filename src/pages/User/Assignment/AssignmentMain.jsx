@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import API from "../../../utils/axios";
-import AssignmentSearchBar from "./AssignmentSearchBar";
+import ReviewSearch from "./../Review/ReviewSearch";
 import AssignmentBoard from "./AssignmentBoard";
 import TrackTitle from "../../../components/TrackTitle";
 import Breadcrumb from "../../../components/Breadcrumb";
@@ -85,7 +85,7 @@ export default function AssignmentMain() {
           <AssignmentBoard assignments={currentPosts} />
         </div>
 
-        <AssignmentSearchBar
+        <ReviewSearch
           totalPosts={totalPosts}
           totalPages={totalPages}
           currentPage={currentPage}

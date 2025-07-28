@@ -7,7 +7,7 @@ export default function AssignmentAdminComments({ feedback }) {
   }
 
   return (
-    <div className="bg-[#F9F9F9] p-8 mt-30 mb-15 border-t-2 border-[#232323]">
+    <div className="bg-[#F9F9F9] mb-15 border-t-2 border-[#232323] p-5 text-sm sm:text-base sm:p-8 sm:mt-30">
       <p>
         <span className="text-[#F6701D] font-bold">운영진</span> : {feedback}
       </p>

@@ -22,7 +22,7 @@ export default function TrackTitle({ suffix = "", showOnlyTrack = false }) {
 
   return (
     <div>
-      <div className="flex fontBold sm:text-[35px] text-[28px]">
+      <div className="flex fontBold sm:text-[35px] text-[23px]">
         {displayTrack && `${displayTrack} ${suffix}`}
       </div>
     </div>

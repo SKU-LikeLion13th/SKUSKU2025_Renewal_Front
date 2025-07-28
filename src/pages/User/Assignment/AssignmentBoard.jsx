@@ -1,15 +1,33 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const headers = ["번호", "제목", "제출 여부", "운영진 확인"];
-const flexValues = ["1", "10", "2", "2"];
 
 export default function AssignmentBoard({ assignments }) {
   const navigate = useNavigate();
-  const headerStyle = "flex fontBold justify-center px-1";
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+
+  // 화면 크기 감지
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsSmallScreen(window.innerWidth <= 640); // 640px 이하일 때 작은 화면으로 판단
+    };
+
+    checkScreenSize(); // 초기 실행
+    window.addEventListener("resize", checkScreenSize);
+
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+
+  // 화면 크기에 따른 flex 값과 텍스트 크기 결정
+  const flexValues = isSmallScreen
+    ? ["1", "5", "2", "2.5"]
+    : ["1", "10", "2", "2"];
+  const textSize = isSmallScreen ? "text-[11px]" : "text-[13.5px]";
+
+  const headerStyle = `flex fontBold justify-center px-1 ${textSize}`;
   const rowStyle = "flex w-full border-b border-b-[#E0E0E0] p-2";
-  const titleCellStyle =
-    "flex justify-start px-1 text-[13.5px] cursor-pointer hover:text-blue-500";
+  const titleCellStyle = `flex justify-start px-1 ${textSize} cursor-pointer hover:text-blue-500 overflow-hidden whitespace-nowrap text-ellipsis`;
 
   // 선택된 과제 데이터와 함께 네비게이션하는 함수
   const handleAssignmentClick = (assignment) => {
@@ -51,10 +69,12 @@ export default function AssignmentBoard({ assignments }) {
         ))}
       </div>
 
-      <div className="flex w-full min-h-[590px] flex-col">
+      <div
+        className={`flex w-full flex-col ${
+          isSmallScreen ? "min-h-[300px]" : "min-h-[550px]"
+        }`}>
         {assignments.map((assignment) => {
-          const baseStyle = "flex justify-center px-1 text-[13.5px]";
-
+          const baseStyle = `flex justify-center px-1 ${textSize}`;
           // 제출 여부 스타일 (예: 제출/미제출)
           const statusStyle = `${baseStyle}`;
 
@@ -77,7 +97,9 @@ export default function AssignmentBoard({ assignments }) {
               <div
                 className={titleCellStyle}
                 style={{ flex: flexValues[1] }}
-                onClick={() => handleAssignmentClick(assignment)}>
+                onClick={() => handleAssignmentClick(assignment)}
+                title={assignment.title} // 호버 시 전체 제목 표시
+              >
                 {assignment.title}
               </div>
 
