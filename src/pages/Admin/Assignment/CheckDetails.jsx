@@ -12,6 +12,7 @@ export default function CheckDetails() {
   const { id: assignmentId, submitId, track } = useParams();
   const [assignment, setAssignment] = useState(null);
   const [feedback, setFeedback] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false); // 로딩 상태 추가
 
   useEffect(() => {
     const fetchAssignment = async () => {
@@ -55,6 +56,10 @@ export default function CheckDetails() {
       return;
     }
 
+    if (isSubmitting) return; // 이미 처리 중이면 리턴
+
+    setIsSubmitting(true); // 로딩 시작
+
     try {
       const requestData = {
         submitAssignmentId: parseInt(submitId),
@@ -74,6 +79,8 @@ export default function CheckDetails() {
     } catch (error) {
       console.error("피드백 처리 실패:", error);
       alert("피드백 처리에 실패했습니다.");
+    } finally {
+      setIsSubmitting(false); // 로딩 종료
     }
   };
 
@@ -153,14 +160,24 @@ export default function CheckDetails() {
 
           <div>
             <button
-              className="w-18 p-1.5 mr-5 text-white bg-[#FC6163] rounded-md hover:bg-red-500 text-sm sm:w-22 sm:text-base"
-              onClick={() => handleSubmitFeedback("NONE_PASS")}>
-              보류
+              className={`w-18 p-1.5 mr-5 text-white rounded-md text-sm sm:w-22 sm:text-base transition-colors duration-200 ${
+                isSubmitting
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-[#FC6163] hover:bg-red-500"
+              }`}
+              onClick={() => handleSubmitFeedback("NONE_PASS")}
+              disabled={isSubmitting}>
+              {isSubmitting ? "처리중..." : "보류"}
             </button>
             <button
-              className="w-18 p-1.5 text-white bg-[#4881FF] rounded-md hover:bg-blue-700 text-sm sm:w-22 sm:text-base"
-              onClick={() => handleSubmitFeedback("PASS")}>
-              통과
+              className={`w-18 p-1.5 text-white rounded-md text-sm sm:w-22 sm:text-base transition-colors duration-200 ${
+                isSubmitting
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-[#4881FF] hover:bg-blue-700"
+              }`}
+              onClick={() => handleSubmitFeedback("PASS")}
+              disabled={isSubmitting}>
+              {isSubmitting ? "처리중..." : "통과"}
             </button>
           </div>
         </div>
@@ -172,6 +189,7 @@ export default function CheckDetails() {
             placeholder="댓글을 입력해 주세요. 보류 시에는 피드백을 꼭 입력해 주세요."
             value={feedback}
             onChange={(e) => setFeedback(e.target.value)}
+            disabled={isSubmitting} // 제출 중에는 텍스트 영역도 비활성화
           />
         </div>
       </div>
