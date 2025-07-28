@@ -10,6 +10,7 @@ export default function HeaderMobile() {
     { title: "PROJECT", path: "/project" },
     { title: "TEAM", path: "/team" },
     { title: "COMMUNITY", path: "/community" },
+    { title: "CYBERCAMPUS", path: "/cybercampus" },
   ];
 
   return (

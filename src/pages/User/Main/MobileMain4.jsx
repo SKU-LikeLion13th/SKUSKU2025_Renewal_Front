@@ -84,7 +84,7 @@ export default function MobileMain4() {
         <div className="bg-[#262626] p-7 w-[85%] rounded-l-md ml-auto">
           <div className="text-[#F75222] flex items-center space-x-2">
             <img
-              src="/assets/images/Main/Main4_React.png"
+              src="/assets/images/Main/Main4_spring.png"
               alt=""
               className="w-8"
             />
@@ -106,7 +106,7 @@ export default function MobileMain4() {
         <div className="bg-[#262626] p-7 w-[85%] rounded-r-md">
           <div className="text-[#F75222] flex items-center space-x-2">
             <img
-              src="/assets/images/Main/Main4_React.png"
+              src="/assets/images/Main/Main4_figma.png"
               alt=""
               className="w-8"
             />
