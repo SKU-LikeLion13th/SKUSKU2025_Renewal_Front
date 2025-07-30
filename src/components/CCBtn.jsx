@@ -1,13 +1,25 @@
+import { useState } from "react";
+import API from "../utils/axios";
+export default function CCBtn({ isHovered, textSize = "text-[13px]" }) {
+  const handleClick = async () => {
+    try {
+      const res = await API.get("/log/status");
+      const user = res.data;
 
-export default function CCBtn({ isHovered }) {
-  const handleClick = () => {
-    window.location.href = "/CyberCampus"; 
+      if ((user.role === "BABY_LION", "ADMIN_LION")) {
+        window.location.href = "/CyberCampus";
+      } else {
+        alert("접근 권한이 없습니다.");
+      }
+    } catch (err) {
+      alert("로그인이 필요합니다.");
+    }
   };
 
   return (
     <div
       onClick={handleClick}
-      className={`flex text-white items-center px-4 py-2 rounded-sm transition-colors duration-300
+      className={`flex justify-center text-white items-center px-4 py-2 rounded-sm transition-colors duration-300 
           ${
             isHovered
               ? "bg-[#8DB7FF] text-black hover:bg-[#2D5ABB]"
@@ -21,7 +33,7 @@ export default function CCBtn({ isHovered }) {
         width={"16px"}
         className="mr-2"
       />
-      <p className="text-[14px]">CYBERCAMPUS</p>
+      <p className={`${textSize}`}>CYBERCAMPUS</p>
     </div>
   );
 }
