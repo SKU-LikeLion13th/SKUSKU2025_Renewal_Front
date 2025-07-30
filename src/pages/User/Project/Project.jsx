@@ -1,12 +1,36 @@
 import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import ProjectTabs from "./ProjectTabs";
 import API from "../../../utils/axios";
 
 export default function Project() {
   const [projects, setProjects] = useState([]);
   const [filteredProjects, setFilteredProjects] = useState([]);
-  const [activeTab, setActiveTab] = useState("all");
+  // const [activeTab, setActiveTab] = useState("all");
   const [tabs, setTabs] = useState([]);
+
+  const [searchParams] = useSearchParams();
+  const defaultTab = searchParams.get("tab") || "all";
+  const [activeTab, setActiveTab] = useState(defaultTab);
+
+  useEffect(() => {
+    const tab = searchParams.get("tab");
+    if (!tab) {
+      setActiveTab("all");
+    } else if (["13", "12", "11"].includes(tab)) {
+      setActiveTab(tab);
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (activeTab === "all") {
+      setFilteredProjects(projects);
+    } else {
+      setFilteredProjects(
+        projects.filter((project) => project.classTh === activeTab)
+      );
+    }
+  }, [activeTab, projects]);
 
   const handleTabClick = (tabValue) => {
     setActiveTab(tabValue);
@@ -31,7 +55,7 @@ export default function Project() {
         const response = await API.get("/project/all");
         const data = response.data;
         setProjects(data);
-        setFilteredProjects(data);
+        // setFilteredProjects(data);
 
         const classList = [...new Set(data.map((p) => p.classTh))]
           .sort()
@@ -73,7 +97,8 @@ export default function Project() {
             <div
               key={project.id}
               className="w-10/12 mx-auto cursor-pointer md:w-full hover:shadow-xl duration-500 hover:-translate-y-1 group"
-              onClick={() => openProject(project.projectUrl)}>
+              onClick={() => openProject(project.projectUrl)}
+            >
               <div className="relative">
                 <img
                   src={project.imageUrl}

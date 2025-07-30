@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import TeamTabs from "./TeamTabs";
 
 import Team13 from "./Team13"; // 13기 페이지
@@ -6,7 +7,16 @@ import Team12 from "./Team12"; // 12기 페이지
 import Team11 from "./Team11"; // 11기 페이지
 
 export default function TeamPage() {
-  const [activeTab, setActiveTab] = useState("13");
+  const [searchParams] = useSearchParams();
+  const defaultTab = searchParams.get("tab") || "13";
+  const [activeTab, setActiveTab] = useState(defaultTab);
+
+  useEffect(() => {
+    const tab = searchParams.get("tab");
+    if (tab && ["13", "12", "11"].includes(tab)) {
+      setActiveTab(tab);
+    }
+  }, [searchParams]);
 
   return (
     <div className="p-8 min-h-screen mx-auto bg-black pb-40">

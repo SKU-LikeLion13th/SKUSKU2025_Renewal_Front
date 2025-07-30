@@ -9,16 +9,36 @@ import { FaInstagram } from "react-icons/fa";
 export default function CCHeader() {
   const [isHovered, setIsHovered] = useState(false);
   const { user, logout } = useAuth();
+
   const location = useLocation();
   const isAdmin = location.pathname.startsWith("/admin");
+  const basePath = isAdmin ? "admin" : "";
+
+  const buildPath = (subPath) =>
+    `/${[basePath, subPath].filter(Boolean).join("/")}`;
 
   const menuItems = [
-    { title: "PROJECT", path: "project" },
-    { title: "TEAM", path: "team" },
-    { title: "COMMUNITY", path: "community" },
+    {
+      title: { label: "PROJECT", path: buildPath("project") },
+      subItems: [
+        { label: "13기", path: buildPath("project?tab=13") },
+        { label: "12기", path: buildPath("project?tab=12") },
+        { label: "11기", path: buildPath("project?tab=11") },
+      ],
+    },
+    {
+      title: { label: "TEAM", path: "/team?tab=13" },
+      subItems: [
+        { label: "13기", path: "/team?tab=13" },
+        { label: "12기", path: "/team?tab=12" },
+        { label: "11기", path: "/team?tab=11" },
+      ],
+    },
+    {
+      title: { label: "COMMUNITY", path: "/" },
+      subItems: [{ label: "문의사항", path: "/" }],
+    },
   ];
-
-  const basePath = isAdmin ? "admin" : "";
 
   function getColorByTrack(track) {
     switch (track) {
@@ -66,34 +86,21 @@ export default function CCHeader() {
                   isHovered ? "text-[#fff]" : "text-black"
                 } cursor-pointer relative`}
               >
-                {item.path ? (
-                  <Link
-                    to={`/${[basePath, item.path].filter(Boolean).join("/")}`}
-                  >
-                    {item.title}
-                  </Link>
-                ) : (
-                  item.title
-                )}
+                <Link to={item.title.path}>
+                  <span>{item.title.label}</span>
+                </Link>
+
                 {isHovered && (
-                  <div className="absolute w-full space-y-6 mt-12">
-                    {item.title === "COMMUNITY" ? (
-                      <div className="text-[16px] text-[#fff] text-center fontRegular">
-                        문의사항
-                      </div>
-                    ) : (
-                      <>
-                        <div className="text-[16px] text-[#fff] text-center fontRegular">
-                          13기
-                        </div>
-                        <div className="text-[16px] text-[#fff] text-center fontRegular">
-                          12기
-                        </div>
-                        <div className="text-[16px] text-[#fff] text-center fontRegular">
-                          11기
-                        </div>
-                      </>
-                    )}
+                  <div className="absolute w-full space-y-8 mt-12">
+                    {item.subItems.map((subItem, subIdx) => (
+                      <Link
+                        key={subIdx}
+                        to={subItem.path}
+                        className="block text-[16px] text-[#fff] text-center fontRegular"
+                      >
+                        {subItem.label}
+                      </Link>
+                    ))}
                   </div>
                 )}
               </div>

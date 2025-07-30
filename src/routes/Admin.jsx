@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import AdminMain from "../pages/Admin/Intro/AdminRealMain";
 import AdminReview from "../pages/Admin/Review/AdminReview";
@@ -17,9 +17,11 @@ import CheckDetails from "../pages/Admin/Assignment/CheckDetails";
 import CCFooter from "../components/CCFooter";
 import CCHeader from "../components/CCHeader";
 import CCHeaderMobile from "../components/CCHeaderMobile";
+import Footer from "../components/Footer";
 
 const Admin = () => {
   const [isMobile, setIsMobile] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const checkIsMobile = () => setIsMobile(window.innerWidth < 1270);
@@ -27,6 +29,9 @@ const Admin = () => {
     window.addEventListener("resize", checkIsMobile);
     return () => window.removeEventListener("resize", checkIsMobile);
   }, []);
+
+  const showAdminFooterPaths = ["/admin/project", "/admin/project/add"];
+  const showAdminFooter = showAdminFooterPaths.includes(location.pathname);
 
   return (
     <div>
@@ -66,7 +71,7 @@ const Admin = () => {
         <Route path="/project" element={<AdminProject />} />
         <Route path="/project/add" element={<AddProject />} />
       </Routes>
-      {!isMobile && <CCFooter />}
+      {!isMobile && (showAdminFooter ? <Footer /> : <CCFooter />)}
     </div>
   );
 };

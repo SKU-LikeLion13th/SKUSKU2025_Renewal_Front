@@ -22,8 +22,8 @@ const User = () => {
       {isMobile ? <HeaderMobile /> : <Header />}
       <Routes>
         <Route path="/" element={<Main />} />
-        <Route path="/project" element={<Project />} />
-        <Route path="/team" element={<TeamPage />} />
+        <Route path="/project/*" element={<Project />} />
+        <Route path="/team/*" element={<TeamPage />} />
       </Routes>
 
       {!isMobile && <Footer />}
