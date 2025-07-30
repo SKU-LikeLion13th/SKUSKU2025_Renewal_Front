@@ -70,12 +70,16 @@ export default function Project() {
 
   return (
     <div className="min-h-screen mx-auto bg-black">
-      <div className="w-4/5 mx-auto py-40">
+      <div className="w-4/5 mx-auto py-30 md:py-40">
         {/* 제목 */}
-        <div className="pb-4 mx-auto text-center font-extrabold md:w-fit md:pb-12 md:pr-20 md:border-b-2 md:text-start md:mx-0">
-          <div className="text-[40px] text-[#3B79FF]">LIKELION</div>
-          <div className="text-[55px] text-white">PROJECTS</div>
-          <div className="text-white text-lg mt-2 font-medium">
+        <div className="pb-8 mx-auto text-center font-extrabold md:w-fit md:pb-12 md:pr-20 md:border-b-2 md:text-start md:mx-0">
+          <div className="text-[25px] sm:text-[40px] text-[#3B79FF]">
+            LIKELION
+          </div>
+          <div className="text-[40px] sm:text-[55px] text-white fontBold">
+            PROJECTS
+          </div>
+          <div className="text-white text-sm sm:text-lg mt-2 font-medium">
             총{" "}
             <span className="text-[#3B79FF] font-bold">
               {filteredProjects.length}건
@@ -92,18 +96,17 @@ export default function Project() {
         />
 
         {/* 프로젝트 리스트 */}
-        <div className="grid w-10/12 grid-cols-1 gap-8 mx-auto mt-8 text-white md:gap-19 sm:grid-cols-2 sm:w-full lg:grid-cols-4">
+        <div className="grid w-full grid-cols-2 gap-5 mx-auto mt-8 text-white md:gap-8 sm:grid-cols-3 sm:w-full xl:gap-12 lg:grid-cols-4">
           {filteredProjects.map((project) => (
             <div
               key={project.id}
-              className="w-10/12 mx-auto cursor-pointer md:w-full hover:shadow-xl duration-500 hover:-translate-y-1 group"
-              onClick={() => openProject(project.projectUrl)}
-            >
+              className="mx-auto cursor-pointer w-full hover:shadow-xl duration-500 hover:-translate-y-1 group"
+              onClick={() => openProject(project.projectUrl)}>
               <div className="relative">
                 <img
                   src={project.imageUrl}
                   alt={project.title}
-                  className="w-full aspect-[4/3] rounded-md shadow-lg group-hover:opacity-30 transition-opacity duration-500 object-cover"
+                  className="w-full aspect-[17/10] rounded-md shadow-lg group-hover:opacity-30 transition-opacity duration-500 object-cover"
                 />
 
                 <div className="absolute inset-0 flex items-center justify-center transition-opacity duration-500 opacity-0 group-hover:opacity-100">

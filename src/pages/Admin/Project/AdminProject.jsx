@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import AdminProjectTabs from "./AdminProjectTabs";
 import API from "../../../utils/axios";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminProject() {
   const [projects, setProjects] = useState([]);
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [activeTab, setActiveTab] = useState("all");
   const [selectedProjects, setSelectedProjects] = useState([]);
+  const navigate = useNavigate();
 
   // 기수 목록 자동 생성
   const [tabs, setTabs] = useState([]);
@@ -30,23 +32,26 @@ export default function AdminProject() {
     );
   };
 
-  // const toggleSelectProject = (projectId) => {
-  //   setSelectedProjects((prev) =>
-  //     prev.includes(projectId)
-  //       ? prev.filter((id) => id !== projectId)
-  //       : [...prev, projectId]
-  //   );
-  // };
+  // 수정 기능 추가
+  const editSelectedProject = () => {
+    if (selectedProjects.length !== 1) {
+      alert("하나의 프로젝트만 선택해주세요.");
+      return;
+    }
 
-  // const toggleSelectAll = () => {
-  //   const allIds = filteredProjects.map((p) => p.id);
-  //   const isAllSelected = allIds.every((id) => selectedProjects.includes(id));
-  //   if (isAllSelected) {
-  //     setSelectedProjects((prev) => prev.filter((id) => !allIds.includes(id)));
-  //   } else {
-  //     setSelectedProjects((prev) => Array.from(new Set([...prev, ...allIds])));
-  //   }
-  // };
+    const projectId = selectedProjects[0];
+    const selectedProject = projects.find((p) => p.id === projectId);
+
+    if (selectedProject) {
+      // state를 통해 프로젝트 데이터 전달
+      navigate("/admin/project/add", {
+        state: {
+          editMode: true,
+          projectData: selectedProject,
+        },
+      });
+    }
+  };
 
   const deleteSelectedProjects = async () => {
     if (selectedProjects.length !== 1) {
@@ -103,12 +108,16 @@ export default function AdminProject() {
 
   return (
     <div className="min-h-screen mx-auto bg-black">
-      <div className="w-4/5 mx-auto py-40">
+      <div className="w-4/5 mx-auto py-30 md:py-40">
         {/* 제목 */}
-        <div className="pb-4 mx-auto text-center font-extrabold md:w-fit md:pb-12 md:pr-20 md:border-b-2 md:text-start md:mx-0">
-          <div className="text-[40px] text-[#3B79FF]">LIKELION</div>
-          <div className="text-[55px] text-white">PROJECTS</div>
-          <div className="text-white text-lg mt-2 font-medium">
+        <div className="pb-8 mx-auto text-center font-extrabold md:w-fit md:pb-12 md:pr-20 md:border-b-2 md:text-start md:mx-0">
+          <div className="text-[25px] sm:text-[40px] text-[#3B79FF]">
+            LIKELION
+          </div>
+          <div className="text-[40px] sm:text-[55px] text-white fontBold">
+            PROJECTS
+          </div>
+          <div className="text-white text-sm sm:text-lg mt-2 font-medium">
             총{" "}
             <span className="text-[#3B79FF] font-bold">
               {filteredProjects.length}건
@@ -123,20 +132,20 @@ export default function AdminProject() {
           onTabClick={handleTabClick}
           selectedProjects={selectedProjects}
           deleteSelectedProjects={deleteSelectedProjects}
-          // toggleSelectAll={toggleSelectAll}
+          editSelectedProject={editSelectedProject} // 수정 함수 전달
           filteredProjects={filteredProjects}
           tabs={tabs} // 동적으로 전달
         />
 
         {/* 프로젝트 리스트 */}
-        <div className="grid w-10/12 grid-cols-1 gap-8 mx-auto mt-8 text-white md:gap-19 sm:grid-cols-2 sm:w-full lg:grid-cols-4">
+        <div className="grid w-full grid-cols-2 gap-5 mx-auto mt-8 text-white md:gap-8 sm:grid-cols-3 sm:w-full xl:gap-12 lg:grid-cols-4">
           {filteredProjects.map((project) => (
-            <div key={project.id} className="w-10/12 mx-auto md:w-full">
+            <div key={project.id} className="w-full mx-auto">
               <div className="relative">
                 <img
                   src={project.imageUrl}
                   alt={project.title}
-                  className="w-full aspect-[4/3] rounded-md shadow-lg object-cover"
+                  className="w-full aspect-[17/10] rounded-md shadow-lg object-cover"
                 />
               </div>
               <div className="p-2">

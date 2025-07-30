@@ -2,7 +2,7 @@ import React from "react";
 
 export default function ProjectTabs({ activeTab, onTabClick, tabs }) {
   return (
-    <div className="flex gap-4 mb-20 text-lg">
+    <div className="flex justify-center text-sm gap-2 sm:text-lg md:gap-4 sm:justify-normal">
       <button
         onClick={() => onTabClick("all")}
         className={`px-2 py-1 border-b-2 ${
