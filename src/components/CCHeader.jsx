@@ -158,7 +158,11 @@ export default function CCHeader() {
             </div>
           ) : (
             // user가 없으면 로그인 버튼을 표시
-            <GoogleLoginBtn isHovered={isHovered} />
+            <GoogleLoginBtn
+              textColor="text-black"
+              bgColor="bg-white"
+              borderColor="border-black"
+            />
           )}
         </div>
       </div>

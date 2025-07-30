@@ -1,9 +1,23 @@
 import { motion } from "framer-motion";
+import axios from "axios";
+import API from "../../../utils/axios";
+import CCBtn from "../../../components/CCBtn";
+import GoogleLoginBtn from "../../../components/GoogleLoginBtn";
 
 export default function Main1() {
+  const handleClick = async () => {
+    try {
+      const res = await API.get("/log/status");
+      const user = res.data;
 
-  const handleClick = () => {
-    window.location.href = "/admin"; // 새로고침 포함하여 이동
+      if (user.role === "ADMIN_LION") {
+        window.location.href = "/admin";
+      } else {
+        alert("관리자 권한이 없습니다.");
+      }
+    } catch (err) {
+      alert("로그인이 필요합니다.");
+    }
   };
 
   return (
@@ -30,20 +44,25 @@ export default function Main1() {
             <span className="fontSB">성결대학교 멋쟁이 사자처럼</span>은
           </p>
           <p className="sm:text-[15px] fontEL text-[9px]">
-            자신이 원하는{" "}
-            <span
-              onClick={handleClick}
-            >
-              IT
-            </span>{" "}
-            서비스를 구현하고 싶은 성결대학교 학생들이 모인 동아리입니다.
+            자신이 원하는 <span onClick={handleClick}>IT</span> 서비스를
+            구현하고 싶은 성결대학교 학생들이 모인 동아리입니다.
           </p>
+        </div>
+        <div className="xl:hidden flex mt-16 flex space-x-3 justify-center items-center px-6 w-full">
+          <div className="lg:w-[250px] md:w-[200px] w-[125px] h-auto text-[5px]">
+            <CCBtn textSize="lg:text-[20px] md:text-[15px] text-[10px]" />
+          </div>
+          <div className="lg:w-[250px] md:w-[200px] w-[150px]">
+            <GoogleLoginBtn textSize="lg:text-[20px] md:text-[15px] text-[10px]" />
+          </div>
         </div>
       </div>
 
       {/* 스크롤다운 (sm 이상일 때만 보임) */}
       <div className="relative sm:flex hidden flex-col items-center bottom-[15%]">
-        <p className="fontSB text-md text-[#666666] flex items-center">Scroll down</p>
+        <p className="fontSB text-md text-[#666666] flex items-center">
+          Scroll down
+        </p>
         <motion.img
           src="/assets/images/Mouse.png"
           alt="마우스 모양"

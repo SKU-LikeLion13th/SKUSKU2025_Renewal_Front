@@ -1,4 +1,9 @@
-export default function GoogleLoginBtn({ isHovered }) {
+export default function GoogleLoginBtn({
+  textColor = "text-black",
+  bgColor = "bg-white",
+  borderColor = "border-black",
+  textSize = "text-[13px]",
+}) {
   const handleLogin = () => {
     const currentPath = location.pathname + location.search;
     localStorage.setItem("redirectAfterLogin", currentPath);
@@ -11,13 +16,7 @@ export default function GoogleLoginBtn({ isHovered }) {
 
   return (
     <div
-      className={`flex items-center px-4 py-2 rounded-sm cursor-pointer box-border
-      border ${
-        isHovered
-          ? "bg-white text-black border-black"
-          : "border-transparent bg-white/50 text-white"
-      }
-      hover:bg-white hover:text-black transition`}
+      className={`flex justify-center items-center px-4 py-2 rounded-sm cursor-pointer box-border border ${bgColor} ${textColor} ${borderColor}  hover:bg-white hover:text-black transition`}
       onClick={handleLogin}
     >
       <img
@@ -26,7 +25,7 @@ export default function GoogleLoginBtn({ isHovered }) {
         width="16px"
         className="mr-2"
       />
-      <p className="text-[13px]">구글계정으로 계속하기</p>
+      <p className={`${textSize}`}>구글계정으로 계속하기</p>
     </div>
   );
 }
