@@ -3,7 +3,7 @@ import { FiSearch } from "react-icons/fi";
 
 export default function AdminAssignmentControl({
   selectedItems,
-  onSelectAll,
+  // onSelectAll,
   onDelete,
   onCreateAssignment,
 }) {
@@ -18,11 +18,11 @@ export default function AdminAssignmentControl({
           </button>
         </div>
         <div>
-          <button
+          {/* <button
             onClick={onSelectAll}
             className="bg-[#E9E9E9] text-[#838383] px-2 py-1.5 rounded cursor-pointer mr-2 sm:mr-5 sm:px-3.5">
             전체 선택
-          </button>
+          </button> */}
           <button
             onClick={onDelete}
             disabled={selectedItems.length === 0}

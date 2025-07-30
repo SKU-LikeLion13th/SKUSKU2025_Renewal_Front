@@ -41,8 +41,8 @@ const leader = [
     role: "부대표",
     department: "컴퓨터공학과 19",
     img: `${images.정택원}`,
-    imgWidth: "120px",
-    imgHeight: "120px",
+    imgWidth: "110px",
+    imgHeight: "110px",
   },
 ];
 
@@ -52,8 +52,8 @@ const design = [
     role: "파트장",
     department: "국어국문학과 22",
     img: `${images.이원경}`,
-    imgWidth: "130px",
-    imgHeight: "130px",
+    imgWidth: "120px",
+    imgHeight: "120px",
   },
   {
     name: "서민주",

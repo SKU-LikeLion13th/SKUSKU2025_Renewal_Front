@@ -78,8 +78,8 @@ const backend = [
     role: "운영진",
     department: "컴퓨터공학과 19",
     img: `${images.정택원}`,
-    imgWidth: "120px",
-    imgHeight: "120px",
+    imgWidth: "110px",
+    imgHeight: "110px",
   },
   {
     name: "남민지",

@@ -13,7 +13,7 @@ export default function AssignmentManagement() {
 
   const [assignments, setAssignments] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
-  const [allSelected, setAllSelected] = useState(false);
+  // const [allSelected, setAllSelected] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const postsPerPage = 15;
@@ -31,7 +31,6 @@ export default function AssignmentManagement() {
         }));
 
         const sortedAssignments = processed.sort((a, b) => b.id - a.id);
-
         setAssignments(sortedAssignments);
         console.log("과제 목록:", sortedAssignments);
       } catch (error) {
@@ -44,25 +43,26 @@ export default function AssignmentManagement() {
     if (track) assignmentList();
   }, [track]);
 
-  const handleSelectAll = () => {
-    if (allSelected) {
-      setSelectedItems([]);
-    } else {
-      setSelectedItems(assignments.map((a) => a.id));
-    }
-    setAllSelected(!allSelected);
-  };
+  // const handleSelectAll = () => {
+  //   if (allSelected) {
+  //     setSelectedItems([]);
+  //   } else {
+  //     setSelectedItems(assignments.map((a) => a.id));
+  //   }
+  //   setAllSelected(!allSelected);
+  // };
 
   const handleSelectItem = (id) => {
     if (selectedItems.includes(id)) {
-      setSelectedItems(selectedItems.filter((itemId) => itemId !== id));
-      setAllSelected(false);
+      setSelectedItems([]); // 선택 해제
+      // setAllSelected(false);
     } else {
-      const newSelected = [...selectedItems, id];
-      setSelectedItems(newSelected);
-      if (newSelected.length === assignments.length) {
-        setAllSelected(true);
-      }
+      setSelectedItems([id]); // 하나만 선택 가능
+      // const newSelected = [...selectedItems, id];
+      // setSelectedItems(newSelected);
+      // if (newSelected.length === assignments.length) {
+      //   setAllSelected(true);
+      // }
     }
   };
 
@@ -84,7 +84,7 @@ export default function AssignmentManagement() {
           assignments.filter((a) => !selectedItems.includes(a.id))
         );
         setSelectedItems([]);
-        setAllSelected(false);
+        // setAllSelected(false);
         alert("선택한 과제가 삭제되었습니다.");
       } catch (error) {
         console.error("과제 삭제 중 오류 발생:", error);
@@ -162,7 +162,7 @@ export default function AssignmentManagement() {
 
         <AdminAssignmentControl
           selectedItems={selectedItems}
-          onSelectAll={handleSelectAll}
+          // onSelectAll={handleSelectAll}
           onDelete={handleDeleteSelected}
           onCreateAssignment={handleCreateAssignment}
         />
