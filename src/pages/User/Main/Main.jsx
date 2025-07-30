@@ -11,7 +11,7 @@ export default function Main() {
   const isMobile = useMediaQuery("(max-width: 640px)");
 
   return (
-    <div className="w-full bg-black sm:mt-0 pt-12 ">
+    <div className="w-full bg-black sm:mt-0">
       <div className="section">
         <Main1 />
       </div>

@@ -9,9 +9,26 @@ export default function Header() {
   const { user, logout } = useAuth();
 
   const menuItems = [
-    { title: "PROJECT", path: "/project" },
-    { title: "TEAM", path: "/team" },
-    { title: "COMMUNITY", path: null },
+    {
+      title: { label: "PROJECT", path: "/project" },
+      subItems: [
+        { label: "13기", path: "/project?tab=13" },
+        { label: "12기", path: "/project?tab=12" },
+        { label: "11기", path: "/project?tab=11" },
+      ],
+    },
+    {
+      title: { label: "TEAM", path: "/team?tab=13" },
+      subItems: [
+        { label: "13기", path: "/team?tab=13" },
+        { label: "12기", path: "/team?tab=12" },
+        { label: "11기", path: "/team?tab=11" },
+      ],
+    },
+    {
+      title: { label: "COMMUNITY", path: "/" },
+      subItems: [{ label: "문의사항", path: "/" }],
+    },
   ];
 
   function getColorByTrack(track) {
@@ -29,13 +46,13 @@ export default function Header() {
 
   return (
     <div
-      className={`fixed z-10 top-0 w-full transition-all duration-300
-        ${isHovered ? "bg-white min-h-[280px]" : "backdrop-blur-2xl"}
-      `}
+      className={`fixed z-10 top-0 w-full transition-all duration-300 ${
+        isHovered ? "bg-white min-h-[280px]" : "backdrop-blur-2xl"
+      }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="flex py-5 px-12 items-center justify-between mx-auto relative z-10 shadow-[0px_0.5px_0px_0px_rgba(217,217,217,1)] ">
+      <div className="flex py-5 px-12 items-center justify-between mx-auto relative z-10 shadow-[0px_0.5px_0px_0px_rgba(217,217,217,1)]">
         {/* 왼쪽 로고 + 메뉴 */}
         <div className="flex space-x-12">
           <Link to={"/"}>
@@ -59,30 +76,21 @@ export default function Header() {
                   isHovered ? "text-[#000]" : "text-white"
                 } cursor-pointer relative`}
               >
-                {item.path ? (
-                  <Link to={item.path}>{item.title}</Link>
-                ) : (
-                  item.title
-                )}
+                <Link to={item.title.path}>
+                  <span>{item.title.label}</span>
+                </Link>
+
                 {isHovered && (
-                  <div className="absolute w-full space-y-6 mt-12">
-                    {item.title === "COMMUNITY" ? (
-                      <div className="text-[16px] text-[#121212] text-center fontRegular">
-                        문의사항
-                      </div>
-                    ) : (
-                      <>
-                        <div className="text-[16px] text-[#121212] text-center fontRegular">
-                          13기
-                        </div>
-                        <div className="text-[16px] text-[#121212] text-center fontRegular">
-                          12기
-                        </div>
-                        <div className="text-[16px] text-[#121212] text-center fontRegular">
-                          11기
-                        </div>
-                      </>
-                    )}
+                  <div className="absolute w-full space-y-8 mt-12">
+                    {item.subItems.map((subItem, subIdx) => (
+                      <Link
+                        key={subIdx}
+                        to={subItem.path}
+                        className="block text-[16px] text-[#121212] text-center fontRegular"
+                      >
+                        {subItem.label}
+                      </Link>
+                    ))}
                   </div>
                 )}
               </div>
@@ -98,12 +106,14 @@ export default function Header() {
               isHovered ? "flex opacity-100" : "hidden opacity-0"
             }`}
           >
-            <button className="text-[13px] px-6 py-1 flex items-center rounded-3xl text-[#fff] bg-[#212121] ">
+            <button className="text-[13px] px-6 py-1 flex items-center rounded-3xl text-[#fff] bg-[#212121]">
               제작자
             </button>
             <a
-              href="https://www.instagram.com/likelion_sku?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+              href="https://www.instagram.com/likelion_sku"
               className="flex items-center"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <img
                 src="/assets/images/insta.png"
@@ -120,12 +130,11 @@ export default function Header() {
 
           {user ? (
             <div
-              className={`flex items-center justify-center  ${
+              className={`flex items-center justify-center ${
                 isHovered ? "text-black" : "text-white"
               }`}
             >
               <div className="flex items-center">
-                {/** 색상 조건 설정 */}
                 <div
                   style={{ backgroundColor: getColorByTrack(user.track) }}
                   className="flex items-center justify-center w-[30px] h-[30px] rounded-full"
@@ -141,7 +150,6 @@ export default function Header() {
               </button>
             </div>
           ) : (
-            // user가 없으면 로그인 버튼을 표시
             <GoogleLoginBtn isHovered={isHovered} />
           )}
         </div>
