@@ -96,12 +96,16 @@ const IntroPart2 = () => {
   const location = useLocation();
 
   const [selectedTrack, setSelectedTrack] = useState(null);
+  const [hoveredTrack, setHoveredTrack] = useState(null);
   const currentTrack = trackInfo[selectedTrack];
 
   const backgroundImage = currentTrack?.backgroundImage || images.part2bg;
 
   const handleCardClick = (cardId) => {
-    if (!selectedTrack) return;
+    if (!selectedTrack) {
+      alert("트랙을 선택해주세요!");
+      return;
+    }
     const urlTrack = trackInfo[selectedTrack].urlName;
     let path = "";
     if (isAdmin) {
@@ -163,11 +167,19 @@ const IntroPart2 = () => {
             <button
               key={track}
               onClick={() => setSelectedTrack(track)}
+              onMouseEnter={() => setHoveredTrack(track)}
+              onMouseLeave={() => setHoveredTrack(null)}
               className={`cursor-pointer text-[10px] md:text-sm px-4 md:px-6 py-[5px] rounded-3xl transition
-                ${selectedTrack === track ? `text-white` : "text-[#c4c4c4]"}`}
+                ${
+                  selectedTrack === track || hoveredTrack === track
+                    ? `text-white`
+                    : "text-[#c4c4c4]"
+                }`}
               style={{
                 backgroundColor:
                   selectedTrack === track
+                    ? trackInfo[track].buttonColor
+                    : hoveredTrack === track
                     ? trackInfo[track].buttonColor
                     : "#ffffff",
               }}>

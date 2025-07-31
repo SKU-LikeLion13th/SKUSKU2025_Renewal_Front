@@ -39,7 +39,7 @@ export default function Main1() {
     <div className="relative h-screen w-full overflow-hidden px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
       {/* 모바일 배경 */}
       <div
-        className="absolute inset-0 bg-cover bg-no-repeat sm:hidden bg-cover bg-no-repeat sm:bg-cover bg-[position:-200px_center] md:bg-[position:-150px_center] lg:bg-[position:-2000px_center]"
+        className="absolute inset-0 bg-cover bg-no-repeat sm:hidden sm:bg-cover bg-[position:-200px_center] md:bg-[position:-150px_center] lg:bg-[position:-2000px_center]"
         style={{
           backgroundImage: "url('/assets/images/Mobile_Main/Main1.jpg')",
         }}
@@ -49,7 +49,7 @@ export default function Main1() {
 
       {/* 데스크탑 배경 */}
       <div
-        className="absolute inset-0 bg-cover bg-no-repeat hidden sm:block"
+        className="absolute inset-0 bg-cover bg-no-repeat hidden sm:block bg-center"
         style={{ backgroundImage: "url('/assets/images/Main/Main1.jpeg')" }}
       >
         <div className="absolute inset-0 bg-black opacity-80"></div>
@@ -57,11 +57,11 @@ export default function Main1() {
 
       {/* 글 (이미지 위에 배치) */}
       <div className="relative flex flex-col justify-center h-full text-white ">
-        <div className="sm:font-extrabold fontSBold text-[28px] sm:leading-[80px] sm:pl-[15%] pl-6 sm:text-[65px] leading-[35px]">
+        <div className="fontSB text-[28px] sm:leading-[80px] sm:pl-[15%] pl-6 sm:text-[3.25rem] leading-[35px]">
           <p>상상을 현실로 만드는</p>
           <p>
             내 손 안에{" "}
-            <span className="text-[#3B79FF] block sm:inline fontMedium ">
+            <span className="text-[#3B79FF] block sm:inline ">
               스쿠스쿠
             </span>
           </p>
@@ -69,7 +69,7 @@ export default function Main1() {
 
         <div className="sm:leading-[30px] sm:pt-12 pt-6 sm:pl-[15%] pl-6">
           <p className="sm:text-[15px] fontEL text-[9px]">
-            <span className="fontSB">성결대학교 멋쟁이 사자처럼</span>은
+            <span className="fontSB">성결대학교 멋쟁이사자처럼</span>은
           </p>
           <p className="sm:text-[15px] fontEL text-[9px]">
             자신이 원하는 <span onClick={handleClick}>IT</span> 서비스를
