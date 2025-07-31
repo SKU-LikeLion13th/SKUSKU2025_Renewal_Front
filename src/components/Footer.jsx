@@ -7,24 +7,44 @@ export default function Footer() {
         {/* 위 */}
         <div className="flex space-x-28 border-b border-[#202020] pb-16">
           {/* project */}
-          <div className="pl-28">
-            <p className="text-[#2D5ABB] fontBold mb-8">PROJECT</p>
-            <p className="text-[#B0B0B0] mb-3">13기</p>
-            <p className="text-[#B0B0B0] mb-3">12기</p>
-            <p className="text-[#B0B0B0]">11기</p>
+          <div className="flex flex-col pl-28">
+            <Link to="/project" className="text-[#2D5ABB] fontBold mb-2">
+              PROJECT
+            </Link>
+            <Link to="/project?tab=13" className="text-[#B0B0B0] my-3">
+              13기
+            </Link>
+            <Link to="/project?tab=12" className="text-[#B0B0B0] my-3">
+              12기
+            </Link>
+            <Link to="/project?tab=11" className="text-[#B0B0B0] my-3">
+              11기
+            </Link>
           </div>
           {/* team */}
-          <div>
-            <p className="text-[#2D5ABB] fontBold mb-8">TEAM</p>
-            <p className="text-[#B0B0B0] mb-3">13기</p>
-            <p className="text-[#B0B0B0] mb-3">12기</p>
-            <p className="text-[#B0B0B0]">11기</p>
+          <div className="flex flex-col">
+            <Link to="/team" className="text-[#2D5ABB] fontBold mb-2">
+              TEAM
+            </Link>
+            <Link to="/team?tab=13" className="text-[#B0B0B0] my-3">
+              13기
+            </Link>
+            <Link to="/team?tab=13" className="text-[#B0B0B0] my-3">
+              12기
+            </Link>
+            <Link to="/team?tab=13" className="text-[#B0B0B0] my-3">
+              11기
+            </Link>
           </div>
           {/* contact */}
           <div>
-            <p className="text-[#2D5ABB] fontBold mb-8">CONTACT</p>
-            <p className="text-[#B0B0B0] mb-3">문의하기</p>
-            <p className="text-[#B0B0B0]">모집공고</p>
+            <Link to="/" className="text-[#2D5ABB] fontBold mb-2">
+              CONTACT
+            </Link>
+            <div className="flex flex-col">
+              <Link className="text-[#B0B0B0] my-3">문의하기</Link>
+              <Link className="text-[#B0B0B0] my-3">모집공고</Link>
+            </div>
           </div>
         </div>
         {/* 아래 */}
