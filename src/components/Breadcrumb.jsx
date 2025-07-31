@@ -14,6 +14,7 @@ const pathMap = {
   add: "과제 등록",
   babylions: " 아기사자 채점",
   submit: "과제 제출",
+  reviewCheck: "복습퀴즈 결과",
 };
 
 const sectionMap = {

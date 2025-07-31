@@ -4,6 +4,8 @@ import AdminMain from "../pages/Admin/Intro/AdminRealMain";
 import AdminReview from "../pages/Admin/Review/AdminReview";
 import AdminReviewUpdate from "../pages/Admin/Review/AdminReviewUpdate";
 import AdminQuiz from "../pages/Admin/Quiz/AdminQuiz";
+import AdminReviewCheck from "../pages/Admin/AdminReviewCheck/AdminReviewCheck";
+import AdminReviewCheckContent from "../pages/Admin/AdminReviewCheck/AdminReviewCheckContent";
 import AssignmentManagement from "../pages/Admin/Assignment/AssignmentManagement";
 import AddAssignment from "../pages/Admin/Assignment/AddAssignment";
 import AdminCCLecture from "../pages/Admin/LectureManagement/AdminCCLecture";
@@ -51,14 +53,9 @@ const Admin = () => {
         />
 
         <Route path="/reviewQuiz/:trackType" element={<AdminReview />} />
-        <Route
-          path="/reviewQuiz/:trackType/reviewAdd"
-          element={<AdminQuiz />}
-        />
-        <Route
-          path="/reviewQuiz/:trackType/reviewUpdate/:reviewWeekId"
-          element={<AdminReviewUpdate />}
-        />
+        <Route path="/reviewQuiz/:trackType/reviewAdd"element={<AdminQuiz />}/>
+        <Route path="/reviewQuiz/:trackType/reviewCheck/:reviewWeekId"element={<AdminReviewCheck />}/>
+        <Route path="/reviewQuiz/:trackType/reviewUpdate/:reviewWeekId" element={<AdminReviewUpdate />}/>
         <Route path="/LectureManagement/:track" element={<AdminCCLecture />} />
         <Route
           path="/LectureManagement/:track/LectureUpload"

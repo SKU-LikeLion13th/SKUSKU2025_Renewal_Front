@@ -1,0 +1,147 @@
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import API from "../../../utils/axios";
+
+export default function AdminReviewCheckContent({
+  headers = ["번호", "제목", "채점", "수정"],
+  flexValues = ["1", "10", "2", "2"],
+  emptyText,
+}) {
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [review, setReview] = useState([]);
+  const { weekId } = useParams();
+
+  // 화면 크기 감지
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsSmallScreen(window.innerWidth <= 640); // 640px 이하일 때 작은 화면으로 판단
+    };
+
+    checkScreenSize(); // 초기 실행
+    window.addEventListener("resize", checkScreenSize);
+
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+
+  useEffect(() => {
+    const fetchAssignments = async () => {
+      try {
+        const response = await API.get(`/admin/reviewQuiz/${weekId}`);
+        console.log("리뷰 퀴즈 응답:", response.data);
+
+        const transformed = response.data.lionQuizList.map((item, index) => ({
+          id: index + 1,
+          name: item.lionName,
+          score: item.score,
+          total: item.total,
+          updateDate: item.updateDate,
+          passNonePass:
+            item.score / item.total >= 0.6
+              ? "PASS"
+              : item.score === 0
+              ? null
+              : "NONE_PASS",
+        }));
+
+        setReview(transformed);
+      } catch (error) {
+        console.error("리뷰 퀴즈 데이터 불러오기 실패:", error);
+      }
+    };
+
+    if (weekId) {
+      fetchAssignments();
+    }
+  }, [weekId]);
+
+
+  // 화면 크기에 따른 flex 값과 텍스트 크기 결정
+  const responsiveFlexValues = isSmallScreen
+    ? ["1", "7", "1.5", "1.5"]
+    : flexValues;
+  const textSize = isSmallScreen ? "text-[11px]" : "text-[13.5px]";
+  const statusTextSize = isSmallScreen ? "text-[10px]" : "text-sm";
+
+  const headerStyle = `flex fontBold justify-center px-1 ${textSize}`;
+  const rowStyle = "flex w-full border-b border-b-[#E0E0E0] p-2";
+  const cellStyle = `flex justify-center px-1 ${textSize}`;
+  const titleCellStyle = `flex justify-start px-1 ${textSize} overflow-hidden whitespace-nowrap text-ellipsis`;
+  const buttonStyle = `underline cursor-pointer ${textSize}`;
+
+  return (
+    <div className="flex flex-col items-center w-full">
+      {/* 헤더 */}
+      <div className="flex w-full border-t-[2.5px] border-t-[#232323] border-b border-b-[#9A9A9A] bg-[#F7F7F7] p-2">
+        {headers.map((header, index) => (
+          <div
+            key={index}
+            className={headerStyle}
+            style={{ flex: responsiveFlexValues[index] }}>
+            {header}
+          </div>
+        ))}
+      </div>
+
+      {/* 본문 */}
+      <div
+        className={`flex w-full flex-col ${!isSmallScreen && "min-h-[550px]"}`}>
+        {review.length > 0 ? (
+          review.map((assignment, index) => (
+            <div key={`${assignment.id}-${index}`} className={rowStyle}>
+              {/* 번호 */}
+              <div
+                className={cellStyle}
+                style={{ flex: responsiveFlexValues[0] }}>
+                {index + 1}
+              </div>
+
+              {/* 제목 */}
+              <div
+                className={titleCellStyle}
+                style={{ flex: responsiveFlexValues[1] }}
+                title={assignment.name || assignment.title || "제목 없음"} // 호버 시 전체 제목 표시
+              >
+                {assignment.name || assignment.title || "제목 없음"}
+              </div>
+
+              {/* 채점 상태/버튼 */}
+              <div
+                className={cellStyle}
+                style={{ flex: responsiveFlexValues[2] }}>
+                {assignment.passNonePass === "PASS" ? (
+                  <span
+                    className={`text-[#4881FF] font-semibold ${statusTextSize}`}>
+                    확인
+                  </span>
+                ) : assignment.passNonePass === "NONE_PASS" ? (
+                  <span
+                    className={`text-[#FF4D4F] font-semibold ${statusTextSize}`}>
+                    보류
+                  </span>
+                ) : (
+                  <div className={buttonStyle}>
+                    점수
+                  </div>
+                )}
+              </div>
+
+              {/* 수정 버튼 */}
+              <div
+                className={cellStyle}
+                style={{ flex: responsiveFlexValues[3] }}>
+                <div className={buttonStyle}>
+                  날짜
+                </div>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div
+            className={`flex justify-center w-full items-center min-h-[250px] sm:min-h-[500px] p-4 text-gray-500 ${textSize}`}>
+            {emptyText || "제출한 아기사자가 없습니다."}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

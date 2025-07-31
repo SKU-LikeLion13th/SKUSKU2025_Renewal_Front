@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../../../utils/axios";
 import { useParams } from "react-router-dom";
+import Lottie from "lottie-react";
+import loadingAnimation from "../../../utils/Insider-loading.json";
 
 export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, setCurrentQuestionIndex }) {
   const navigate = useNavigate();
@@ -10,6 +12,27 @@ export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, 
   const [modalImageSrc, setModalImageSrc] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { trackType } = useParams();
+
+  useEffect(() => {
+    const fetchSubmittedAnswers = async () => {
+      try {
+        const res = await API.get(`/reviewQuiz/${reviewWeekId}`);
+        if (Array.isArray(res.data)) {
+          const savedAnswers = {};
+          res.data.forEach((quizItem) => {
+            if (quizItem.response) {
+              savedAnswers[quizItem.id] = quizItem.response;
+            }
+          });
+          setSelectedAnswer(savedAnswers);
+        }
+      } catch (err) {
+        console.error("제출된 답안을 불러오는 데 실패했습니다:", err);
+      }
+    };
+
+    fetchSubmittedAnswers();
+  }, [reviewWeekId]);
 
   const openImageModal = (src) => {
     setModalImageSrc(src);
@@ -89,9 +112,8 @@ export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, 
       }
   };
 
-
   return (
-    <div className="flex w-full min-h-[590px] flex-col">
+    <div className="flex relative w-full min-h-[590px] flex-col">
       {currentQuestion ? (
         <div className="flex flex-col p-3">
           <div className="font-semibold">Question {currentQuestionIndex + 1}.</div>
@@ -194,7 +216,7 @@ export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, 
                 onClick={handleSubmitAnswers}
                 disabled={isSubmitting}
               >
-                {isSubmitting ? "제출 중..." : "답안 제출하기"}
+                {isSubmitting ? "채점 중..." : "답안 제출하기"}
               </button>
             )}
           </div>
@@ -220,6 +242,20 @@ export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, 
           >
             &times;
           </button>
+        </div>
+      )}
+      
+      {isSubmitting && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="flex flex-col items-center justify-center bg-white px-8 py-10 rounded-2xl shadow-xl">
+            <Lottie
+              animationData={loadingAnimation}
+              loop
+              autoplay
+              style={{ width: 150, height: 150 }}
+            />
+            <div className="mt-4 text-black text-xl font-semibold">채점 중...</div>
+          </div>
         </div>
       )}
     </div>
