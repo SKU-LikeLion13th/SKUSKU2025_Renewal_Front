@@ -49,7 +49,7 @@ const Breadcrumb = () => {
   }
 
   return (
-    <nav className="flex text-sm" aria-label="Breadcrumb">
+    <nav className="flex text-[10px] sm:text-sm" aria-label="Breadcrumb">
       <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
         <li className="inline-flex items-center">
           <Link
@@ -110,13 +110,13 @@ const Breadcrumb = () => {
                   />
                 </svg>
                 {isLast ? (
-                  <span className="ms-1 text-sm font-bold text-[#333333]">
+                  <span className="ms-1 font-bold text-[#333333]">
                     {label}
                   </span>
                 ) : (
                   <Link
                     to={routeTo}
-                    className="ms-1 text-sm font-medium text-[#B3B3B3] hover:text-[#666666] md:ms-2">
+                    className="ms-1 font-medium text-[#B3B3B3] hover:text-[#666666] md:ms-2">
                     {label}
                   </Link>
                 )}
