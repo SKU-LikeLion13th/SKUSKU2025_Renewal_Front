@@ -4,6 +4,7 @@ import API from "../../../utils/axios";
 import LectureControls from "../../Admin/LectureManagement/LectureControls";
 import LectureTable from "./LectureTable";
 import Breadcrumb from "../../../components/Breadcrumb";
+import { CodeSquare } from "lucide-react";
 
 const CCLecture = () => {
   const { track } = useParams();
@@ -35,6 +36,7 @@ const CCLecture = () => {
     };
 
     fetchLectureData();
+    console.log(data);
   }, [trackParam]);
 
   const handleSearch = (keyword) => {
