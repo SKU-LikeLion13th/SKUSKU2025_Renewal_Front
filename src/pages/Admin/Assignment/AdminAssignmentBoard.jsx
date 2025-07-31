@@ -30,7 +30,7 @@ export default function AdminAssignmentBoard({
 
   const headerStyle = `flex fontBold justify-center px-1 ${textSize}`;
   const rowStyle = "flex w-full border-b border-b-[#E0E0E0] p-2";
-  const cellStyle = `flex justify-center px-1 ${textSize}`;
+  const cellStyle = `flex justify-center items-center px-1 ${textSize}`;
   const titleCellStyle = `flex justify-start px-1 ${textSize} overflow-hidden whitespace-nowrap text-ellipsis`;
   const buttonStyle = `underline cursor-pointer ${textSize}`;
 
@@ -81,7 +81,7 @@ export default function AdminAssignmentBoard({
                 type="checkbox"
                 checked={selectedItems.includes(assignment.id)}
                 onChange={() => onSelectItem(assignment.id)}
-                className={`${isSmallScreen ? "w-3 h-3" : "w-4 h-4"}`}
+                className={`${isSmallScreen ? "w-3 h-3" : "w-3.5 h-3.5"}`}
               />
             </div>
           </div>

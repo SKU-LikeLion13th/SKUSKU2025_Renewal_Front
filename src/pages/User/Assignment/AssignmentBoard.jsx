@@ -73,8 +73,12 @@ export default function AssignmentBoard({ assignments }) {
         className={`flex w-full flex-col ${!isSmallScreen && "min-h-[550px]"}`}>
         {assignments.map((assignment) => {
           const baseStyle = `flex justify-center px-1 ${textSize}`;
-          // 제출 여부 스타일 (예: 제출/미제출)
-          const statusStyle = `${baseStyle}`;
+
+          // 제출 여부 스타일 (제출인 경우 파란색)
+          let statusStyle = baseStyle;
+          if (assignment.status === "제출") {
+            statusStyle += " text-[#3B79FF] font-bold";
+          }
 
           // 운영진 확인 스타일 (PASS, NONE_PASS, UNREVIEWED)
           let completedStyle = baseStyle;
@@ -87,7 +91,7 @@ export default function AssignmentBoard({ assignments }) {
           return (
             <div key={assignment.id} className={rowStyle}>
               {/* 번호 */}
-              <div className={statusStyle} style={{ flex: flexValues[0] }}>
+              <div className={baseStyle} style={{ flex: flexValues[0] }}>
                 {assignment.displayNumber}
               </div>
 
