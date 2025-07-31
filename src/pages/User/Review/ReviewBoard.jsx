@@ -8,6 +8,7 @@ const ReviewBoard = ({ trackType }) => {
   const [quizzes, setQuizzes] = useState([]);
   const [flexValues, setFlexValues] = useState(["1", "7", "1", "1"]);
 
+  // 반응형 flex 값 조정
   useEffect(() => {
     const updateFlexValues = () => {
       if (window.innerWidth < 640) {
@@ -19,44 +20,41 @@ const ReviewBoard = ({ trackType }) => {
 
     updateFlexValues();
     window.addEventListener("resize", updateFlexValues);
-
     return () => window.removeEventListener("resize", updateFlexValues);
   }, []);
 
-    useEffect(() => {
-      const fetchQuizzes = async () => {
-        try {
-          const response = await API.get(`/reviewWeek/${trackType}`);
-          console.log("받아온 데이터 (정렬 전):", response.data);
-          console.log(response.data.map(d => d.reviewWeekId));
+  // 퀴즈 데이터 가져오기
+  useEffect(() => {
+    const fetchQuizzes = async () => {
+      try {
+        const response = await API.get(`/reviewWeek/${trackType}`);
+        const sortedData = [...response.data].sort(
+          (a, b) => Number(b.reviewWeekId) - Number(a.reviewWeekId)
+        );
 
-          const sortedResponseData = [...response.data].sort((a, b) => {
-            return Number(b.reviewWeekId) - Number(a.reviewWeekId);
-          });
+        const quizList = sortedData.map((quiz, index) => ({
+          id: index + 1,
+          title: quiz.title,
+          score: quiz.score,
+          total: quiz.total,
+          isSubmit: quiz.isSubmit,
+          reviewWeekId: quiz.reviewWeekId,
+        }));
 
-          const quizList = sortedResponseData.map((quiz, index) => ({
-            Id: index + 1,
-            title: quiz.title,
-            score: quiz.score,
-            total: quiz.total,
-            IsSubmit: quiz.isSubmit,
-            reviewWeekId: quiz.reviewWeekId,
-          }));
-          
-
-          setQuizzes(quizList);
-        } catch (error) {
-          console.error("데이터 가져오기 실패:", error);
-        }
-      };
-
-      if (trackType) {
-        fetchQuizzes();
+        setQuizzes(quizList);
+      } catch (error) {
+        console.error("퀴즈 데이터 가져오기 실패:", error);
       }
-    }, [trackType]);
+    };
+
+    if (trackType) {
+      fetchQuizzes();
+    }
+  }, [trackType]);
 
   return (
     <div className="flex flex-col items-center w-full">
+      {/* 헤더 */}
       <div className="flex w-full sm:text-[15px] text-[12px] border-t-[2.5px] border-t-[#232323] border-b border-b-[#9A9A9A] bg-[#F7F7F7] p-2">
         {headers.map((header, index) => (
           <div
@@ -69,14 +67,24 @@ const ReviewBoard = ({ trackType }) => {
         ))}
       </div>
 
-      <div className="flex w-full min-h-[250px] sm:min-h-[590px] mb-5 flex-col">
+      {/* 본문 */}
+      <div className="flex w-full min-h-[250px] sm:min-h-[500px] mb-5 flex-col">
         {quizzes.length > 0 ? (
           quizzes.map((quiz) => (
-            <div key={quiz.reviewWeekId} className="flex w-full border-b border-b-[#E0E0E0] p-2">
-              <div className="flex justify-center sm:px-1 px-0.5 sm:text-[13.5px] text-[12px]" style={{ flex: flexValues[0] }}>
-                {quiz.Id}
+            <div
+              key={quiz.reviewWeekId}
+              className="flex w-full border-b border-b-[#E0E0E0] p-2"
+            >
+              {/* 번호 */}
+              <div
+                className="flex justify-center sm:px-1 px-0.5 sm:text-[13.5px] text-[12px]"
+                style={{ flex: flexValues[0] }}
+              >
+                {quiz.id}
               </div>
-              <div 
+
+              {/* 제목 */}
+              <div
                 className="flex justify-start sm:px-1 px-0.5 sm:text-[13.5px] text-[12px] cursor-pointer"
                 style={{ flex: flexValues[1] }}
                 onClick={() =>
@@ -90,16 +98,23 @@ const ReviewBoard = ({ trackType }) => {
               >
                 {quiz.title}
               </div>
+
+              {/* 제출 여부 */}
               <div
                 className={`flex justify-center sm:px-1 px-0.5 sm:text-[13.5px] text-[12px] ${
-                  quiz.IsSubmit === "제출" ? "text-[#3B79FF] font-bold" : ""
+                  quiz.isSubmit === "제출" ? "text-[#3B79FF] font-bold" : ""
                 }`}
                 style={{ flex: flexValues[2] }}
               >
-                {quiz.IsSubmit}
+                {quiz.isSubmit}
               </div>
-              <div className="flex justify-center sm:px-1 px-0.5 sm:text-[13.5px] text-[12px]" style={{ flex: flexValues[3] }}>
-                {quiz.score} / {quiz.total}
+
+              {/* 점수 */}
+              <div
+                className="flex justify-center sm:px-1 px-0.5 sm:text-[13.5px] text-[12px]"
+                style={{ flex: flexValues[3] }}
+              >
+                <span className="text-[#0EC891]">{quiz.score}&nbsp;</span>/ {quiz.total}
               </div>
             </div>
           ))
@@ -109,8 +124,8 @@ const ReviewBoard = ({ trackType }) => {
           </div>
         )}
       </div>
+    </div>
+  );
+};
 
-          </div>
-        );
-      };
 export default ReviewBoard;

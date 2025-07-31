@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import images from "../../../../utils/images.jsx";
+import API from "../../../../utils/axios.js";
 
 const IntroPart1 = () => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
@@ -14,6 +15,22 @@ const IntroPart1 = () => {
 
     return () => window.removeEventListener("resize", checkScreen);
   }, []);
+
+  const handleClick = async () => {
+    try {
+      const res = await API.get("/log/status");
+      const user = res.data;
+
+      if (user.role === "ADMIN_LION") {
+        window.location.href = "/admin";
+      } else {
+        alert("관리자 권한이 없습니다.");
+      }
+    } catch (err) {
+      alert("로그인이 필요합니다.");
+    }
+  };
+
   return (
     <div className="w-full h-[calc(100vh-80px)] flex flex-col justify-between items-center pt-[140px] md:pt-[80px] pb-10">
       <div className="flex items-center w-full flex-1 relative">
@@ -45,7 +62,7 @@ const IntroPart1 = () => {
       </div>
       <div className="flex flex-col items-center">
         <p className="text-center text-xs fontLight text-[#666666]">
-          Scroll Down
+          Sc<span onClick={handleClick}>ro</span>ll Down
         </p>
         <img src={images.mouse} className="w-6 mt-1" />
       </div>

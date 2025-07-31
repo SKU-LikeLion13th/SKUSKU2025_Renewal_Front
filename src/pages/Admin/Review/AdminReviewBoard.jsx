@@ -2,8 +2,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../../utils/axios";
 
-const headers = ["번호", "제목", "수정", "삭제"];
-const flexValues = ["1", "7", "1", "1"];
+const headers = ["번호", "제목", "결과", "수정", "삭제"];
+const flexValues = ["1", "6", "1", "1", "1"];
 
 export default function AdminReviewBoard({ posts, trackType, setAllPosts }) {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ export default function AdminReviewBoard({ posts, trackType, setAllPosts }) {
         ))}
       </div>
 
-      <div className="flex w-full min-h-[590px] flex-col">
+      <div className="flex w-full min-h-[250px] sm:min-h-[500px] flex-col">
         {posts.length > 0 ? (
           posts.map((item, idx) => (
             <div
@@ -56,8 +56,16 @@ export default function AdminReviewBoard({ posts, trackType, setAllPosts }) {
               </div>
 
               <div
-                className="flex justify-center px-1 text-[13.5px] cursor-pointer"
+                className="flex justify-center px-1 text-[13.5px] cursor-pointer underline"
                 style={{ flex: flexValues[2] }}
+                onClick={() => navigate(`/admin/reviewQuiz/${trackType}/reviewCheck/${item.reviewWeekId}`)}
+              >
+                결과
+              </div>
+
+              <div
+                className="flex justify-center px-1 text-[13.5px] cursor-pointer underline"
+                style={{ flex: flexValues[3] }}
                 onClick={() => navigate(`/admin/reviewQuiz/${trackType}/reviewUpdate/${item.reviewWeekId}`)}
               >
                 수정
@@ -65,7 +73,7 @@ export default function AdminReviewBoard({ posts, trackType, setAllPosts }) {
 
               <div
                 className="flex justify-center px-1 text-[13.5px] text-red-600 cursor-pointer underline"
-                style={{ flex: flexValues[3] }}
+                style={{ flex: flexValues[4] }}
                 onClick={() => handleDelete(item.reviewWeekId)}
               >
                 삭제
@@ -73,18 +81,17 @@ export default function AdminReviewBoard({ posts, trackType, setAllPosts }) {
             </div>
           ))
         ) : (
-          <div className="flex justify-center p-10 text-gray-500">등록된 복습퀴즈가 없습니다.</div>
+          <div className="flex justify-center items-center min-h-[250px] sm:min-h-[500px] text-gray-500">등록된 복습퀴즈가 없습니다.</div>
         )}
-
-        <div className="flex justify-between w-full mt-10 text-[14px] fontLight">
+      </div>
+      <div className="flex justify-between w-full mt-10 text-[14px] fontLight">
           <div
-            className="flex bg-[#3B79FF] text-white px-4 py-1.5 rounded-[5.95px] cursor-pointer"
+            className="flex bg-[#3B79FF] text-white px-4 py-1.5 mb-4 rounded-[5.95px] cursor-pointer"
             onClick={() => navigate(`/admin/reviewQuiz/${trackType}/reviewAdd`)}
           >
             문제 등록
           </div>
         </div>
-      </div>
     </div>
   );
 }
