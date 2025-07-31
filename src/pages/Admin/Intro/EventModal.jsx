@@ -66,7 +66,7 @@ const EventModal = ({ date, onClose, onSaved, initialData }) => {
   };
 
   return (
-    <div className="absolute w-[80%] h-[80%] sm:h-[70%] top-[20%] left-[10%] rounded-3xl border-2 border-[#DADADA] bg-[#3E3E3E] text-white shadow-lg p-6 sm:p-16 sm:px-27 overflow-hidden z-50">
+    <div className="absolute w-[80%] h-[80%] sm:h-[70%] top-[7%] sm:top-[20%] left-[10%] rounded-3xl border-2 border-[#DADADA] bg-[#3E3E3E] text-white shadow-lg p-6 sm:p-16 sm:px-27 overflow-hidden z-50">
       <button
         className="absolute top-5 right-6 text-white text-2xl hover:text-gray-300"
         onClick={onClose}

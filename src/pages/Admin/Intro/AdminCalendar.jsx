@@ -3,8 +3,10 @@ import images from "../../../utils/images";
 import Calendar from "react-calendar";
 import axios from "../../../utils/axios";
 import EventModal from "./EventModal";
+import { useMediaQuery } from "../../User/Main/useMediaQuery";
 
 const AdminCalendar = () => {
+  const isMobile = useMediaQuery("(max-width: 768px)");
   const [value, setValue] = useState(new Date());
   //이벤트 추가 모달 관련 state
   const [addModalIsOpen, setAddModalIsOpen] = useState(false);
@@ -86,9 +88,10 @@ const AdminCalendar = () => {
 
   const handleDateClick = (date) => {
     const formattedDate = date.toISOString().split("T")[0];
-    const dayEvents = events[formattedDate];
-    if (dayEvents && dayEvents.length > 0) {
+    const dayEvents = events[formattedDate] || [];
+    if (isMobile || (dayEvents && dayEvents.length > 0)) {
       setSelectedDateEvents(dayEvents);
+      setSelectedDate(date);
       setModalIsOpen(true);
       setCheckedEvents([]);
     }
@@ -114,9 +117,7 @@ const AdminCalendar = () => {
 
     try {
       await Promise.all(
-        checkedEvents.map((id) =>
-          axios.delete(`/admin/schedule/${id}`)
-        )
+        checkedEvents.map((id) => axios.delete(`/admin/schedule/${id}`))
       );
       alert("성공적으로 삭제되었습니다!");
       setModalIsOpen(false);
@@ -125,6 +126,7 @@ const AdminCalendar = () => {
       console.error("삭제 실패:", err);
     }
   };
+
   return (
     <div className="relative flex justify-center w-[100%] h-[100%]">
       <Calendar
@@ -196,27 +198,53 @@ const AdminCalendar = () => {
 
       {modalIsOpen && (
         <div
-          className="absolute w-[80%] h-[64%] top-[25%] left-[10%] rounded-3xl border-2 border-[#DADADA] bg-white shadow-lg p-6 sm:p-8 overflow-hidden"
+          className="absolute w-[80%] h-[75%] sm:h-[64%] top-[7%] sm:top-[25%] left-[10%] rounded-3xl border-2 border-[#DADADA] bg-white shadow-lg p-6 sm:p-8 overflow-hidden"
           onClick={() => setModalIsOpen(false)}
         >
           <div
-            className="flex justify-between items-center mb-6 mx-5"
+            className="flex justify-between items-center mb-6 mx-2 sm:mx-5"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="text-lg mt-1 sm:mt-0 sm:text-2xl font-bold">
               Events
             </div>
-            <div className="flex justify-center items-center">
-              <div className="mt-1 sm:mr-5 fontEL sm:text-sm text-xs">
-                <button onClick={handleSelectAll} className="ml-12 sm:mr-3 sm:ml-0 mb-1 sm:mb-0 px-3 py-[6px] rounded-md bg-[#E9E9E9] text-[#838383] cursor-pointer">전체 선택</button>
-                <button onClick={handleDelete} className="ml-12 sm:mr-2 sm:ml-0 px-3 py-[6px] rounded-md bg-[#6C6868] text-white cursor-pointer">선택 삭제</button>
+            <div className="flex items-center justify-end">
+              <div className="sm:hidden ml-5 mr-2">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleAddEvent(selectedDate);
+                  }}
+                  className="px-3 py-[3px] rounded-md bg-[#FF8A8A] text-white text-sm"
+                >
+                  +
+                </button>
               </div>
-              <button
-                onClick={() => setModalIsOpen(false)}
-                className="text-3xl text-gray-400 hover:text-black"
-              >
-                &times;
-              </button>
+              <div className="flex justify-center items-center">
+                <div className="mt-1 sm:mr-5 fontEL sm:text-sm text-xs">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSelectAll();
+                    }}
+                    className="sm:mr-3 mb-1 sm:mb-0 px-3 py-[6px] rounded-md bg-[#E9E9E9] text-[#838383] cursor-pointer"
+                  >
+                    전체 선택
+                  </button>
+                  <button
+                    onClick={handleDelete}
+                    className="ml-0 min-[440px]:ml-1 mr-1 sm:mr-2 px-3 py-[6px] rounded-md bg-[#6C6868] text-white cursor-pointer"
+                  >
+                    선택 삭제
+                  </button>
+                </div>
+                <button
+                  onClick={() => setModalIsOpen(false)}
+                  className="text-3xl text-gray-400 hover:text-black"
+                >
+                  &times;
+                </button>
+              </div>
             </div>
           </div>
 
@@ -266,7 +294,7 @@ const AdminCalendar = () => {
           onClose={() => {
             setAddModalIsOpen(false);
             setModalIsOpen(false);
-            setEventToEdit(null); 
+            setEventToEdit(null);
           }}
           onSaved={refetchEvents}
           initialData={eventToEdit} // 수정용 데이터 넘김
