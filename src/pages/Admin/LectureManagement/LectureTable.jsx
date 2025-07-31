@@ -53,62 +53,64 @@ const LectureTable = ({
       {/* 데이터 행 */}
       <div
         className={`flex w-full flex-col ${
-          isSmallScreen ? "min-h-[300px]" : "min-h-[550px]"
+          isSmallScreen ? "min-h-[300px]" : " min-h-[250px] sm:min-h-[590px] "
         }`}
       >
-        {paddedItems.map((item, i) => (
-          <div key={i} className={`${rowStyle} ${!item ? "opacity-50" : ""}`}>
-            {/* 번호 */}
-            <div
-              className={`flex justify-center px-1 ${textSize}`}
-              style={{ flex: flexValues[0] }}
-            >
-              {startIndex + i + 1}
-            </div>
-
-            {/* 제목 */}
-            <div
-              className={titleCellStyle}
-              style={{ flex: flexValues[1], paddingLeft: "1rem" }}
-              title={item ? item.title : ""}
-            >
-              {item ? item.title : ""}
-            </div>
-
-            {/* 수정 */}
-            <div
-              className={`flex justify-center px-1 ${textSize}`}
-              style={{ flex: flexValues[2] }}
-            >
-              {item && (
-                <Link
-                  to={`/admin/LectureManagement/${track}/LectureEdit/${item.id}`}
-                >
-                  <button className="text-blue-600 underline text-xs sm:text-sm">
-                    수정
-                  </button>
-                </Link>
-              )}
-            </div>
-
-            {/* 삭제 (체크박스) */}
-            <div
-              className={`flex justify-center px-1 ${textSize}`}
-              style={{ flex: flexValues[3] }}
-            >
-              {item ? (
-                <input
-                  type="checkbox"
-                  checked={selectedItems.includes(item.id)}
-                  onChange={() => toggleSelect(item.id)}
-                  className="w-4 h-4"
-                />
-              ) : (
-                ""
-              )}
-            </div>
+        {paddedItems.filter(Boolean).length === 0 ? (
+          <div className="flex justify-center items-center p-10 text-gray-500 min-h-[590px] w-full">
+            등록된 강의가 없습니다.
           </div>
-        ))}
+        ) : (
+          paddedItems
+            .filter(Boolean) // 실제 데이터만
+            .map((item, i) => (
+              <div key={i} className={rowStyle}>
+                {/* 번호 */}
+                <div
+                  className={`flex justify-center px-1 ${textSize}`}
+                  style={{ flex: flexValues[0] }}
+                >
+                  {startIndex + i + 1}
+                </div>
+
+                {/* 제목 */}
+                <div
+                  className={titleCellStyle}
+                  style={{ flex: flexValues[1], paddingLeft: "1rem" }}
+                  title={item.title}
+                >
+                  {item.title}
+                </div>
+
+                {/* 수정 */}
+                <div
+                  className={`flex justify-center px-1 ${textSize}`}
+                  style={{ flex: flexValues[2] }}
+                >
+                  <Link
+                    to={`/admin/LectureManagement/${track}/LectureEdit/${item.id}`}
+                  >
+                    <button className="text-blue-600 underline text-xs sm:text-sm">
+                      수정
+                    </button>
+                  </Link>
+                </div>
+
+                {/* 삭제 */}
+                <div
+                  className={`flex justify-center px-1 ${textSize}`}
+                  style={{ flex: flexValues[3] }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={selectedItems.includes(item.id)}
+                    onChange={() => toggleSelect(item.id)}
+                    className="w-4 h-4"
+                  />
+                </div>
+              </div>
+            ))
+        )}
       </div>
     </div>
   );

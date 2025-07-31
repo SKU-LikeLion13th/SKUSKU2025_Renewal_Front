@@ -21,7 +21,6 @@ const LectureDetail = () => {
         }
       }
     };
-
     fetchLecture();
   }, [id]);
 
@@ -47,7 +46,7 @@ const LectureDetail = () => {
 
       {/* 경로 */}
       <div className="mb-12">
-        <Breadcrumb/>
+        <Breadcrumb />
       </div>
 
       <hr className="border border-gray-200 mb-12" />
