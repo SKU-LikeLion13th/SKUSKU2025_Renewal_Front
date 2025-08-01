@@ -90,7 +90,7 @@ const backend = [
   {
     name: "박준범",
     role: "파트장",
-    department: "컴퓨터공학과 21",
+    department: "컴퓨터공학과 20",
     img: `${images.박준범}`,
     imgWidth: "130px",
     imgHeight: "130px",
