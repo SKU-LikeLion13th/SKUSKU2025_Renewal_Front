@@ -9,9 +9,13 @@ export default function HeaderMobile() {
   const menuItems = [
     { title: "PROJECT", path: "/project" },
     { title: "TEAM", path: "/team" },
-    { title: "COMMUNITY", path: "/community" },
+    { title: "COMMUNITY", path: "/", isAlert: true },
     { title: "CYBERCAMPUS", path: "/cybercampus" },
   ];
+
+  const handleAlertClick = () => {
+    alert("내년 상반기에 다시 모집할 예정입니다. 다음 기회에 지원해주세요!");
+  };
 
   return (
     <div
@@ -24,7 +28,7 @@ export default function HeaderMobile() {
       }}
     >
       <div className="flex flex-col py-4 px-4">
-        {/* 로고 & 햄버거 버튼 (윗줄) */}
+        {/* 로고 & 햄버거 버튼 */}
         <div className="flex justify-between items-center w-full">
           <Link to="/">
             <div className="flex items-center space-x-2">
@@ -55,21 +59,43 @@ export default function HeaderMobile() {
           </button>
         </div>
 
+        {/* 메뉴 리스트 */}
         {isMenuOpen && (
           <div className="flex flex-col space-y-4 mt-4 transition-all duration-300 sm:ml-5">
-            {menuItems.map(({ title, path }) => (
-              <Link
-                to={path}
-                key={title}
-                className="text-black text-base fontMedium cursor-pointer px-4"
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  setIsHovered(false);
-                }}
-              >
-                {title}
-              </Link>
-            ))}
+            {menuItems.map((item, index) => {
+              const isLast = index === menuItems.length - 1;
+              const itemClass = `text-black text-base fontMedium cursor-pointer px-4 ${
+                isLast ? "mb-3" : ""
+              }`;
+
+              return (
+                <div key={index}>
+                  {item.isAlert ? (
+                    <div
+                      onClick={() => {
+                        handleAlertClick();
+                        setIsMenuOpen(false);
+                        setIsHovered(false);
+                      }}
+                      className={itemClass}
+                    >
+                      {item.title}
+                    </div>
+                  ) : (
+                    <Link
+                      to={item.path}
+                      className={itemClass}
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        setIsHovered(false);
+                      }}
+                    >
+                      {item.title}
+                    </Link>
+                  )}
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
