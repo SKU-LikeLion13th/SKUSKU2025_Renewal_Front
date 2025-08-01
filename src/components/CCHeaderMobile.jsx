@@ -22,7 +22,7 @@ export default function CCHeaderMobile() {
         if (!isMenuOpen) setIsHovered(false);
       }}
     >
-      <div className="flex flex-col py-4 md:py-6 px-4">
+      <div className="flex flex-col py-4 px-4">
         {/* 로고 & 햄버거 버튼 (윗줄) */}
         <div className="flex justify-between items-center w-full">
           <Link to="/">
