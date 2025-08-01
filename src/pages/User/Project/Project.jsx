@@ -110,7 +110,7 @@ export default function Project() {
                 />
 
                 <div className="absolute inset-0 flex items-center justify-center transition-opacity duration-500 opacity-0 group-hover:opacity-100">
-                  <span className="px-4 py-2 text-lg text-white bg-blue-500 rounded-lg font-bold">
+                  <span className="px-3 py-1.5 text-sm text-white bg-blue-500 rounded-md font-bold sm:px-3 sm:py-2 sm:text-sm md:px-4 md:py-2 md:text-base lg:text-base xl:px-5 xl:py-2 xl:text-lg">
                     사이트 보러가기
                   </span>
                 </div>
