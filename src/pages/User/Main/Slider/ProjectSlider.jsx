@@ -64,10 +64,10 @@ export default function ProjectSlider() {
                 slidesPerView: 3,
               },
               1024: {
-                slidesPerView: 2.8,
+                slidesPerView: 2,
               },
               768: {
-                slidesPerView: 2.6,
+                slidesPerView: 2,
               },
               640: {
                 slidesPerView: 1,
