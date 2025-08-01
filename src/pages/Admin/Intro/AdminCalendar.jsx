@@ -111,7 +111,8 @@ const AdminCalendar = () => {
     setCheckedEvents(allIds);
   };
   //선택한 거 삭제
-  const handleDelete = async () => {
+  const handleDelete = async (e) => {
+    e.stopPropagation();
     if (checkedEvents.length === 0) return;
     if (!window.confirm("정말 삭제하시겠습니까?")) return;
 
@@ -233,7 +234,7 @@ const AdminCalendar = () => {
                   </button>
                   <button
                     onClick={handleDelete}
-                    className="ml-0 min-[440px]:ml-1 mr-1 sm:mr-2 px-3 py-[6px] rounded-md bg-[#6C6868] text-white cursor-pointer"
+                    className="ml-0 mr-1 sm:mr-2 px-3 py-[6px] rounded-md bg-[#6C6868] text-white cursor-pointer"
                   >
                     선택 삭제
                   </button>

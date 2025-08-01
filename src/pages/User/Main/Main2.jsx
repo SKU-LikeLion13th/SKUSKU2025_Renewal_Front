@@ -21,7 +21,7 @@ function AnimatedCard({ title, desc, imgSrc, imgClass, bgColor }) {
       variants={fadeUp}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
-      className="flex flex-1 min-w-0 sm:max-w-[26%] w-full h-auto sm:h-48 aspect-[4/3] sm:aspect-auto rounded-sm sm:rounded-xl items-center justify-evenly px-2 sm:px-3 py-2"
+      className="flex flex-1 min-w-0 sm:max-w-[25%] w-full h-auto sm:h-48 aspect-[4/3] sm:aspect-auto rounded-sm sm:rounded-xl items-center justify-evenly px-2 sm:px-3 py-2"
       style={{ backgroundColor: bgColor }}
     >
       <div className="flex flex-col justify-center gap-1 sm:gap-2 text-left overflow-hidden">
@@ -108,7 +108,7 @@ export default function Main2() {
           "내 아이디어를 내 손으로 실현한다."
         </p>
         {/* 박스 3개 */}
-        <div className="flex flex-wrap w-full px-4 sm:px-0 justify-center gap-x-2 gap-y-4 sm:gap-x-6 sm:gap-y-6 mt-2">
+        <div className="flex flex-wrap w-full px-4 sm:px-20 justify-center gap-x-2 gap-y-4 sm:gap-x-22 sm:gap-y-6 mt-2">
           {items.map(({ title, desc, imgSrc, imgClass, bgColor }, idx) => (
             <AnimatedCard
               key={idx}
@@ -124,7 +124,7 @@ export default function Main2() {
         {/* 글 */}
         <div className="text-center hidden sm:block leading-8">
           <p className="fontThin sm:text-[clamp(9px,2.9vw,16px)] ">
-            <span className="fontSB text-xl">
+            <span className="fontMedium text-xl">
               "내 아이디어를 내 손으로 실현한다."{" "}
             </span>
             라는 모토를 가지고,
