@@ -79,7 +79,7 @@ const LectureTable = ({ data, track }) => {
                 {item?.createDateTime &&
                 !isNaN(new Date(item.createDateTime).getTime())
                   ? new Intl.DateTimeFormat("ko-KR", {
-                      year: "numeric",
+                      year: "2-digit",
                       month: "2-digit",
                       day: "2-digit",
                     }).format(new Date(item.createDateTime))
