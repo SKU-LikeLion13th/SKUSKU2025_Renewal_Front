@@ -48,9 +48,8 @@ export default function AdminReviewBoard({ posts, trackType, setAllPosts }) {
               </div>
 
               <div
-                className="flex justify-start px-1 text-[13.5px] cursor-pointer"
+                className="flex justify-start px-1 text-[13.5px]"
                 style={{ flex: flexValues[1] }}
-                onClick={() => navigate(`/admin/reviewQuiz/${trackType}/reviewUpdate/${item.reviewWeekId}`)}
               >
                 {item.title}
               </div>
