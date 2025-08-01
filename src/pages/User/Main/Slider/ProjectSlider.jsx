@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import API from "../../../../utils/axios";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -50,42 +48,44 @@ export default function ProjectSlider() {
   return (
     <div className="flex justify-center items-center">
       <div className="w-[90%]">
-        <Swiper
-          modules={[Autoplay]}
-          freeMode={true}
-          loop={true}
-          autoplay={{
-            delay: 0,
-            disableOnInteraction: false,
-          }}
-          speed={4000}
-          slidesPerView={1}
-          breakpoints={{
-            1280: {
-              slidesPerView: 3,
-            },
-            1024: {
-              slidesPerView: 2.8,
-            },
-            768: {
-              slidesPerView: 2.6,
-            },
-            640: {
-              slidesPerView: 1,
-            },
-          }}
-        >
-          {projects.map((project) => (
-            <SwiperSlide key={project.id} className="h-auto">
-              <ProjectItem
-                title={project.title}
-                subtitle={project.subTitle}
-                image={project.imageUrl}
-                url={project.url}
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        {projects.length > 0 && (
+          <Swiper
+            modules={[Autoplay]}
+            freeMode={true}
+            loop={true}
+            autoplay={{
+              delay: 1,
+              disableOnInteraction: false,
+            }}
+            speed={4000}
+            slidesPerView={1}
+            breakpoints={{
+              1280: {
+                slidesPerView: 3,
+              },
+              1024: {
+                slidesPerView: 2.8,
+              },
+              768: {
+                slidesPerView: 2.6,
+              },
+              640: {
+                slidesPerView: 1,
+              },
+            }}
+          >
+            {projects.map((project) => (
+              <SwiperSlide key={project.id} className="h-auto">
+                <ProjectItem
+                  title={project.title}
+                  subtitle={project.subTitle}
+                  image={project.imageUrl}
+                  url={project.url}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        )}
       </div>
     </div>
   );
