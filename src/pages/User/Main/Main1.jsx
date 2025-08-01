@@ -56,8 +56,8 @@ export default function Main1() {
       </div>
 
       {/* 글 (이미지 위에 배치) */}
-      <div className="relative flex flex-col justify-center h-full text-white ">
-        <div className="fontSB text-[28px] sm:leading-[60px] sm:pl-[8%] pl-6 sm:text-[3.3vw] leading-[35px]">
+      <div className="relative flex flex-col justify-center h-full mt-3 text-white ">
+        <div className="fontSB text-[28px] sm:leading-[clamp(3rem,4.3vw,4rem)] sm:pl-[8%] pl-6 sm:text-[clamp(28px,2.9vw,3rem)]">
           <p>상상을 현실로 만드는</p>
           <p>
             내 손 안에{" "}
@@ -65,11 +65,11 @@ export default function Main1() {
           </p>
         </div>
 
-        <div className="sm:leading-[30px] sm:pt-12 pt-6 sm:pl-[8%] pl-6">
-          <p className="sm:text-[15px] fontEL text-[9px]">
+        <div className="sm:leading-[30px] sm:pt-9 pt-6 sm:pl-[8%] pl-6 sm:text-[clamp(9px,2.9vw,16px)] fontThin text-[9px]">
+          <p>
             <span className="fontSB">성결대학교 멋쟁이사자처럼</span>은
           </p>
-          <p className="sm:text-[15px] fontEL text-[9px]">
+          <p>
             자신이 원하는 <span onClick={handleClick}>IT</span> 서비스를
             구현하고 싶은 성결대학교 학생들이 모인 동아리입니다.
           </p>
@@ -86,7 +86,7 @@ export default function Main1() {
                   <div className="flex items-center">
                     <div
                       style={{ backgroundColor: getColorByTrack(user.track) }}
-                      className="flex items-center justify-center w-[20px] sm:w-[25px] md:w-[30px] lg:w-[35px] h-[20px] sm:h-[25px] md:h-[30px] lg:h-[35px] h-auto rounded-full text-[10px] sm:text-[14px] md:text-[16px] lg:text-[20px]"
+                      className="flex items-center justify-center w-[20px] sm:w-[25px] md:w-[30px] lg:w-[35px] sm:h-[25px] md:h-[30px] lg:h-[35px] h-auto rounded-full text-[10px] sm:text-[14px] md:text-[16px] lg:text-[20px]"
                     >
                       🦁
                     </div>
@@ -126,13 +126,13 @@ export default function Main1() {
 
       {/* 스크롤다운 (sm 이상일 때만 보임) */}
       <div className="relative sm:flex hidden flex-col items-center bottom-[15%]">
-        <p className="fontSB text-md text-[#666666] flex items-center">
+        <p className="fontSB text-sm text-[#666666] flex items-center">
           Scroll down
         </p>
         <motion.img
           src="/assets/images/Mouse.png"
           alt="마우스 모양"
-          className="w-[35px] mt-2"
+          className="w-[23px] mt-2"
           animate={{ y: [0, 10, 0] }}
           transition={{
             duration: 2,

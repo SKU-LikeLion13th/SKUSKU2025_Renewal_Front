@@ -21,12 +21,12 @@ function AnimatedCard({ title, desc, imgSrc, imgClass, bgColor }) {
       variants={fadeUp}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
-      className="flex flex-1 min-w-0 sm:max-w-[300px] max-w-[33%] h-auto sm:h-52 aspect-[4/3] sm:aspect-auto rounded-sm sm:rounded-xl items-center justify-between px-2 sm:px-4 py-2"
+      className="flex flex-1 min-w-0 sm:max-w-[350px] max-w-[33%] h-auto sm:h-48 aspect-[4/3] sm:aspect-auto rounded-sm sm:rounded-xl items-center justify-between px-2 sm:px-8 py-2"
       style={{ backgroundColor: bgColor }}
     >
       <div className="flex flex-col justify-center gap-1 sm:gap-2 text-left overflow-hidden">
-        <p className="fontBold text-[11px] sm:text-[22px] truncate">{title}</p>
-        <div className="hidden sm:block fontEL text-[12px] break-words leading-tight">
+        <p className="fontSB text-[11px] sm:text-[clamp(11px,2.9vw,30px)] truncate">{title}</p>
+        <div className="hidden sm:block fontEL text-sm break-words leading-5">
           {desc}
         </div>
       </div>
@@ -47,7 +47,7 @@ export default function Main2() {
         </>
       ),
       imgSrc: "/assets/images/Main/Self.png",
-      imgClass: "sm:w-20 w-6",
+      imgClass: "sm:w-15 w-6",
       bgColor: "#4B76D3",
     },
     {
@@ -62,7 +62,7 @@ export default function Main2() {
         </>
       ),
       imgSrc: "/assets/images/Main/cooperation.png",
-      imgClass: "sm:w-20 w-8",
+      imgClass: "sm:w-26 w-8",
       bgColor: "#264C9F",
     },
     {
@@ -75,13 +75,13 @@ export default function Main2() {
         </>
       ),
       imgSrc: "/assets/images/Main/Possibility.png",
-      imgClass: "sm:w-20 w-6",
+      imgClass: "sm:w-18 w-6",
       bgColor: "#142F69",
     },
   ];
 
   return (
-    <div className="relative sm:h-screen h-[250px] w-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
+    <div className="relative sm:min-h-screen h-[250px] w-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
       {/* 배경 이미지 + 검정색 오버레이 */}
       <div className="absolute inset-0 sm:bg-[url('/assets/images/Main/Main2.jpeg')] bg-cover bg-center">
         <div className="absolute inset-0 bg-black opacity-80"></div>
@@ -90,10 +90,10 @@ export default function Main2() {
       <div className="relative flex flex-col justify-center h-full text-white items-center sm:space-y-30 sm:pt-32 py-16 space-y-3">
         {/* 3가지 방향성 */}
         <div className="text-center sm:block flex flex-row justify-center items-center gap-1">
-          <p className="sm:text-[21px] sm:fontEL text-[11px] fontEL">
-            성결대학교 멋쟁이 사자처럼의
+          <p className="sm:text-[clamp(9px,2.9vw,16px)] text-[11px] fontThin">
+            성결대학교 멋쟁이사자처럼의
           </p>
-          <p className="sm:text-[40px] sm:fontSB text-[12px] fontBold">
+          <p className="sm:text-[clamp(20px,2.9vw,30px)] text-[12px] fontSB">
             3가지 방향성
           </p>
         </div>
@@ -116,10 +116,10 @@ export default function Main2() {
         </div>
 
         {/* 글 */}
-        <div className="text-center hidden sm:block">
-          <p className="fontThin">
-            <span className="fontSB">"내 아이디어를 내 손으로 실현한다.</span>
-            "라는 모토를 가지고,
+        <div className="text-center hidden sm:block leading-8">
+          <p className="fontThin sm:text-[clamp(9px,2.9vw,16px)] ">
+            <span className="fontSB text-xl">"내 아이디어를 내 손으로 실현한다." </span>
+            라는 모토를 가지고,
           </p>
           <p className="fontThin">실제 서비스를 구현하며 개발자의 꿈을 이루는데</p>
           <p className="fontThin">한걸음 더 다가가고자 합니다.</p>
