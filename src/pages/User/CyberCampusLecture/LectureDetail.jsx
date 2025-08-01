@@ -38,6 +38,28 @@ const LectureDetail = () => {
     );
   }
 
+  const handleFileDownload = async (fileUrl, fileName) => {
+    try {
+      const response = await fetch(fileUrl);
+      if (!response.ok) throw new Error("다운로드 실패");
+
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error("파일 다운로드 실패:", error);
+      window.open(fileUrl, "_blank"); // 실패 시 백업
+    }
+  };
+
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 mt-24 sm:mt-44 pb-24">
       {/* 제목 */}
@@ -68,16 +90,9 @@ const LectureDetail = () => {
       <div className="bg-[#F9F9F9] border-t-[1.5px] p-6 sm:p-8">
         {lecture.joinLectureFiles?.map((file) => (
           <a
-            // key={file.fileName}
-            // href={`data:${file.fileType};base64,${file.file}`}
-            // download={file.fileName}
-            // className="text-blue-500 underline flex items-center mb-2 text-xs sm:text-base"
             key={file.fileName}
-            href={file.fileUrl}
-            download
+            onClick={() => handleFileDownload(file.fileUrl, file.fileName)}
             className="text-blue-500 underline flex items-center mb-2 text-xs sm:text-base"
-            target="_blank"
-            rel="noopener noreferrer"
           >
             <img
               src="https://cdn-icons-png.flaticon.com/512/337/337946.png"
