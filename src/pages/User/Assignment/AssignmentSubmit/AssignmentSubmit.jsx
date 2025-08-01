@@ -18,7 +18,11 @@ export default function AssignmentSubmit({ assignment }) {
   const [deletedFiles, setDeletedFiles] = useState([]); // 삭제될 파일들 추적
   const [isUploading, setIsUploading] = useState(false);
 
+  // 드래그 앤 드롭 상태
+  const [isDragOver, setIsDragOver] = useState(false);
+
   const fileInputRef = useRef();
+  const dropZoneRef = useRef();
 
   useEffect(() => {
     const fetchAssignmentDetails = async () => {
@@ -53,6 +57,53 @@ export default function AssignmentSubmit({ assignment }) {
 
     checkSubmissionStatus();
   }, [assignment]);
+
+  // 드래그 앤 드롭 이벤트 핸들러
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!isDragOver) {
+      setIsDragOver(true);
+    }
+  };
+
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // dropZone 영역을 완전히 벗어났을 때만 isDragOver를 false로 설정
+    const rect = dropZoneRef.current?.getBoundingClientRect();
+    if (rect) {
+      const { left, right, top, bottom } = rect;
+      const { clientX, clientY } = e;
+
+      if (
+        clientX < left ||
+        clientX > right ||
+        clientY < top ||
+        clientY > bottom
+      ) {
+        setIsDragOver(false);
+      }
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+
+    const droppedFiles = Array.from(e.dataTransfer.files);
+    if (droppedFiles.length > 0) {
+      setFiles((prevFiles) => [...prevFiles, ...droppedFiles]);
+    }
+  };
 
   const handleContentChange = (e) => {
     setContent(e.target.value);
@@ -355,10 +406,18 @@ export default function AssignmentSubmit({ assignment }) {
                   파일 업로드
                 </h1>
 
-                <div className="bg-[#F9F9F9] mt-3 mb-6 border-t-2 border-[#232323] p-5 sm:p-8 text-xs sm:text-sm">
+                <div
+                  ref={dropZoneRef}
+                  className={`bg-[#F9F9F9] mt-3 mb-6 border-t-2 border-[#232323] p-5 sm:p-8 text-xs sm:text-sm transition-colors duration-200 ${
+                    isDragOver ? "bg-blue-50 border-blue-400" : ""
+                  }`}
+                  onDragOver={handleDragOver}
+                  onDragEnter={handleDragEnter}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}>
                   {/* 기존 제출된 파일들 (수정 모드일 때만 표시) */}
                   {isEditMode && submittedFiles.length > 0 && (
-                    <div className="mb-6">
+                    <div className="mb-1">
                       {submittedFiles.map((file, idx) => (
                         <div
                           key={idx}
@@ -399,10 +458,16 @@ export default function AssignmentSubmit({ assignment }) {
                   )}
 
                   <div
-                    className="text-gray-500 cursor-pointer hover:text-gray-700 text-xs sm:text-sm mb-1"
+                    className={`cursor-pointer hover:text-gray-700 text-xs sm:text-sm mt-6 mb-1 transition-colors duration-200 ${
+                      isDragOver
+                        ? "text-blue-600 font-semibold"
+                        : "text-gray-500"
+                    }`}
                     onClick={() => fileInputRef.current?.click()}>
                     <span className="underline font-semibold">파일선택</span>{" "}
-                    또는 여기로 파일을 끌어오세요.
+                    {isDragOver
+                      ? "또는 여기로 파일을 끌어오세요."
+                      : "또는 여기로 파일을 끌어오세요."}
                   </div>
                   <input
                     type="file"

@@ -22,7 +22,12 @@ export default function AddAssignment() {
   const [originalFiles, setOriginalFiles] = useState([]); // 원본 파일들 저장
   const [deletedFiles, setDeletedFiles] = useState([]); // 삭제된 파일들 추적
   const [isUploading, setIsUploading] = useState(false);
+
+  // 드래그 앤 드롭 상태
+  const [isDragOver, setIsDragOver] = useState(false);
+
   const fileInputRef = useRef(null);
+  const dropZoneRef = useRef(null);
 
   useEffect(() => {
     if (isEdit) {
@@ -77,14 +82,47 @@ export default function AddAssignment() {
     }
   };
 
+  // 개선된 드래그 앤 드롭 이벤트 핸들러
   const handleDragOver = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    if (!isDragOver) {
+      setIsDragOver(true);
+    }
+  };
+
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // dropZone 영역을 완전히 벗어났을 때만 isDragOver를 false로 설정
+    const rect = dropZoneRef.current?.getBoundingClientRect();
+    if (rect) {
+      const { left, right, top, bottom } = rect;
+      const { clientX, clientY } = e;
+
+      if (
+        clientX < left ||
+        clientX > right ||
+        clientY < top ||
+        clientY > bottom
+      ) {
+        setIsDragOver(false);
+      }
+    }
   };
 
   const handleDrop = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    setIsDragOver(false);
+
     if (e.dataTransfer.files.length > 0) {
       setSelectedFiles((prev) => [
         ...prev,
@@ -281,8 +319,15 @@ export default function AddAssignment() {
                       파일 업로드
                     </label>
                     <div
-                      className="flex items-center border border-[#7D7D7D] rounded py-1.5 px-4"
+                      ref={dropZoneRef}
+                      className={`flex items-center border rounded py-1.5 px-4 transition-all duration-200 ${
+                        isDragOver
+                          ? "border-blue-400 bg-blue-50"
+                          : "border-[#7D7D7D] bg-white"
+                      }`}
                       onDragOver={handleDragOver}
+                      onDragEnter={handleDragEnter}
+                      onDragLeave={handleDragLeave}
                       onDrop={handleDrop}>
                       <input
                         type="file"
@@ -296,15 +341,24 @@ export default function AddAssignment() {
                         type="button"
                         onClick={handleFileSelectClick}
                         disabled={isUploading}
-                        className={`text-sm text-[#353535] underline ${
+                        className={`text-sm underline ${
                           isUploading
-                            ? "cursor-not-allowed opacity-50"
-                            : "cursor-pointer"
+                            ? "cursor-not-allowed opacity-50 text-gray-400"
+                            : isDragOver
+                            ? "cursor-pointer text-blue-600 font-semibold"
+                            : "cursor-pointer text-[#353535]"
                         }`}>
                         {isUploading ? "업로드 중..." : "파일선택"}
                       </button>
-                      <span className="ml-3 text-[#A6A6A6] text-xs">
-                        또는 여기로 파일을 끌어오세요.
+                      <span
+                        className={`ml-3 text-xs transition-colors duration-200 ${
+                          isDragOver
+                            ? "text-blue-600 font-medium"
+                            : "text-[#A6A6A6]"
+                        }`}>
+                        {isDragOver
+                          ? "또는 여기로 파일을 끌어오세요."
+                          : "또는 여기로 파일을 끌어오세요."}
                       </span>
                     </div>
                   </div>
@@ -328,7 +382,7 @@ export default function AddAssignment() {
                             <button
                               type="button"
                               onClick={() => handleRemoveFile(index)}
-                              className="ml-2 text-gray-500 hover:text-red-500">
+                              className="ml-2 text-gray-500 hover:text-red-500 transition-colors duration-150">
                               ×
                             </button>
                           </div>
@@ -344,10 +398,10 @@ export default function AddAssignment() {
               <button
                 type="submit"
                 disabled={isUploading}
-                className={`px-3 py-1.5 rounded-md text-white sm:min-w-25 ${
+                className={`px-3 py-1.5 rounded-md text-white sm:min-w-25 transition-colors duration-200 ${
                   isUploading
                     ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-[#3B79FF] cursor-pointer"
+                    : "bg-[#3B79FF] cursor-pointer hover:bg-blue-600"
                 }`}>
                 {isUploading
                   ? "업로드 중..."
@@ -357,7 +411,7 @@ export default function AddAssignment() {
               </button>
               <button
                 type="button"
-                className="px-5 py-1.5 cursor-pointer text-[#838383] bg-[#E9E9E9] rounded-md sm:min-w-25 "
+                className="px-5 py-1.5 cursor-pointer text-[#838383] bg-[#E9E9E9] rounded-md sm:min-w-25 hover:bg-gray-300 transition-colors duration-200"
                 onClick={() => navigate(-1)}>
                 나가기
               </button>
