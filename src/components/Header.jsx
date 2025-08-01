@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import GoogleLoginBtn from "./GoogleLoginBtn";
 import CCBtn from "./CCBtn";
 import { useAuth } from "../utils/AuthContext";
@@ -7,6 +7,10 @@ import { useAuth } from "../utils/AuthContext";
 export default function Header() {
   const [isHovered, setIsHovered] = useState(false);
   const { user, logout } = useAuth();
+  const location = useLocation();
+  const isActive = (path) => {
+    return location.pathname + location.search === path;
+  };
 
   const menuItems = [
     {
@@ -26,8 +30,8 @@ export default function Header() {
       ],
     },
     {
-      title: { label: "COMMUNITY", path: "/" },
-      subItems: [{ label: "문의사항", path: "/" }],
+      title: { label: "COMMUNITY", path: "/", isAlert: true },
+      subItems: [{ label: "모집공고", path: "/", isAlert: true }],
     },
   ];
 
@@ -43,6 +47,10 @@ export default function Header() {
         return "#999999";
     }
   }
+
+  const handleAlertClick = () => {
+    alert("내년 상반기에 다시 모집할 예정입니다. 다음 기회에 지원해주세요!");
+  };
 
   return (
     <div
@@ -69,32 +77,61 @@ export default function Header() {
           </Link>
 
           <div className="flex items-center space-x-16">
-            {menuItems.map((item, index) => (
-              <div
-                key={index}
-                className={`fontMedium text-[16px] ${
-                  isHovered ? "text-[#000]" : "text-white"
-                } cursor-pointer relative`}
-              >
-                <Link to={item.title.path}>
-                  <span>{item.title.label}</span>
-                </Link>
+            {menuItems.map((item, index) => {
+              const active = isActive(item.title.path);
 
-                {isHovered && (
-                  <div className="absolute w-full space-y-8 mt-12">
-                    {item.subItems.map((subItem, subIdx) => (
-                      <Link
-                        key={subIdx}
-                        to={subItem.path}
-                        className="block text-[16px] text-[#121212] text-center fontRegular"
-                      >
-                        {subItem.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
+              return (
+                <div
+                  key={index}
+                  className={`fontMedium text-[16px] ${
+                    isHovered ? "text-[#000]" : "text-white"
+                  } cursor-pointer relative ${
+                    active ? "fontBold" : "fontRegular"
+                  }`}
+                >
+                  {/* 타이틀이 alert일 경우 */}
+                  {item.title.isAlert ? (
+                    <div onClick={handleAlertClick}>
+                      <span>{item.title.label}</span>
+                    </div>
+                  ) : (
+                    <Link to={item.title.path}>
+                      <span>{item.title.label}</span>
+                    </Link>
+                  )}
+
+                  {isHovered && (
+                    <div className="absolute w-full space-y-8 mt-12">
+                      {item.subItems.map((subItem, subIdx) => {
+                        const subActive = isActive(subItem.path);
+
+                        return subItem.isAlert ? (
+                          <div
+                            key={subIdx}
+                            onClick={handleAlertClick}
+                            className={`block text-[16px] text-[#121212] text-center cursor-pointer ${
+                              subActive ? "fontBold" : "fontRegular"
+                            }`}
+                          >
+                            {subItem.label}
+                          </div>
+                        ) : (
+                          <Link
+                            key={subIdx}
+                            to={subItem.path}
+                            className={`block text-[16px] text-[#121212] text-center ${
+                              subActive ? "fontBold" : "fontRegular"
+                            }`}
+                          >
+                            {subItem.label}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
 

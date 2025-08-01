@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import API from "../../../utils/axios";
-import { useDropzone } from "react-dropzone";
 import axios from "axios";
+import { useDropzone } from "react-dropzone";
 import Breadcrumb from "../../../components/Breadcrumb";
 
 const AdminCCLectureEdit = () => {
@@ -56,42 +56,34 @@ const AdminCCLectureEdit = () => {
       const uploaded = await Promise.all(
         acceptedFiles.map(async (file) => {
           try {
-            // 1. presigned URL 요청
-            const presignRes = await axios.post(
+            // ✅ 올바르게 presigned 요청
+            const presignedRes = await axios.post(
               "https://backend.sku-sku.com/s3/presigned-urls",
               [
                 {
                   fileName: file.name,
                   mimeType: file.type,
                 },
-              ]
+              ],
+              { withCredentials: true }
             );
 
-            const presignData = Array.isArray(presignRes.data)
-              ? presignRes.data[0]
-              : presignRes.data;
+            const presigned = presignedRes.data[0];
 
-            console.log("presignRes.data:", presignRes.data);
-            console.log("file.type:", file.type);
-            console.log("fileUrl:", presignData.fileUrl);
-            console.log("fileKey:", presignData.fileKey);
-
-            // 2. S3 업로드 (fetch 사용 권장)
-            await fetch(presignData.uploadUrl, {
-              method: "PUT",
+            // ✅ S3 업로드
+            await axios.put(presigned.uploadUrl, file, {
               headers: {
-                "Content-Type": file.type || "application/octet-stream",
+                "Content-Type": file.type,
               },
-              body: file,
             });
 
-            // 3. 업로드 성공 후 파일 정보 반환
+            // ✅ 파일 정보 반환
             return {
               fileName: file.name,
               fileSize: file.size,
-              fileType: file.type || "application/octet-stream",
-              fileUrl: presignData.cdnUrl, // 보통 cdnUrl 또는 fileUrl
-              fileKey: presignData.key,
+              fileType: file.type,
+              fileUrl: presigned.cdnUrl,
+              fileKey: presigned.key,
               status: "NEW",
             };
           } catch (error) {
@@ -100,6 +92,7 @@ const AdminCCLectureEdit = () => {
           }
         })
       );
+
       setFiles((prev) => [...prev, ...uploaded.filter((f) => f !== null)]);
     },
 
@@ -158,7 +151,7 @@ const AdminCCLectureEdit = () => {
         {track} 자료 수정
       </h1>
       <div className="mb-8">
-        <Breadcrumb/>
+        <Breadcrumb />
       </div>
 
       <hr className="border border-gray-200 mb-12" />

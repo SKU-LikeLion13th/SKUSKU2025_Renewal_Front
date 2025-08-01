@@ -14,7 +14,7 @@ const ProjectItem = ({ title, subtitle, image, url }) => (
     rel="noopener noreferrer"
   >
     <div
-      className="w-full aspect-[16/9] rounded-[10px] overflow-hidden md:mx-25 mx-10 bg-cover bg-center flex flex-col justify-end p-4"
+      className="w-full aspect-[16/9] rounded-[10px] overflow-hidden mx-2 sm:mx-3 md:mx-4 lg:mx-5 bg-cover bg-center flex flex-col justify-end p-4"
       style={{
         backgroundImage: `linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent), url(${image})`,
       }}
@@ -52,8 +52,6 @@ export default function ProjectSlider() {
       <div className="w-[90%]">
         <Swiper
           modules={[Autoplay]}
-          slidesPerView={1.3} // 기본값
-          spaceBetween={20}
           freeMode={true}
           loop={true}
           autoplay={{
@@ -61,22 +59,19 @@ export default function ProjectSlider() {
             disableOnInteraction: false,
           }}
           speed={4000}
+          slidesPerView={2}
           breakpoints={{
-            640: {
-              slidesPerView: 1.2,
-              spaceBetween: 12,
-            },
-            768: {
-              slidesPerView: 1.6,
-              spaceBetween: 16,
+            1280: {
+              slidesPerView: 2,
             },
             1024: {
-              slidesPerView: 2.2,
-              spaceBetween: 20,
+              slidesPerView: 1.6,
             },
-            1280: {
-              slidesPerView: 2.8,
-              spaceBetween: 24,
+            768: {
+              slidesPerView: 1.3,
+            },
+            640: {
+              slidesPerView: 1.0,
             },
           }}
         >
