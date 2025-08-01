@@ -15,6 +15,14 @@ const CCLecture = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchKeyword, setSearchKeyword] = useState("");
 
+  const trackLabelMap = {
+    FRONTEND: "FRONT-END",
+    BACKEND: "BACK-END",
+    DESIGN: "DESIGN",
+  };
+
+  const trackLabel = trackLabelMap[trackParam] || trackParam;
+
   useEffect(() => {
     const fetchLectureData = async () => {
       try {
@@ -23,6 +31,7 @@ const CCLecture = () => {
         });
         setAllData(response.data);
         setData(response.data);
+        console.log(response.data);
         if (Array.isArray(response.data)) {
           setData(response.data);
         } else {
@@ -63,7 +72,7 @@ const CCLecture = () => {
   return (
     <div className="lex flex-col justify-start w-9/12 mx-auto sm:mt-50 mt-30 lg:w-8/12">
       <h1 className="flex fontBold sm:text-[35px] text-[23px]">
-        {track} 자료실
+        {trackLabel} 자료실
       </h1>
       <div className="flex justify-start w-full sm:mt-15 mt-8 pb-5">
         <Breadcrumb />

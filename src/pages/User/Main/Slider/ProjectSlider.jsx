@@ -49,11 +49,11 @@ export default function ProjectSlider() {
 
   return (
     <div className="flex justify-center items-center">
-      <div className="w-full">
+      <div className="w-[90%]">
         <Swiper
           modules={[Autoplay]}
-          slidesPerView={1.2} // 기본값
-          spaceBetween={-40}
+          slidesPerView={1.3} // 기본값
+          spaceBetween={20}
           freeMode={true}
           loop={true}
           autoplay={{

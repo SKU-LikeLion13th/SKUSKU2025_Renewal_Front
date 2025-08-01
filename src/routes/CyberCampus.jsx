@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
-// import CCLecture from "../pages/User/CyberCampusLecture/CCLecture";
 import CCLecture from "../pages/User/CyberCampusLecture/CCLecture";
 import LectureDetail from "../pages/User/CyberCampusLecture/LectureDetail";
 import CyberCampusIntro from "../pages/User/CyberCampus/CyberCampusMain/CyberCampusIntro";
@@ -11,6 +10,7 @@ import AssignmentSubmitPage from "../pages/User/Assignment/AssignmentSubmit/Assi
 import CCFooter from "../components/CCFooter";
 import CCHeader from "../components/CCHeader";
 import CCHeaderMobile from "../components/CCHeaderMobile";
+import LoginRouteGuard from "../components/LoginRouteGuard";
 
 export default function CyberCampus() {
   const [isMobile, setIsMobile] = useState(false);
@@ -23,27 +23,29 @@ export default function CyberCampus() {
   }, []);
 
   return (
-    <div>
-      {isMobile ? <CCHeaderMobile /> : <CCHeader />}
-      <Routes>
-        <Route path="/" element={<CyberCampusIntro />} />
-        <Route path="lecture/:track" element={<CCLecture />} />
-        <Route
-          path="lecture/:track/lecture_detail/:id"
-          element={<LectureDetail />}
-        />
-        <Route path="/review/:trackType" element={<Review />} />
-        <Route
-          path="/review/:trackType/quiz/:reviewWeekId"
-          element={<Quiz />}
-        />
-        <Route path="/assignment/:track" element={<AssignmentMain />} />
-        <Route
-          path="/assignment/:track/submit/:assignmentId"
-          element={<AssignmentSubmitPage />}
-        />
-      </Routes>
-      {!isMobile && <CCFooter />}
-    </div>
+    <LoginRouteGuard>
+      <div>
+        {isMobile ? <CCHeaderMobile /> : <CCHeader />}
+        <Routes>
+          <Route path="/" element={<CyberCampusIntro />} />
+          <Route path="lecture/:track" element={<CCLecture />} />
+          <Route
+            path="lecture/:track/lecture_detail/:id"
+            element={<LectureDetail />}
+          />
+          <Route path="/review/:trackType" element={<Review />} />
+          <Route
+            path="/review/:trackType/quiz/:reviewWeekId"
+            element={<Quiz />}
+          />
+          <Route path="/assignment/:track" element={<AssignmentMain />} />
+          <Route
+            path="/assignment/:track/submit/:assignmentId"
+            element={<AssignmentSubmitPage />}
+          />
+        </Routes>
+        {!isMobile && <CCFooter />}
+      </div>
+    </LoginRouteGuard>
   );
 }
