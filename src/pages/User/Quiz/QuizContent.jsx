@@ -112,6 +112,28 @@ export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, 
       }
   };
 
+  const handleFileDownload = async (fileUrl, fileName) => {
+    try {
+      const response = await fetch(fileUrl);
+      if (!response.ok) throw new Error("다운로드 실패");
+
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error("파일 다운로드 실패:", error);
+      window.open(fileUrl, "_blank"); // 실패 시 백업
+    }
+  };
+  
   return (
     <div className="flex relative w-full min-h-[590px] flex-col">
       {currentQuestion ? (
@@ -145,14 +167,16 @@ export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, 
                   .filter((file) => !/^(jpg|jpeg|png|gif|bmp|webp)$/i.test(file.fileType))
                   .map((file, index) => (
                     <div key={index} className="mt-2">
-                      <a
-                        href={file.fileUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <div
+                        name={file.fileUrl}
+                        onClick={(e) => {
+                          e.preventDefault(); // 기본 링크 이동 막기!
+                          handleFileDownload(file.fileUrl, file.fileName);
+                        }}
                         className="text-[#3B79FF] underline text-sm"
                       >
-                        {file.fileName}
-                      </a>
+                        {file.fileName} 다운로드
+                      </div>
                     </div>
                   ))}
             </div>
