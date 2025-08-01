@@ -200,7 +200,7 @@ const AdminCalendar = () => {
       {modalIsOpen && (
         <div
           className="absolute w-[80%] h-[75%] sm:h-[64%] top-[7%] sm:top-[25%] left-[10%] rounded-3xl border-2 border-[#DADADA] bg-white shadow-lg p-6 sm:p-8 overflow-hidden"
-          onClick={() => setModalIsOpen(false)}
+          // 모달 외부 클릭 이벤트는 그대로 유지하되, 내부에서 이벤트 차단
         >
           <div
             className="flex justify-between items-center mb-6 mx-2 sm:mx-5"
@@ -212,6 +212,7 @@ const AdminCalendar = () => {
             <div className="flex items-center justify-end">
               <div className="sm:hidden ml-5 mr-2">
                 <button
+                  type="button"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleAddEvent(selectedDate);
@@ -224,17 +225,25 @@ const AdminCalendar = () => {
               <div className="flex justify-center items-center">
                 <div className="mt-1 sm:mr-5 fontEL sm:text-sm text-xs">
                   <button
+                    type="button"
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleSelectAll();
+                      const allIds = selectedDateEvents.map(
+                        (event) => event.id
+                      );
+                      setCheckedEvents(allIds);
                     }}
                     className="sm:mr-3 mb-1 sm:mb-0 px-3 py-[6px] rounded-md bg-[#E9E9E9] text-[#838383] cursor-pointer"
                   >
                     전체 선택
                   </button>
                   <button
-                    onClick={handleDelete}
-                    className="ml-0 mr-1 sm:mr-2 px-3 py-[6px] rounded-md bg-[#6C6868] text-white cursor-pointer"
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDelete(e);
+                    }}
+                    className="ml-0 sm:mr-2 px-3 py-[6px] rounded-md bg-[#6C6868] text-white cursor-pointer"
                   >
                     선택 삭제
                   </button>
@@ -255,7 +264,7 @@ const AdminCalendar = () => {
           >
             {selectedDateEvents.map((event, idx) => (
               <div
-                key={idx}
+                key={event.id} // idx 대신 event.id 사용
                 className="flex justify-between rounded-xl p-4 sm:p-5 text-[14px] sm:text-lg fontBold text-start text-gray-800"
                 style={{ backgroundColor: event.color }}
               >
@@ -267,8 +276,10 @@ const AdminCalendar = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <button
+                    type="button"
                     className="text-gray-800 cursor-pointer"
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       setEventToEdit(event);
                       setSelectedDate(new Date(event.startDate));
                       setAddModalIsOpen(true);
@@ -276,12 +287,28 @@ const AdminCalendar = () => {
                   >
                     <img src={images.Pen} alt="Edit" className="w-4 h-4" />
                   </button>
-                  <input
-                    type="checkbox"
-                    checked={checkedEvents.includes(event.id)}
-                    onChange={() => handleCheck(event.id)}
-                    className="w-4 h-4 accent-white border-gray-400 cursor-pointer"
-                  />
+
+                  {/* 체크박스 부분만 수정 */}
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCheckedEvents((prev) => {
+                        const newState = prev.includes(event.id)
+                          ? prev.filter((id) => id !== event.id)
+                          : [...prev, event.id];
+                        return newState;
+                      });
+                    }}
+                    className="cursor-pointer p-1" // 터치 영역 약간 확대
+                  >
+                    <input
+                      type="checkbox"
+                      checked={checkedEvents.includes(event.id)}
+                      onChange={() => {}} 
+                      onClick={(e) => e.preventDefault()} 
+                      className="w-4 h-4 accent-white border-gray-400 cursor-pointer pointer-events-none"
+                    />
+                  </div>
                 </div>
               </div>
             ))}
