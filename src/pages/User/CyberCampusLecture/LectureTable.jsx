@@ -76,8 +76,12 @@ const LectureTable = ({ data, track }) => {
                 className="flex justify-center"
                 style={{ flex: flexValues[2] }}
               >
-                {item && item.createDate && !isNaN(new Date(item.createDate))
-                  ? new Date(item.createDate).toLocaleDateString("ko-KR")
+                {item?.createDate && !isNaN(new Date(item.createDate))
+                  ? new Intl.DateTimeFormat("ko-KR", {
+                      year: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
+                    }).format(new Date(item.createDate))
                   : "-"}
               </div>
             </div>

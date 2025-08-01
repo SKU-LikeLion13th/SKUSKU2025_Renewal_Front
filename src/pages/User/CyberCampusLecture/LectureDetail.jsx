@@ -13,6 +13,7 @@ const LectureDetail = () => {
       try {
         const response = await API.get(`/lecture/${id}`);
         setLecture(response.data);
+        console.log(response.data);
       } catch (err) {
         if (err.response && err.response.status === 404) {
           setError("해당 강의 자료를 찾을 수 없습니다.");
@@ -67,17 +68,26 @@ const LectureDetail = () => {
       <div className="bg-[#F9F9F9] border-t-[1.5px] p-6 sm:p-8">
         {lecture.joinLectureFiles?.map((file) => (
           <a
+            // key={file.fileName}
+            // href={`data:${file.fileType};base64,${file.file}`}
+            // download={file.fileName}
+            // className="text-blue-500 underline flex items-center mb-2 text-xs sm:text-base"
             key={file.fileName}
-            href={`data:${file.fileType};base64,${file.file}`}
-            download={file.fileName}
+            href={file.fileUrl}
+            download
             className="text-blue-500 underline flex items-center mb-2 text-xs sm:text-base"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <img
               src="https://cdn-icons-png.flaticon.com/512/337/337946.png"
               alt="파일 아이콘"
               className="w-5 h-5 mr-2"
             />
-            {file.fileName} ({(file.size / 1024).toFixed(1)} KB)
+            {file.fileName}
+            {typeof file.size === "number" && (
+              <span className="ml-1">({(file.size / 1024).toFixed(1)} KB)</span>
+            )}
           </a>
         ))}
       </div>
