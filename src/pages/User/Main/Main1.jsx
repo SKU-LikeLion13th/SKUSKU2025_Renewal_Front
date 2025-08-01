@@ -75,38 +75,31 @@ export default function Main1() {
           </p>
         </div>
 
-        <div className="xl:hidden flex mt-24 justify-center items-center px-6 w-full">
+        <div className="xl:hidden flex lg:mt-24 md:mt-16 sm:mt-12 mt-20 justify-center items-center px-6 w-full">
           <div className="flex flex-col justify-center items-center gap-4">
             {/* 로그인 ㅇ */}
             {user ? (
               <>
                 <div
-                  className={`flex items-center justify-center text-white`} // 기본 흰색 글씨
+                  className={`flex items-center justify-center text-white text-[13px] sm:text-[14px] md:text-[15px] lg:text-[16px]`} // 기본 흰색 글씨
                 >
                   <div className="flex items-center">
                     <div
                       style={{ backgroundColor: getColorByTrack(user.track) }}
-                      className="flex items-center justify-center w-[20px] sm:w-[25px] md:w-[30px] lg:w-[35px] sm:h-[25px] md:h-[30px] lg:h-[35px] h-auto rounded-full text-[10px] sm:text-[14px] md:text-[16px] lg:text-[20px]"
+                      className="flex items-center justify-center w-[20px] sm:w-[25px] md:w-[30px] lg:w-[35px] sm:h-[25px] md:h-[30px] lg:h-[35px] h-[20px] rounded-full "
                     >
                       🦁
                     </div>
-                    <span className="px-1 sm:px-3 text-[10px] sm:text-[14px] md:text-[16px] lg:text-[20px]">
-                      {user.track}
-                    </span>
-                    <span className="fontBold text-[10px] sm:text-[14px] md:text-[16px] lg:text-[20px]">
-                      {user.name}님
-                    </span>
+                    <span className="px-1 sm:px-3">{user.track}</span>
+                    <span className="fontBold">{user.name}님</span>
                   </div>
                   <div className="px-1 sm:px-2 text-[gray]">|</div>
-                  <button
-                    onClick={logout}
-                    className="text-[10px] sm:text-[14px] md:text-[16px] lg:text-[20px]"
-                  >
+                  <button onClick={logout} className="">
                     LOGOUT
                   </button>
                 </div>
                 <div className="lg:w-[250px] md:w-[200px] sm:w-[180px] w-[125px] h-auto text-[5px] flex justify-center">
-                  <CCBtn textSize="lg:text-[18px] md:text-[15px] text-[10px]" />
+                  <CCBtn textSize="lg:text-[15px] md:text-[13px] text-[10px]" />
                 </div>
               </>
             ) : (
