@@ -3,9 +3,16 @@ import API from "../../../utils/axios";
 import CCBtn from "../../../components/CCBtn";
 import GoogleLoginBtn from "../../../components/GoogleLoginBtn";
 import { useAuth } from "../../../utils/AuthContext";
+import { useInView } from "react-intersection-observer";
 
 export default function Main1() {
   const { user, logout } = useAuth();
+
+  const { ref, inView } = useInView({
+    triggerOnce: false,  // 여러 번 화면에 들어올 때마다 애니메이션 실행
+    threshold: 0.3,
+  });
+
   const handleClick = async () => {
     try {
       const res = await API.get("/log/status");
@@ -35,7 +42,10 @@ export default function Main1() {
   }
 
   return (
-    <div className="relative h-screen w-full overflow-hidden px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
+    <div
+      ref={ref} // 여기서 관찰
+      className="relative h-screen w-full overflow-hidden px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16"
+    >
       {/* 모바일 배경 */}
       <div
         className="absolute inset-0 bg-cover bg-no-repeat sm:hidden sm:bg-cover bg-[position:-200px_center] md:bg-[position:-150px_center] lg:bg-[position:-2000px_center]"
@@ -55,7 +65,12 @@ export default function Main1() {
       </div>
 
       {/* 글 (이미지 위에 배치) */}
-      <div className="relative flex flex-col justify-center h-full mt-3 text-white ">
+      <motion.div
+        className="relative flex flex-col justify-center h-full mt-3 text-white"
+        initial={{ opacity: 0, y: 50 }}
+        animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+        transition={{ duration: 1 }}
+      >
         <div className="fontSB text-[28px] sm:leading-[clamp(3rem,4.3vw,4rem)] sm:pl-[8%] pl-6 sm:text-[clamp(28px,2.9vw,3rem)]">
           <p>상상을 현실로 만드는</p>
           <p>
@@ -114,7 +129,7 @@ export default function Main1() {
             )}
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* 스크롤다운 (sm 이상일 때만 보임) */}
       <div className="relative sm:flex hidden flex-col items-center bottom-[15%]">
@@ -125,7 +140,7 @@ export default function Main1() {
           src="/assets/images/Mouse.png"
           alt="마우스 모양"
           className="w-[23px] mt-2"
-          animate={{ y: [0, 10, 0] }}
+          animate={inView ? { y: [0, 10, 0] } : { y: 0 }}
           transition={{
             duration: 2,
             repeat: Infinity,
