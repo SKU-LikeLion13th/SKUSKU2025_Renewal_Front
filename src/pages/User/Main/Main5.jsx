@@ -9,9 +9,8 @@ export default function Main5() {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // 스크롤로 진입할 때마다 true로 전환
         if (entry.isIntersecting) {
-          setIsVisible(false); // 리셋 (재생 가능하게)
+          setIsVisible(true); // 리셋 (재생 가능하게)
           setTimeout(() => {
             setIsVisible(true);
           }, 50); // 약간의 지연 후 다시 true로 (애니메이션 재실행 트리거)

@@ -59,7 +59,7 @@ export default function ProjectSlider() {
             disableOnInteraction: false,
           }}
           speed={4000}
-          slidesPerView={3}
+          slidesPerView={1}
           breakpoints={{
             1280: {
               slidesPerView: 3,
