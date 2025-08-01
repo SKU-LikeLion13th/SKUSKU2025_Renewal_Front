@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import axios from "axios";
 import API from "../../../utils/axios";
 import CCBtn from "../../../components/CCBtn";
 import GoogleLoginBtn from "../../../components/GoogleLoginBtn";

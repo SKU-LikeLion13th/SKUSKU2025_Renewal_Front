@@ -6,8 +6,8 @@ import axios from 'axios';
 export default function AdminQuizContent() {
   const [questionCount, setQuestionCount] = useState(1);
   const [questionTypes, setQuestionTypes] = useState([]);
-  // 문제별 첨부파일 상태: {0: [File, ...], 1: [...], ...}
   const [filesByQuestion, setFilesByQuestion] = useState({});
+  const [dragStates, setDragStates] = useState({}); // 각 문제별 드래그 상태 관리
 
   const { trackType } = useParams();
   const navigate = useNavigate();
@@ -29,10 +29,19 @@ export default function AdminQuizContent() {
         });
         return copy;
       });
+      // 드래그 상태도 초기화
+      setDragStates((prev) => {
+        const copy = {...prev};
+        Object.keys(copy).forEach(key => {
+          if (parseInt(key) >= value) delete copy[key];
+        });
+        return copy;
+      });
     } else {
       setQuestionCount(0);
       setQuestionTypes([]);
       setFilesByQuestion({});
+      setDragStates({});
     }
   };
 
@@ -42,21 +51,73 @@ export default function AdminQuizContent() {
     setQuestionTypes(updatedTypes);
   };
 
-  const [selectedFiles, setSelectedFiles] = useState({});
-
-  const handleFileChange = (index, e) => {
-    const files = Array.from(e.target.files);
-    setSelectedFiles((prev) => ({
+  const handleFileChange = (index, files) => {
+    setFilesByQuestion((prev) => ({
       ...prev,
       [index]: files,
     }));
-
-    setFilesByQuestion((prev) => ({
-    ...prev,
-    [index]: files,
-  }));
   };
 
+  // 각 문제별 드래그 앤 드롭 핸들러
+  const handleDragOver = (e, questionIndex) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragStates(prev => ({
+      ...prev,
+      [questionIndex]: true
+    }));
+  };
+
+  const handleDragEnter = (e, questionIndex) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragStates(prev => ({
+      ...prev,
+      [questionIndex]: true
+    }));
+  };
+
+  const handleDragLeave = (e, questionIndex) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // 현재 요소의 경계를 벗어났는지 확인
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX;
+    const y = e.clientY;
+    
+    if (x < rect.left || x >= rect.right || y < rect.top || y >= rect.bottom) {
+      setDragStates(prev => ({
+        ...prev,
+        [questionIndex]: false
+      }));
+    }
+  };
+
+  const handleDrop = (e, questionIndex) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    setDragStates(prev => ({
+      ...prev,
+      [questionIndex]: false
+    }));
+
+    const droppedFiles = Array.from(e.dataTransfer.files);
+    if (droppedFiles.length > 0) {
+      // 기존 파일과 새로 드롭된 파일을 합치기
+      const existingFiles = filesByQuestion[questionIndex] || [];
+      const newFiles = [...existingFiles, ...droppedFiles];
+      handleFileChange(questionIndex, newFiles);
+    }
+  };
+
+  // 파일 제거 함수
+  const removeFile = (questionIndex, fileIndex) => {
+    const currentFiles = filesByQuestion[questionIndex] || [];
+    const updatedFiles = currentFiles.filter((_, index) => index !== fileIndex);
+    handleFileChange(questionIndex, updatedFiles);
+  };
 
   const handleSubmit = async () => {
     try {
@@ -74,21 +135,6 @@ export default function AdminQuizContent() {
       }
 
       // 문제별 유효성 검사
-      for (let i = 0; i < questionCount; i++) {
-        const content = document.querySelectorAll("input[placeholder='문제를 입력해주세요.']")[i]?.value.trim();
-        const type = questionTypes[i];
-
-        if (!content) {
-          alert(`문제 ${i + 1}의 내용을 입력해주세요.`);
-          return;
-        }
-
-        if (!type) {
-          alert(`문제 ${i + 1}의 형식을 선택해주세요.`);
-          return;
-        }
-      }
-
       for (let i = 0; i < questionCount; i++) {
         const content = document.querySelectorAll("input[placeholder='문제를 입력해주세요.']")[i]?.value.trim();
         const type = questionTypes[i];
@@ -299,31 +345,67 @@ export default function AdminQuizContent() {
 
       {/* 파일첨부 input 추가 */}
       <div className="flex sm:mt-20 mt-8 sm:text-[20px] text-[15px] fontSB">파일 업로드</div>
-      <label
-        htmlFor={`file-upload-${index}`}
-        className="flex w-fit sm:mt-10 mt-3 bg-[#FFFFFF] border-[#E5E5E5] border-[1.51px] rounded-[7px] sm:px-5 sm:py-3 px-4 py-2 cursor-pointer"
+      <div
+        className={`
+          flex w-fit sm:mt-10 mt-3 bg-[#FFFFFF] border-[1.51px] rounded-[7px] sm:px-5 sm:py-3 px-4 py-2 cursor-pointer
+          ${dragStates[index] 
+            ? 'border-[#3B79FF] bg-[#F0F4FF]' 
+            : 'border-[#E5E5E5]'
+          }
+        `}
+        onDragOver={(e) => handleDragOver(e, index)}
+        onDragEnter={(e) => handleDragEnter(e, index)}
+        onDragLeave={(e) => handleDragLeave(e, index)}
+        onDrop={(e) => handleDrop(e, index)}
+        onClick={() => document.getElementById(`file-upload-${index}`).click()}
       >
         <span className="sm:text-[14px] text-[9.5px] text-[#232323] underline">파일 선택</span>
         <input
           id={`file-upload-${index}`}
           type="file"
           multiple
-          onChange={(e) => handleFileChange(index, e)}
+          onChange={(e) => handleFileChange(index, Array.from(e.target.files))}
           className="hidden"
         />
 
         <div className="ml-3 sm:text-[14px] text-[9.5px]">
-          {selectedFiles[index] && selectedFiles[index].length > 0 ? (
-            <ul className="text-[#232323] list-disc ml-5">
-              {selectedFiles[index].map((file, i) => (
-                <li key={i}>{file.name}</li>
-              ))}
-            </ul>
+          {filesByQuestion[index]?.length > 0 ? (
+            <span className="text-[#232323]">선택된 파일: {filesByQuestion[index].length}개</span>
           ) : (
-            <span className="text-[#A6A6A6]">또는 여기로 파일을 끌어오세요.</span>
+            <span className={`${dragStates[index] ? 'text-[#3B79FF]' : 'text-[#A6A6A6]'}`}>
+              {dragStates[index] ? '파일을 여기에 놓으세요' : '또는 여기로 파일을 끌어오세요.'}
+            </span>
           )}
         </div>
-      </label>
+      </div>
+
+      {/* 선택된 파일 목록 표시 */}
+      {filesByQuestion[index] && filesByQuestion[index].length > 0 && (
+        <div className="flex flex-col sm:mt-5 mt-3 bg-[#F9F9F9] border-[#E5E5E5] border-[1px] rounded-[7px] sm:px-4 sm:py-3 px-3 py-2">
+          <div className="sm:text-[12px] text-[10px] text-[#666666] fontSB">
+            선택된 파일:
+          </div>
+          <div className="flex flex-col gap-1 mt-2">
+            {filesByQuestion[index].map((file, fileIndex) => (
+              <div key={fileIndex} className="flex items-center justify-between">
+                <span className="sm:text-[11px] text-[9px] text-[#232323] truncate flex-1">
+                  • {file.name}
+                </span>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeFile(index, fileIndex);
+                  }}
+                  className="ml-2 sm:text-[11px] text-[9px] text-[#FF4444] hover:text-[#FF0000]"
+                >
+                  삭제
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className='flex sm:mt-20 mt-8 sm:text-[20px] text-[15px] fontSB'>해설 입력</div>
       <input type="text" placeholder='해설을 입력해주세요.' className='flex lg:w-[50%] sm:w-[74%] w-fit sm:mt-10 mt-3 bg-[#FFFFFF] border-[#E5E5E5] border-[1.51px] rounded-[7px] sm:text-[16px] text-[12.5px] text-[#949494] fontSB sm:px-5 sm:py-3 px-4 py-2' />

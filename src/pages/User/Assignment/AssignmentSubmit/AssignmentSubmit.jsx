@@ -332,7 +332,7 @@ export default function AssignmentSubmit({ assignment }) {
                 type="button"
                 onClick={() => handleFileDownload(f.fileUrl, f.fileName)}
                 className="underline  text-[#4881FF] hover:text-blue-700 text-xs sm:text-sm">
-                {f.fileName} 다운로드
+                {f.fileName}
               </button>
             </div>
           ))}
@@ -366,7 +366,7 @@ export default function AssignmentSubmit({ assignment }) {
                           handleFileDownload(file.fileUrl, file.fileName)
                         }
                         className="underline text-[#4881FF] hover:text-blue-700 text-xs sm:text-sm">
-                        {file.fileName} 다운로드
+                        {file.fileName}
                       </button>
                     </div>
                   ))}
