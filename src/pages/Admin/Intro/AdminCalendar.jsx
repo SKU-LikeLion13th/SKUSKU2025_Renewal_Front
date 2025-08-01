@@ -304,9 +304,14 @@ const AdminCalendar = () => {
                     <input
                       type="checkbox"
                       checked={checkedEvents.includes(event.id)}
-                      onChange={() => {}} 
-                      onClick={(e) => e.preventDefault()} 
+                      onChange={() => {}}
+                      onClick={(e) => e.preventDefault()}
                       className="w-4 h-4 accent-white border-gray-400 cursor-pointer pointer-events-none"
+                      style={{
+                        // 모바일에서 체크표시가 잘 보이도록 추가 스타일
+                        accentColor: "#3b82f6", // 파란색
+                        transform: "scale(1.2)", // 약간 크게
+                      }}
                     />
                   </div>
                 </div>
