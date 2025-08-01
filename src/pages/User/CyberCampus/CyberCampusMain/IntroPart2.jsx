@@ -139,7 +139,7 @@ const IntroPart2 = () => {
       opacity: 1,
       y: 0,
       transition: {
-        staggerChildren: 0.15,  // 조금 더 부드러운 간격
+        staggerChildren: 0.15, // 조금 더 부드러운 간격
         when: "beforeChildren",
         ease: [0.25, 0.1, 0.25, 1],
         duration: 0.5,
@@ -158,7 +158,6 @@ const IntroPart2 = () => {
       },
     },
   };
-
 
   return (
     <div className="relative min-h-screen w-full flex flex-col justify-center items-center">
@@ -190,7 +189,11 @@ const IntroPart2 = () => {
         variants={containerVariants}
       >
         {/* 트랙 이름 */}
-        <motion.div variants={itemVariants} key="track-name" className="text-center">
+        <motion.div
+          variants={itemVariants}
+          key="track-name"
+          className="text-center"
+        >
           {currentTrack ? (
             <>
               <p className="fontBold text-3xl">SKU LIKELION</p>
@@ -212,7 +215,7 @@ const IntroPart2 = () => {
         </motion.div>
 
         {/* 트랙 선택 버튼 */}
-        <motion.div variants={containerVariants} className="flex gap-3">
+        <motion.div variants={containerVariants} className="flex gap-3 ">
           {Object.keys(trackInfo).map((track) => (
             <motion.button
               key={track}
@@ -241,11 +244,16 @@ const IntroPart2 = () => {
         </motion.div>
 
         {/* 트랙 미선택 안내 문구 */}
-        {!currentTrack && (
-          <motion.p variants={itemVariants} className="text-xs md:text-sm">
-            <span className="text-[#1f65ff]">트랙 선택 후</span> 서비스 이용이 가능합니다.
-          </motion.p>
-        )}
+        <div className="h-[20px] md:h-[24px]">
+          <p
+            className={`text-xs md:text-sm ${
+              currentTrack ? "invisible" : "visible"
+            }`}
+          >
+            <span className="text-[#1f65ff]">트랙 선택 후</span> 서비스 이용이
+            가능합니다.
+          </p>
+        </div>
 
         {/* 카드 목록 */}
         <motion.div
