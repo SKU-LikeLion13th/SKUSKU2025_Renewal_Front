@@ -53,11 +53,11 @@ const LectureTable = ({
       {/* 데이터 행 */}
       <div
         className={`flex w-full flex-col ${
-          isSmallScreen ? "min-h-[300px]" : " min-h-[250px] sm:min-h-[590px] "
+          isSmallScreen ? "min-h-[290px]" : "min-h-[500px] "
         }`}
       >
         {paddedItems.filter(Boolean).length === 0 ? (
-          <div className="flex justify-center items-center p-10 text-gray-500 min-h-[590px] w-full">
+          <div className="flex justify-center items-center p-10 text-gray-500 min-h-[290px] sm:min-h-[500px] w-full">
             등록된 강의가 없습니다.
           </div>
         ) : (
