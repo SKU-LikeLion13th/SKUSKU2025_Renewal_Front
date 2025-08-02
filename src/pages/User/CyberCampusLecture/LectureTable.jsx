@@ -20,7 +20,7 @@ const LectureTable = ({ data, track }) => {
   }, []);
 
   return (
-    <div className="flex flex-col w-full text-xs sm:text-sm md:text-base  min-h-[250px] sm:min-h-[590px]">
+    <div className="flex flex-col w-full text-xs sm:text-sm md:text-base">
       {/* 헤더 */}
       <div className="flex bg-[#F7F7F7] border-t-[2.5px] border-t-[#232323] border-b border-b-[#9A9A9A] p-2">
         {headers.map((header, index) => (
@@ -41,7 +41,7 @@ const LectureTable = ({ data, track }) => {
       {/* 내용 */}
       <div className="flex flex-col w-full h-full">
         {data.filter(Boolean).length === 0 ? (
-          <div className="flex justify-center items-center p-10 text-gray-500 min-h-[590px] w-full">
+          <div className="flex justify-center items-center p-10 text-gray-500 min-h-[290px] sm:min-h-[500px] w-full">
             등록된 강의가 없습니다.
           </div>
         ) : (
