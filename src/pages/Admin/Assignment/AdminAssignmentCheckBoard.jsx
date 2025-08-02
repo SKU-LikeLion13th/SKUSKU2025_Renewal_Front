@@ -51,7 +51,9 @@ export default function AdminAssignmentCheckBoard({
 
       {/* 본문 */}
       <div
-        className={`flex w-full flex-col ${!isSmallScreen && "min-h-[550px]"}`}>
+        className={`flex w-full flex-col ${
+          isSmallScreen ? "min-h-[290px]" : "min-h-[500px]"
+        } ${assignments.length === 0 ? "justify-center items-center" : ""}`}>
         {assignments.length > 0 ? (
           assignments.map((assignment, index) => (
             <div key={`${assignment.id}-${index}`} className={rowStyle}>
@@ -107,8 +109,8 @@ export default function AdminAssignmentCheckBoard({
             </div>
           ))
         ) : (
-          <div
-            className={`flex justify-center w-full p-4 text-gray-500 ${textSize}`}>
+          /* 빈 상태 메시지 */
+          <div className={`text-gray-500 ${textSize}`}>
             {emptyText || "등록된 과제가 없습니다."}
           </div>
         )}

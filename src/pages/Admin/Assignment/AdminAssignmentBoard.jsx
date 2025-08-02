@@ -51,7 +51,7 @@ export default function AdminAssignmentBoard({
       {/* 본문 */}
       <div
         className={`flex w-full flex-col ${
-          !isSmallScreen ? "min-h-[290px]" : "min-h-[500px]"
+          isSmallScreen ? "min-h-[290px]" : "min-h-[500px]"
         } ${assignments.length === 0 ? "justify-center items-center" : ""}`}>
         {assignments.length > 0 ? (
           assignments.map((assignment, index) => (
