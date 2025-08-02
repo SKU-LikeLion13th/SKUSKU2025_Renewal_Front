@@ -31,7 +31,6 @@ const CCLecture = () => {
         });
         setAllData(response.data);
         setData(response.data);
-        console.log(response.data);
         if (Array.isArray(response.data)) {
           setData(response.data);
         } else {
@@ -45,7 +44,6 @@ const CCLecture = () => {
     };
 
     fetchLectureData();
-    console.log(data);
   }, [trackParam]);
 
   const handleSearch = (keyword) => {

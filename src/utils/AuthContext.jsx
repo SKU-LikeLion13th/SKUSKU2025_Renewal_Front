@@ -11,7 +11,6 @@ export function AuthProvider({ children }) {
       try {
         const response = await API.get("/log/status");
         setUser(response.data);
-        console.log("유저 정보:", response.data);
       } catch (error) {
         setUser(null);
       }

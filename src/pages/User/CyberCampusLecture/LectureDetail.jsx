@@ -13,7 +13,6 @@ const LectureDetail = () => {
       try {
         const response = await API.get(`/lecture/${id}`);
         setLecture(response.data);
-        console.log(response.data);
       } catch (err) {
         if (err.response && err.response.status === 404) {
           setError("해당 강의 자료를 찾을 수 없습니다.");

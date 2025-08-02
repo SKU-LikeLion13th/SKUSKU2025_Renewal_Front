@@ -42,7 +42,6 @@ const AdminCCLectureUpload = () => {
         presignedReqBody,
         { withCredentials: true }
       );
-      console.log(presignedRes.data);
 
       const presignedUrls = presignedRes.data;
 
@@ -67,7 +66,6 @@ const AdminCCLectureUpload = () => {
         };
       });
 
-      console.log(fileInfoList);
       // 강의 등록 요청
       const payload = {
         trackType: track.replace("-", "").toUpperCase(),
@@ -75,8 +73,6 @@ const AdminCCLectureUpload = () => {
         content,
         files: fileInfoList,
       };
-
-      console.log(JSON.stringify(payload, null, 2));
 
       // 업로드 완
       const res = await API.post("/admin/lecture/add", payload, {
