@@ -35,7 +35,7 @@ export default function AdminAssignmentBoard({
   const buttonStyle = `underline cursor-pointer ${textSize}`;
 
   return (
-    <div className="flex flex-col items-center w-full">
+    <div className="flex flex-col items-center w-full min-h-[290px] sm:min-h-[500px]">
       {/* 헤더 */}
       <div className="flex w-full border-t-[2.5px] border-t-[#232323] border-b border-b-[#9A9A9A] bg-[#F7F7F7] p-2">
         {headers.map((header, index) => (

@@ -70,7 +70,9 @@ export default function AssignmentBoard({ assignments }) {
       </div>
 
       <div
-        className={`flex w-full flex-col ${!isSmallScreen && "min-h-[550px]"}`}>
+        className={`flex w-full flex-col ${
+          !isSmallScreen ? "min-h-[290px]" : "min-h-[500px]"
+        }`}>
         {assignments.map((assignment) => {
           const baseStyle = `flex justify-center px-1 ${textSize}`;
 
