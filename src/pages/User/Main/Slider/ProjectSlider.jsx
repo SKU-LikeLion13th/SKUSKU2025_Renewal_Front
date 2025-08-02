@@ -34,7 +34,6 @@ export default function ProjectSlider() {
     API.get("/project/all")
       .then((response) => {
         setProjects(response.data);
-        console.log(response.data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
