@@ -21,7 +21,7 @@ const AdminCCLectureEdit = () => {
       try {
         const response = await API.get(`/lecture/${lectureId}`);
         const lecture = response.data;
-        console.log(lecture);
+
         setTitle(lecture.title);
         setContent(lecture.content || "");
         setFiles(
@@ -37,9 +37,6 @@ const AdminCCLectureEdit = () => {
             status: "KEEP",
           }))
         );
-        console.log("joinLectureFiles:", lecture.joinLectureFiles);
-        // console.log("파일 목록 확인", lecture.joinLectureFiles);
-        console.log("params:", { track, lectureId });
       } catch (err) {
         console.error("상세 정보 불러오기 실패:", err);
         setError("강의자료 정보를 불러오는 데 실패했습니다.");
@@ -132,7 +129,6 @@ const AdminCCLectureEdit = () => {
           status: f.status,
         })),
       };
-      console.log("업데이트 요청 payload:", JSON.stringify(payload, null, 2));
 
       await API.put("/admin/lecture/update", payload, {
         headers: { "Content-Type": "application/json" },

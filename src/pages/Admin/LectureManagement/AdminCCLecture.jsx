@@ -23,7 +23,7 @@ const AdminCCLecture = () => {
         const response = await API.get(`/lecture/all/${trackParam}`, {
           withCredentials: true,
         });
-        console.log("강의 전체 데이터:", response.data);
+
         setAllData(response.data);
         setData(response.data);
       } catch (err) {
@@ -68,11 +68,6 @@ const AdminCCLecture = () => {
           if (lecture?.fileKey && typeof lecture.fileKey === "string") {
             fileKey.push(lecture.fileKey);
           }
-
-          // console.log("fileKey: ", fileKey);
-          // console.log("삭제 요청 lecture:", lecture);
-          console.log("최종 fileKey:", fileKey);
-          console.log("삭제 요청 lecture:", lecture);
 
           return API.delete(`/admin/lecture/${id}`, {
             // headers: { "Content-Type": "application/json" },
