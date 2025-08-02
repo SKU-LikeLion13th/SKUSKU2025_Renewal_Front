@@ -119,6 +119,14 @@ export default function AssignmentBoard({ assignments }) {
             </div>
           );
         })}
+
+        {/* 빈 상태 메시지 */}
+        {assignments.length === 0 && (
+          <div
+            className={`flex justify-center w-full p-4 text-gray-500 ${textSize}`}>
+            등록된 과제가 없습니다.
+          </div>
+        )}
       </div>
     </div>
   );
