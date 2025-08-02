@@ -474,8 +474,6 @@ export default function AdminReviewUpdate() {
         reviewQuizDTOList,
       };
 
-      console.log('🚩 전송할 데이터:', payload);
-
       const response = await API.put(`/admin/reviewQuiz/update/${reviewWeekId}`, payload);
 
       if (response.status === 200) {
