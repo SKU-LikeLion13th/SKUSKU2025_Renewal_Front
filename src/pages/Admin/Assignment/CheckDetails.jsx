@@ -20,8 +20,6 @@ export default function CheckDetails() {
         const res = await API.get(`/admin/assignment/check/${submitId}`);
         setAssignment(res.data);
         setFeedback(res.data.feedback || "");
-
-        console.log("API 응답 데이터:", res.data);
       } catch (error) {
         console.error("과제 조회 실패:", error);
       }

@@ -163,11 +163,6 @@ export default function AddProject() {
         alert("프로젝트가 성공적으로 등록되었습니다!");
       }
 
-      console.log(
-        `프로젝트 ${editMode ? "수정" : "등록"} 성공:`,
-        response.data
-      );
-
       // 폼 초기화
       setFormData({
         classTh: "",

@@ -18,7 +18,7 @@ export default function CheckLions() {
         const { data } = await API.get(
           `/admin/assignment/checklions/${assignmentId}`
         );
-        console.log("제출한 아기사자 목록:", data);
+
         const processed = data.map((item, index) => ({
           id: item.submitAssignmentId,
           name: item.lionName || item.name || "이름 없음",

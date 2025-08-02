@@ -234,14 +234,6 @@ export default function AssignmentSubmit({ assignment }) {
           files: fileData,
         };
 
-        console.log("수정할 과제 데이터:", submitPayload);
-        console.log("파일 변경사항:", {
-          hasChanges: fileData.length > 0,
-          deletedFiles: deletedFiles,
-          newFiles: fileData.filter((f) => f.status === "NEW"),
-          totalChanges: fileData.length,
-        });
-
         await API.put("/assignment/update", submitPayload);
         alert("과제가 수정되었습니다.");
 
@@ -280,7 +272,6 @@ export default function AssignmentSubmit({ assignment }) {
           files: fileData, // 새 제출시에는 모든 파일
         };
 
-        console.log("제출할 과제 데이터:", submitPayload);
         await API.post("/assignment/submit", submitPayload);
         alert("과제가 제출되었습니다.");
 

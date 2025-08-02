@@ -210,16 +210,9 @@ export default function AddAssignment() {
       };
 
       if (isEdit) {
-        console.log("수정할 과제 데이터:", assignmentData);
-        console.log("파일 변경사항:", {
-          deletedFiles: deletedFiles,
-          newFiles: fileData.filter((f) => f.status === "NEW"),
-        });
-
         await API.put("/admin/assignment/update", assignmentData);
         alert("과제가 수정되었습니다.");
       } else {
-        console.log("등록할 과제 데이터:", assignmentData);
         await API.post("/admin/assignment/upload", assignmentData);
         alert("과제가 등록되었습니다.");
       }

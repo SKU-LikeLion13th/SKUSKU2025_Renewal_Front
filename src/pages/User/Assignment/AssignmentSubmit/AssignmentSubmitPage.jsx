@@ -25,7 +25,6 @@ export default function AssignmentSubmitPage() {
         //isSubmit이 true인 경우에만
         if (basicAssignmentData?.isSubmit == "True") {
           const { data } = await API.get(`/assignment/submit/${assignmentId}`);
-          console.log("제출 정보:", data);
           submitData = data;
         }
 
@@ -39,7 +38,6 @@ export default function AssignmentSubmitPage() {
             basicAssignmentData?.assignmentId || parseInt(assignmentId),
         };
 
-        console.log("합쳐진 과제 정보:", mergedAssignment);
         setAssignment(mergedAssignment);
       } catch (error) {
         console.error("과제 정보를 불러오는 데 실패했습니다:", error);

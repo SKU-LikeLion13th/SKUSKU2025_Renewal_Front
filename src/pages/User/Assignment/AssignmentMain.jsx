@@ -32,11 +32,9 @@ export default function AssignmentMain() {
           track: track,
         }));
 
-        // Sort assignments by ID in descending order (most recent first)
         const sortedAssignments = processed.sort((a, b) => b.id - a.id);
 
         setAssignments(sortedAssignments);
-        console.log("과제 데이터:", sortedAssignments);
       } catch (error) {
         console.error("과제 데이터를 불러오는 데 실패했습니다:", error);
         if (error.response?.status === 404) {
