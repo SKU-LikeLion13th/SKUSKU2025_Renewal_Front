@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import API from "../../../utils/axios";
 import axios from "axios";
@@ -7,6 +7,7 @@ import Breadcrumb from "../../../components/Breadcrumb";
 
 const AdminCCLectureEdit = () => {
   const { track, lectureId } = useParams();
+  const navigate = useNavigate();
 
   const trackParam = track.replace("-", "").toUpperCase();
 
@@ -139,6 +140,7 @@ const AdminCCLectureEdit = () => {
       });
 
       alert("수정이 완료되었습니다.");
+      navigate(`/admin/LectureManagement/${track}`);
     } catch (err) {
       console.error("수정 중 오류:", err);
       setError("수정 중 오류가 발생했습니다.");

@@ -172,7 +172,7 @@ const IntroPart2 = () => {
         src={images.folder}
         alt="floating folder"
         className="absolute inset-0 w-[17%] top-[20%] object-cover -z-20"
-        animate={{ y: [0, -15, 0, 15, 0] }}
+        animate={{ y: [0, -25, 0, 25, 0] }}
         transition={{
           duration: 6,
           repeat: Infinity,

@@ -79,7 +79,7 @@ const IntroPart3 = () => {
           </div>
           <div className="flex items-center justify-center"> {/* 화면 가운데 정렬, 높이 꽉 채움 */}
             <motion.div
-              animate={{ y: [0, -8, 0, 8, 0] }}
+              animate={{ y: [0, -15, 0, 15, 0] }}
               transition={{
                 duration: 8,
                 repeat: Infinity,
@@ -95,7 +95,7 @@ const IntroPart3 = () => {
             </motion.div>
 
             <motion.div
-              animate={{ y: [0, 8, 0, -8, 0] }}
+              animate={{ y: [0, 15, 0, -15, 0] }}
               transition={{
                 duration: 8,
                 repeat: Infinity,
