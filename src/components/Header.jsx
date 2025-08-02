@@ -30,8 +30,8 @@ export default function Header() {
       ],
     },
     {
-      title: { label: "COMMUNITY", path: "/", isAlert: true },
-      subItems: [{ label: "모집공고", path: "/", isAlert: true }],
+      title: { label: "COMMUNITY", isAlert: true },
+      subItems: [{ label: "모집공고", isAlert: true }],
     },
   ];
 
