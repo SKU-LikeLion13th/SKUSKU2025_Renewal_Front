@@ -72,58 +72,57 @@ export default function AssignmentBoard({ assignments }) {
       <div
         className={`flex w-full flex-col ${
           !isSmallScreen ? "min-h-[290px]" : "min-h-[500px]"
-        }`}>
-        {assignments.map((assignment) => {
-          const baseStyle = `flex justify-center px-1 ${textSize}`;
+        } ${assignments.length === 0 ? "justify-center items-center" : ""}`}>
+        {assignments.length > 0 ? (
+          assignments.map((assignment) => {
+            const baseStyle = `flex justify-center px-1 ${textSize}`;
 
-          // 제출 여부 스타일 (제출인 경우 파란색)
-          let statusStyle = baseStyle;
-          if (assignment.status === "제출") {
-            statusStyle += " text-[#3B79FF] font-bold";
-          }
+            // 제출 여부 스타일 (제출인 경우 파란색)
+            let statusStyle = baseStyle;
+            if (assignment.status === "제출") {
+              statusStyle += " text-[#3B79FF] font-bold";
+            }
 
-          // 운영진 확인 스타일 (PASS, NONE_PASS, UNREVIEWED)
-          let completedStyle = baseStyle;
-          if (assignment.completed === "확인") {
-            completedStyle += " text-[#4881FF] font-bold";
-          } else if (assignment.completed === "보류") {
-            completedStyle += " text-red-500 font-bold";
-          }
+            // 운영진 확인 스타일 (PASS, NONE_PASS, UNREVIEWED)
+            let completedStyle = baseStyle;
+            if (assignment.completed === "확인") {
+              completedStyle += " text-[#4881FF] font-bold";
+            } else if (assignment.completed === "보류") {
+              completedStyle += " text-red-500 font-bold";
+            }
 
-          return (
-            <div key={assignment.id} className={rowStyle}>
-              {/* 번호 */}
-              <div className={baseStyle} style={{ flex: flexValues[0] }}>
-                {assignment.displayNumber}
+            return (
+              <div key={assignment.id} className={rowStyle}>
+                {/* 번호 */}
+                <div className={baseStyle} style={{ flex: flexValues[0] }}>
+                  {assignment.displayNumber}
+                </div>
+
+                {/* 제목 */}
+                <div
+                  className={titleCellStyle}
+                  style={{ flex: flexValues[1] }}
+                  onClick={() => handleAssignmentClick(assignment)}
+                  title={assignment.title} // 호버 시 전체 제목 표시
+                >
+                  {assignment.title}
+                </div>
+
+                {/* 제출 여부 */}
+                <div className={statusStyle} style={{ flex: flexValues[2] }}>
+                  {assignment.status}
+                </div>
+
+                {/* 운영진 확인 */}
+                <div className={completedStyle} style={{ flex: flexValues[3] }}>
+                  {assignment.completed}
+                </div>
               </div>
-
-              {/* 제목 */}
-              <div
-                className={titleCellStyle}
-                style={{ flex: flexValues[1] }}
-                onClick={() => handleAssignmentClick(assignment)}
-                title={assignment.title} // 호버 시 전체 제목 표시
-              >
-                {assignment.title}
-              </div>
-
-              {/* 제출 여부 */}
-              <div className={statusStyle} style={{ flex: flexValues[2] }}>
-                {assignment.status}
-              </div>
-
-              {/* 운영진 확인 */}
-              <div className={completedStyle} style={{ flex: flexValues[3] }}>
-                {assignment.completed}
-              </div>
-            </div>
-          );
-        })}
-
-        {/* 빈 상태 메시지 */}
-        {assignments.length === 0 && (
-          <div
-            className={`flex justify-center w-full p-4 text-gray-500 ${textSize}`}>
+            );
+          })
+        ) : (
+          /* 빈 상태 메시지 */
+          <div className={`text-gray-500 ${textSize}`}>
             등록된 과제가 없습니다.
           </div>
         )}
