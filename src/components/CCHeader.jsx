@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import GoogleLoginBtn from "./GoogleLoginBtn";
 import CCBtn from "./CCBtn";
@@ -10,6 +10,26 @@ export default function CCHeader() {
   const [isHovered, setIsHovered] = useState(false);
   const { user, logout } = useAuth();
   const location = useLocation();
+  const [isTooltipVisible, setIsTooltipVisible] = useState(false);
+  const tooltipRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (tooltipRef.current && !tooltipRef.current.contains(event.target)) {
+        setIsTooltipVisible(false);
+      }
+    }
+
+    if (isTooltipVisible) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isTooltipVisible]);
   const isActive = (path) => {
     return location.pathname + location.search === path;
   };
@@ -151,9 +171,20 @@ export default function CCHeader() {
               isHovered ? "flex opacity-100" : "hidden opacity-0"
             }`}
           >
-            <button className="text-[13px] px-6 py-1 flex items-center rounded-3xl text-[#232323] bg-white fontBold">
-              제작자
-            </button>
+            <div className="relative" ref={tooltipRef}>
+              <button
+                className="text-[13px] px-6 py-1 flex items-center rounded-3xl text-[#232323] bg-white fontBold"
+                onClick={() => setIsTooltipVisible((prev) => !prev)}
+              >
+                제작자
+              </button>
+              {isTooltipVisible && (
+                <div className="absolute top-[140%] left-1/2 -translate-x-1/2 bg-white border border-gray-500 rounded-lg shadow-md px-4 py-2 text-sm text-black whitespace-nowrap z-20">
+                  12, 13기 운영진이 제작했습니다!
+                  <div className="absolute top-[-8px] left-1/2 -translate-x-1/2 w-3 h-3 bg-white border-l border-t border-gray-500 rotate-45"></div>
+                </div>
+              )}
+            </div>
             <a
               href="https://www.instagram.com/likelion_sku?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
               className="flex items-center rounded-full bg-white"
