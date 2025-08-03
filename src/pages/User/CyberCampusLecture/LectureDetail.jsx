@@ -78,8 +78,12 @@ const LectureDetail = () => {
         {lecture.title}
       </h2>
 
-      <div className="bg-[#F9F9F9] border-t-[1.5px] mb-12 sm:mb-20 h-32 text-sm sm:text-base">
-        {lecture.content && <div className="p-6 sm:p-8">{lecture.content}</div>}
+      <div className="bg-[#F9F9F9] border-t-[1.5px] mb-12 sm:mb-20 max-h-64 overflow-y-auto text-sm sm:text-base">
+        {lecture.content && (
+          <div className="p-6 sm:p-8 whitespace-pre-line break-words">
+            {lecture.content}
+          </div>
+        )}
       </div>
 
       {/* 파일 다운로드 */}
