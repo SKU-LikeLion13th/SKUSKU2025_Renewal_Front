@@ -27,7 +27,7 @@ const AdminRouteGuard = ({ children }) => {
     checkRole();
   }, []);
 
-  if (isAllowed === null) return null; // 또는 로딩 스피너
+  if (isAllowed === null) return null;
 
   return children;
 };

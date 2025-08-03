@@ -6,8 +6,14 @@ export default function CCHeaderMobile() {
   const [isHovered, setIsHovered] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const isAdmin = location.pathname.startsWith("/admin");
+  const basePath = isAdmin ? "admin" : "";
+
+  const buildPath = (subPath) =>
+    `/${[basePath, subPath].filter(Boolean).join("/")}`;
+
   const menuItems = [
-    { title: "PROJECT", path: "/project" },
+    { title: "PROJECT", path: buildPath("project") },
     { title: "TEAM", path: "/team" },
     { title: "COMMUNITY", path: "/community" },
   ];
