@@ -40,54 +40,41 @@ const LectureTable = ({ data, track }) => {
 
       {/* 내용 */}
       <div className="flex flex-col w-full h-full">
-        {data.filter(Boolean).length === 0 ? (
-          <div className="flex justify-center items-center p-10 text-gray-500 min-h-[290px] sm:min-h-[500px] w-full">
-            등록된 강의가 없습니다.
-          </div>
-        ) : (
-          data.filter(Boolean).map((item, i) => (
+        {data.filter(Boolean).map((item, i) => (
+          <Link
+            key={i}
+            to={`/cybercampus/lecture/${track}/lecture_detail/${item.id}`}
+            className={`flex w-full border-b border-b-[#E0E0E0] sm:px-1 px-0.5 sm:text-[13.5px] text-[12px] p-2 cursor-pointer hover:bg-blue-50 ${
+              !item ? "opacity-50" : ""
+            }`}
+          >
             <div
-              key={i}
-              className={`flex w-full border-b border-b-[#E0E0E0] sm:px-1 px-0.5  sm:text-[13.5px] text-[12px] p-2 cursor-pointer hover:bg-blue-50 ${
-                !item ? "opacity-50" : ""
-              }`}
+              className="flex justify-center"
+              style={{ flex: flexValues[0] }}
             >
-              <div
-                className="flex justify-center"
-                style={{ flex: flexValues[0] }}
-              >
-                {i + 1}
-              </div>
-              <div
-                className="flex justify-start"
-                style={{ flex: flexValues[1], paddingLeft: "1rem" }}
-              >
-                {item ? (
-                  <Link
-                    to={`/cybercampus/lecture/${track}/lecture_detail/${item.id}`}
-                  >
-                    {item.title}
-                  </Link>
-                ) : (
-                  ""
-                )}
-              </div>
-              <div
-                className="flex justify-center"
-                style={{ flex: flexValues[2] }}
-              >
-                {item?.createDateTime &&
-                !isNaN(new Date(item.createDateTime).getTime())
-                  ? new Intl.DateTimeFormat("ko-KR", {
-                      year: "2-digit",
-                      month: "2-digit",
-                      day: "2-digit",
-                    }).format(new Date(item.createDateTime))
-                  : "-"}
-              </div>
+              {i + 1}
             </div>
-          ))
-        )}
+            <div
+              className="flex justify-start"
+              style={{ flex: flexValues[1], paddingLeft: "1rem" }}
+            >
+              {item.title}
+            </div>
+            <div
+              className="flex justify-center"
+              style={{ flex: flexValues[2] }}
+            >
+              {item?.createDateTime &&
+              !isNaN(new Date(item.createDateTime).getTime())
+                ? new Intl.DateTimeFormat("ko-KR", {
+                    year: "2-digit",
+                    month: "2-digit",
+                    day: "2-digit",
+                  }).format(new Date(item.createDateTime))
+                : "-"}
+            </div>
+          </Link>
+        ))}
       </div>
     </div>
   );

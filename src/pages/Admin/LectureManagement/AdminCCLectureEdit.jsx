@@ -175,9 +175,14 @@ const AdminCCLectureEdit = () => {
         </h3>
         <textarea
           value={content}
-          onChange={handleContentChange}
+          onChange={(e) => {
+            setContent(e.target.value);
+            e.target.style.height = "auto"; // 높이 초기화
+            e.target.style.height = `${e.target.scrollHeight}px`; // 내용에 맞게 조정
+          }}
           placeholder="내용을 입력해 주세요."
-          className="bg-[#F9F9F9] w-full h-40 resize-none p-4 rounded-md text-sm placeholder-[#949494]"
+          className="bg-[#F9F9F9] w-full resize-none p-4 rounded-md text-sm placeholder-[#949494]"
+          style={{ minHeight: "10rem", overflow: "hidden" }} // 초기 높이 유지
         />
       </div>
 
