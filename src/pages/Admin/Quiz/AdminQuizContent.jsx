@@ -7,7 +7,8 @@ export default function AdminQuizContent() {
   const [questionCount, setQuestionCount] = useState(1);
   const [questionTypes, setQuestionTypes] = useState([]);
   const [filesByQuestion, setFilesByQuestion] = useState({});
-  const [dragStates, setDragStates] = useState({}); // 각 문제별 드래그 상태 관리
+  const [dragStates, setDragStates] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { trackType } = useParams();
   const navigate = useNavigate();
@@ -292,6 +293,8 @@ export default function AdminQuizContent() {
     } catch (err) {
       alert("요청 실패: " + (err.response?.data?.message || err.message));
       console.error("상세 오류:", err);
+    } finally {
+      setIsSubmitting(false); // 등록 끝
     }
   };
 
@@ -431,16 +434,19 @@ export default function AdminQuizContent() {
       <div className='flex justify-end sm:mt-20 mt-10'>
         <div
           className='flex bg-[#E9E9E9] text-[#838383] sm:px-5 sm:py-2 px-4 py-1.5 rounded-[6.45px] cursor-pointer'
-          onClick={() => navigate(-1)}  // 이전 페이지로 이동
+          onClick={() => !isSubmitting && navigate(-1)}  // 등록 중이면 나가기 막기
         >
           나가기
         </div>
-        <div
-          className='flex bg-[#3B79FF] text-white sm:px-5 sm:py-2 px-4 py-1.5 sm:ml-7 ml-2 rounded-[6.45px] cursor-pointer'
+        <button
+          className={`flex sm:px-5 sm:py-2 px-4 py-1.5 sm:ml-7 ml-2 rounded-[6.45px] cursor-pointer fontSB
+            ${isSubmitting ? 'bg-[#A9C1FF] cursor-not-allowed' : 'bg-[#3B79FF] hover:bg-[#2F5FDD]'}
+            text-white`}
+          disabled={isSubmitting}
           onClick={handleSubmit}
         >
-          등록하기
-        </div>
+          {isSubmitting ? '등록 중...' : '등록하기'}
+        </button>
       </div>
     </div>
   );

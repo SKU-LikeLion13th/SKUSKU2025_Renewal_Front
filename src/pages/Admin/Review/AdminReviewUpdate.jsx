@@ -16,7 +16,7 @@ export default function AdminReviewUpdate() {
   const [filesByQuestion, setFilesByQuestion] = useState({});
   const [selectedFiles, setSelectedFiles] = useState({});
   const [quizContents, setQuizContents] = useState([]);
-  
+  const [isUpdating, setIsUpdating] = useState(false);
   const [questionStates, setQuestionStates] = useState([]); 
   const [originalQuizData, setOriginalQuizData] = useState([]);
 
@@ -332,6 +332,10 @@ export default function AdminReviewUpdate() {
       return;
     }
 
+    if (isUpdating) return; 
+    setIsUpdating(true);
+
+
     for (let index = 0; index < questionCount; index++) {
       const state = questionStates[index];
       const type = questionTypes[index];
@@ -485,6 +489,8 @@ export default function AdminReviewUpdate() {
     } catch (err) {
       alert("요청 실패: " + (err.response?.data?.message || err.message));
       console.error("상세 오류:", err);
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -598,7 +604,7 @@ export default function AdminReviewUpdate() {
                   <button
                     type="button"
                     onClick={() => handleExistingFileDelete(index, i)}
-                    className="text-red-500 text-[11px] sm:text-[12px] underline"
+                    className="text-red-500 text-[11px] sm:text-[12px] underline cursor-pointer"
                   >
                     삭제
                   </button>
@@ -654,12 +660,15 @@ export default function AdminReviewUpdate() {
         {Array.from({ length: questionCount }).map((_, index) => renderQuestionBlock(index))}
 
         <div className='flex justify-end sm:mt-20 mt-10'>
-          <div
-            className='flex bg-[#3B79FF] text-white sm:px-5 sm:py-2 px-4 py-1.5 sm:ml-7 ml-2 text-[14px] sm:text-[15px] rounded-[6.45px] cursor-pointer'
+          <button
+            className={`flex items-center justify-center bg-[#3B79FF] text-white sm:px-5 sm:py-2 px-4 py-1.5 sm:ml-7 ml-2 text-[14px] sm:text-[15px] rounded-[6.45px] cursor-pointer${
+              isUpdating ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+            }`}
             onClick={handleUpdate}
+            disabled={isUpdating}
           >
-            수정하기
-          </div>
+            {isUpdating ? '수정 중...' : '수정하기'}
+          </button>
         </div>
       </div>
     </div>

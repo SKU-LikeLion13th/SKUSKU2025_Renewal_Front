@@ -48,7 +48,7 @@ export default function ReviewSearch({
   };
 
   return (
-    <div className="flex w-full mb-20">
+    <div className="flex w-full sm:mb-40 mb-20">
           <div className="flex justify-between w-full p-2 items-center sm:text-[14px] text-[10px]">
             <div className="flex sm:flex-row flex-col items-start">
               <div className="flex mr-3">
@@ -70,7 +70,7 @@ export default function ReviewSearch({
                 />
                 <button
                   onClick={handlePageChange}
-                  className="sm:w-[60px] w-[50px] sm:py-1.25 sm:px-3 px-1 py-0.5 items-center text-center sm:text-[13.5px] text-[8px] border-[#D8D8D8] border-[1.8px] rounded-[5.14px]"
+                  className="sm:w-[60px] w-[50px] sm:py-1.25 sm:px-3 px-1 py-0.5 items-center text-center sm:text-[13.5px] text-[8px] border-[#D8D8D8] border-[1.8px] rounded-[5.14px] cursor-pointer"
                 >
                   보기
                 </button>

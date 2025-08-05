@@ -135,7 +135,7 @@ export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, 
   };
   
   return (
-    <div className="flex relative w-full min-h-[590px] flex-col">
+    <div className="flex relative w-full min-h-[590px] flex-col sm:mb-40 mb-20">
       {currentQuestion ? (
         <div className="flex flex-col p-3">
           <div className="font-semibold">Question {currentQuestionIndex + 1}.</div>
@@ -175,7 +175,7 @@ export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, 
                         }}
                         className="text-[#3B79FF] underline text-sm"
                       >
-                        {file.fileName} 다운로드
+                        {file.fileName}
                       </div>
                     </div>
                   ))}
@@ -186,24 +186,31 @@ export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, 
           currentQuestion.quizType === "MULTIPLE_CHOICE" ? (
             <div className="flex flex-col mt-2">
               {currentQuestion.answerChoiceList.map((choice, index) => (
-                <label key={index} className="flex items-center mb-2">
+                <label key={index} className="flex items-center mb-2 cursor-pointer"> {/* 여기에 추가 */}
                   <input
                     type="radio"
                     name={`question-${currentQuestion.id}`}
                     value={choice}
                     checked={selectedAnswer[currentQuestion.id] === choice}
                     onChange={() => handleAnswerChange(currentQuestion.id, choice)}
-                    className="my-3 mr-2"
+                    className="my-3 mr-2 cursor-pointer" // input에도
                   />
                   {choice}
                 </label>
               ))}
             </div>
           ) : (
-            <div className="w-full min-h-[200px] text-[16px] my-6 bg-[#F4F4F4] p-4">
+            <div
+              className="w-full min-h-[200px] text-[16px] my-6 bg-[#F4F4F4] p-4 cursor-text"
+              onClick={() => {
+                const textarea = document.getElementById(`textarea-${currentQuestion.id}`);
+                if (textarea) textarea.focus(); // 전체 박스를 눌러도 textarea에 포커스
+              }}
+            >
               <textarea
+                id={`textarea-${currentQuestion.id}`} // ID로 연결
                 placeholder="답안을 입력해주세요."
-                className="w-full h-full p-4 overflow-hidden resize-none"
+                className="w-full h-full p-4 overflow-hidden resize-none bg-transparent outline-none"
                 rows="1"
                 value={selectedAnswer[currentQuestion.id] || ""}
                 onInput={(e) => {
@@ -218,7 +225,7 @@ export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, 
           <div className="flex w-full">
             {currentQuestionIndex > 0 && (
               <button
-                className="flex px-6 py-1.5 my-4 text-[13px] text-[#838383] bg-[#E9E9E9] rounded-[5.95px]"
+                className="flex px-6 py-1.5 my-4 text-[13px] text-[#838383] bg-[#E9E9E9] rounded-[5.95px] cursor-pointer"
                 onClick={goToPrevQuestion}
               >
                 이전
@@ -227,14 +234,14 @@ export default function QuizContent({ quiz, reviewWeekId, currentQuestionIndex, 
 
             {currentQuestionIndex < quiz.questions.length - 1 ? (
               <button
-                className="flex px-6 py-1.5 my-4 text-[14px] text-white bg-[#4881FF] rounded-[5.95px] ml-auto"
+                className="flex px-6 py-1.5 my-4 text-[14px] text-white bg-[#4881FF] rounded-[5.95px] ml-auto cursor-pointer"
                 onClick={goToNextQuestion}
               >
                 다음
               </button>
             ) : (
               <button
-                className={`flex px-6 py-1.5 my-4 text-[14px] text-white rounded-[5.95px] ml-auto ${
+                className={`flex px-6 py-1.5 my-4 text-[14px] text-white rounded-[5.95px] ml-auto cursor-pointer ${
                   isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-[#4881FF]"
                 }`}
                 onClick={handleSubmitAnswers}

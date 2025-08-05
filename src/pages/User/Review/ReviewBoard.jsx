@@ -53,7 +53,7 @@ const ReviewBoard = ({ trackType }) => {
   }, [trackType]);
 
   return (
-    <div className="flex flex-col items-center w-full">
+    <div className="flex flex-col items-center w-full ">
       {/* 헤더 */}
       <div className="flex w-full sm:text-[15px] text-[12px] border-t-[2.5px] border-t-[#232323] border-b border-b-[#9A9A9A] bg-[#F7F7F7] p-2">
         {headers.map((header, index) => (
