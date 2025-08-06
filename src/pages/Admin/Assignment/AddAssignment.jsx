@@ -279,7 +279,7 @@ export default function AddAssignment() {
                       name="fileFormat"
                       checked={fileFormat === "Subjective"}
                       onChange={() => setFileFormat("Subjective")}
-                      className="w-5 h-5"
+                      className="w-5 h-5 cursor-pointer"
                     />
                     <label
                       htmlFor="subjective"
@@ -294,7 +294,7 @@ export default function AddAssignment() {
                       name="fileFormat"
                       checked={fileFormat === "file"}
                       onChange={() => setFileFormat("file")}
-                      className="w-5 h-5"
+                      className="w-5 h-5 cursor-pointer"
                     />
                     <label
                       htmlFor="fileUpload"
@@ -375,7 +375,7 @@ export default function AddAssignment() {
                             <button
                               type="button"
                               onClick={() => handleRemoveFile(index)}
-                              className="ml-2 text-gray-500 hover:text-red-500 transition-colors duration-150">
+                              className="cursor-pointer ml-2 text-gray-500 hover:text-red-500 transition-colors duration-150">
                               ×
                             </button>
                           </div>

@@ -132,8 +132,8 @@ export default function CheckDetails() {
                     onClick={() =>
                       handleFileDownload(file.fileUrl, file.fileName)
                     }
-                    className="underline text-[#4881FF] hover:text-blue-700 transition-colors duration-200 text-xs sm:text-sm">
-                    {file.fileName} 다운로드
+                    className="underline cursor-pointer text-[#4881FF] hover:text-blue-700 transition-colors duration-200 text-xs sm:text-sm">
+                    {file.fileName}
                   </button>
                 </div>
               ))}
@@ -159,7 +159,7 @@ export default function CheckDetails() {
 
           <div>
             <button
-              className={`w-18 p-1.5 mr-5 text-white rounded-md text-sm sm:w-22 sm:text-base transition-colors duration-200 ${
+              className={`cursor-pointer w-18 p-1.5 mr-5 text-white rounded-md text-sm sm:w-22 sm:text-base transition-colors duration-200 ${
                 isSubmitting
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-[#FC6163] hover:bg-red-500"
@@ -169,7 +169,7 @@ export default function CheckDetails() {
               {isSubmitting ? "처리중..." : "보류"}
             </button>
             <button
-              className={`w-18 p-1.5 text-white rounded-md text-sm sm:w-22 sm:text-base transition-colors duration-200 ${
+              className={`cursor-pointer w-18 p-1.5 text-white rounded-md text-sm sm:w-22 sm:text-base transition-colors duration-200 ${
                 isSubmitting
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-[#4881FF] hover:bg-blue-700"

@@ -322,7 +322,7 @@ export default function AssignmentSubmit({ assignment }) {
               <button
                 type="button"
                 onClick={() => handleFileDownload(f.fileUrl, f.fileName)}
-                className="underline  text-[#4881FF] hover:text-blue-700 text-xs sm:text-sm">
+                className="underline text-[#4881FF] hover:text-blue-700 text-xs sm:text-sm cursor-pointer">
                 {f.fileName}
               </button>
             </div>
@@ -356,7 +356,8 @@ export default function AssignmentSubmit({ assignment }) {
                         onClick={() =>
                           handleFileDownload(file.fileUrl, file.fileName)
                         }
-                        className="underline text-[#4881FF] hover:text-blue-700 text-xs sm:text-sm">
+                        className="underline text-[#4881FF] hover:text-blue-700 text-xs sm:text-sm cursor-pointer">
+                        {" "}
                         {file.fileName}
                       </button>
                     </div>
@@ -372,7 +373,7 @@ export default function AssignmentSubmit({ assignment }) {
               <button
                 type="button"
                 onClick={handleEditMode}
-                className="text-white bg-[#6B6B6B] rounded-md hover:bg-[#525252] text-xs px-3 sm:px-4 sm:py-2 sm:text-sm">
+                className="cursor-pointer text-white bg-[#6B6B6B] rounded-md hover:bg-[#525252] text-xs px-3 sm:px-4 sm:py-2 sm:text-sm">
                 수정하기
               </button>
             </div>
@@ -418,7 +419,7 @@ export default function AssignmentSubmit({ assignment }) {
                           </span>
                           <button
                             type="button"
-                            className="text-xs underline text-[#353535] hover:text-[#000000]"
+                            className="cursor-pointer text-xs underline text-[#353535] hover:text-[#000000]"
                             onClick={() => handleSubmittedFileRemove(idx)}>
                             삭제
                           </button>
@@ -476,7 +477,7 @@ export default function AssignmentSubmit({ assignment }) {
               <button
                 type="submit"
                 disabled={isUploading}
-                className="py-2 text-white bg-[#4881FF] rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-xs px-3 sm:px-4 sm:py-2 sm:text-sm">
+                className="cursor-pointer py-2 text-white bg-[#4881FF] rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-xs px-3 sm:px-4 sm:py-2 sm:text-sm">
                 {isUploading
                   ? "처리 중..."
                   : isSubmitted
@@ -488,7 +489,7 @@ export default function AssignmentSubmit({ assignment }) {
                   type="button"
                   onClick={handleCancelEdit}
                   disabled={isUploading}
-                  className="text-gray-600 bg-gray-200 rounded-md hover:bg-gray-300 disabled:opacity-50 text-xs px-3 sm:px-4 sm:py-2 sm:text-sm">
+                  className="cursor-pointer ext-gray-600 bg-gray-200 rounded-md hover:bg-gray-300 disabled:opacity-50 text-xs px-3 sm:px-4 sm:py-2 sm:text-sm">
                   취소
                 </button>
               )}

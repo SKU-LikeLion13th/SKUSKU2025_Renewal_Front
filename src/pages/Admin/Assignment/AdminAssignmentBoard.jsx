@@ -85,7 +85,7 @@ export default function AdminAssignmentBoard({
                   type="checkbox"
                   checked={selectedItems.includes(assignment.id)}
                   onChange={() => onSelectItem(assignment.id)}
-                  className={`${
+                  className={`cursor-pointer ${
                     isSmallScreen ? "w-3 h-3" : "w-[13px] h-[13px]"
                   }`}
                 />

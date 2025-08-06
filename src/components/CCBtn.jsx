@@ -19,14 +19,13 @@ export default function CCBtn({ isHovered, textSize = "text-[13px]" }) {
   return (
     <div
       onClick={handleClick}
-      className={`flex justify-center text-white items-center px-4 py-2 rounded-sm transition-colors duration-300 
+      className={`flex justify-center text-white items-center px-4 py-2 rounded-sm transition-colors duration-300 cursor-pointer
           ${
             isHovered
               ? "bg-[#8DB7FF] text-black hover:bg-[#2D5ABB]"
               : "bg-[#2D5ABB]"
           }
-        `}
-    >
+        `}>
       <img
         src="/assets/images/campus.png"
         alt=""
