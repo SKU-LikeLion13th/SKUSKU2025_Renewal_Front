@@ -156,10 +156,10 @@ export default function Header() {
         </div>
 
         {/* 오른쪽 로그인 및 버튼 */}
-        <div className="flex space-x-4 items-center">
+        <div className="flex space-x-4 items-center ">
           {/* Hover 시에만 보임 */}
           <div
-            className={`transition-opacity duration-300 space-x-4 ${
+            className={`transition-opacity duration-300 space-x-4 hidden xl:flex ${
               isHovered ? "flex opacity-100" : "hidden opacity-0"
             }`}
           >
