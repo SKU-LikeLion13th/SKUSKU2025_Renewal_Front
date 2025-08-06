@@ -167,7 +167,7 @@ export default function CCHeader() {
         <div className="hidden md:flex space-x-4 items-center ">
           {/* Hover 시에만 보임 */}
           <div
-            className={`transition-opacity duration-300 space-x-4 ${
+            className={`transition-opacity duration-300 space-x-4 hidden xl:flex ${
               isHovered ? "flex opacity-100" : "hidden opacity-0"
             }`}
           >

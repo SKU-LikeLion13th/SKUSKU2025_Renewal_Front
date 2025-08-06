@@ -95,7 +95,7 @@ const LectureDetail = () => {
           <a
             key={file.fileName}
             onClick={() => handleFileDownload(file.fileUrl, file.fileName)}
-            className="text-blue-500 underline flex items-center mb-2 text-xs sm:text-base"
+            className="text-blue-500 underline cursor-pointer flex items-center mb-2 text-xs sm:text-base"
           >
             <img
               src="https://cdn-icons-png.flaticon.com/512/337/337946.png"
