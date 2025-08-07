@@ -101,7 +101,7 @@ const backend = [
     img: `${images.박준범}`,
     imgWidth: "115px",
     imgHeight: "115px",
-    imgMarginRight: "-18px",
+    imgMarginRight: "-15px",
   },
   {
     name: "권오현",
