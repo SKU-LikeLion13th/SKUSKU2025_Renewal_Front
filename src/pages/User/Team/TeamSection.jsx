@@ -11,14 +11,17 @@ export default function TeamSection({ title, members, isCompact = false }) {
           {members.map((member) => (
             <div
               key={member.name}
-              className={`flex flex-1 items-center justify-center gap-9 sm:gap-5 origin-top transition-transform duration-200                    
+              className={`flex flex-1 items-center justify-center origin-top transition-transform duration-200                    
                           ${
                             isCompact
                               ? "scale-[clamp(0.65,2.5vw,0.85)]"
                               : "scale-[clamp(0.55,3.5vw,1)]"
                           }`}
-              style={{ minWidth: "max-content" }}>
-              <div className="basis-1/2 flex-shrink-0 flex justify-end">
+              style={{
+                minWidth: "max-content",
+              }}
+            >
+              <div className="basis-1/2 flex-shrink-0 flex justify-center">
                 <img
                   src={member.img}
                   alt={member.name}
@@ -30,10 +33,18 @@ export default function TeamSection({ title, members, isCompact = false }) {
                     height: `clamp(70px, ${
                       parseInt(member.imgHeight) * 0.8
                     }px, ${member.imgHeight})`,
+                    marginTop: member.imgMarginTop || "0px",
+                    marginBottom: member.imgMarginBottom || "0px",
+                    marginLeft: member.imgMarginLeft || "0px",
+                    marginRight: member.imgMarginRight || "0px",
+                    paddingTop: member.imgPaddingTop || "0px",
+                    paddingBottom: member.imgPaddingBottom || "0px",
+                    paddingLeft: member.imgPaddingLeft || "0px",
+                    paddingRight: member.imgPaddingRight || "0px",
                   }}
                 />
               </div>
-              <div className="basis-1/2 min-w-0 flex-shrink-0">
+              <div className="ml-4 basis-1/2 min-w-0 flex-shrink-0">
                 <div className="text-white font-semibold flex items-center gap-1 text-[clamp(14px,1.5vw,18px)] overflow-hidden whitespace-nowrap text-ellipsis">
                   {member.name}
                   <span className="text-[clamp(11px,1.2vw,14px)] text-gray-300">

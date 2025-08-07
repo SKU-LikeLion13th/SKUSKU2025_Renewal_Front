@@ -31,36 +31,40 @@ const leader = [
     img: `${images.김현준}`,
     imgWidth: "130px",
     imgHeight: "130px",
+    imgMarginTop: "-15px",
   },
   {
     name: "주영민",
     role: "부대표",
     department: "미디어소프트웨어학과 17",
     img: `${images.주영민}`,
-    imgWidth: "160px",
-    imgHeight: "160px",
+    imgWidth: "115px",
+    imgHeight: "115px",
+    imgMarginRight: "-15px",
   },
 ];
 
 const design = [
   {
     name: "이원경",
-    role: "운영진",
+    role: "파트장",
     department: "국어국문학과 22",
     img: `${images.이원경}`,
-    imgWidth: "130px",
-    imgHeight: "130px",
+    imgWidth: "115px",
+    imgHeight: "115px",
+    imgMarginRight: "-10px",
   },
 ];
 
 const frontend = [
   {
     name: "노승희",
-    role: "운영진",
+    role: "대표",
     department: "미디어소프트웨어학과 20",
     img: `${images.노승희}`,
     imgWidth: "130px",
     imgHeight: "130px",
+    imgMarginRight: "-15px",
   },
 ];
 
@@ -75,18 +79,19 @@ const backend = [
   },
   {
     name: "정택원",
-    role: "운영진",
+    role: "부대표",
     department: "컴퓨터공학과 19",
     img: `${images.정택원}`,
-    imgWidth: "110px",
-    imgHeight: "110px",
+    imgWidth: "105px",
+    imgHeight: "105px",
   },
   {
     name: "남민지",
     role: "운영진",
     department: "컴퓨터공학과 21",
     img: `${images.남민지}`,
-    imgWidth: "130px",
-    imgHeight: "130px",
+    imgWidth: "115px",
+    imgHeight: "115px",
+    imgMarginRight: "-10px",
   },
 ];

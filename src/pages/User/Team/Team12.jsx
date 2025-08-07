@@ -35,14 +35,16 @@ const leader = [
     img: `${images.노승희}`,
     imgWidth: "130px",
     imgHeight: "130px",
+    imgMarginRight: "-18px",
   },
   {
     name: "정택원",
     role: "부대표",
     department: "컴퓨터공학과 19",
     img: `${images.정택원}`,
-    imgWidth: "110px",
-    imgHeight: "110px",
+    imgWidth: "105px",
+    imgHeight: "105px",
+    imgMarginRight: "-10px",
   },
 ];
 
@@ -52,8 +54,9 @@ const design = [
     role: "파트장",
     department: "국어국문학과 22",
     img: `${images.이원경}`,
-    imgWidth: "120px",
-    imgHeight: "120px",
+    imgWidth: "115px",
+    imgHeight: "115px",
+    imgMarginRight: "-10px",
   },
   {
     name: "서민주",
@@ -62,6 +65,7 @@ const design = [
     img: `${images.서민주}`,
     imgWidth: "130px",
     imgHeight: "130px",
+    imgMarginRight: "-10px",
   },
 ];
 
@@ -71,8 +75,8 @@ const frontend = [
     role: "파트장",
     department: "컴퓨터공학과 19",
     img: `${images.고창준}`,
-    imgWidth: "140px",
-    imgHeight: "140px",
+    imgWidth: "135px",
+    imgHeight: "135px",
   },
   {
     name: "김영현",
@@ -81,6 +85,7 @@ const frontend = [
     img: `${images.김영현}`,
     imgWidth: "130px",
     imgHeight: "130px",
+    imgMarginRight: "-5px",
   },
   {
     name: "신민서",
@@ -89,6 +94,8 @@ const frontend = [
     img: `${images.신민서}`,
     imgWidth: "150px",
     imgHeight: "150px",
+    imgMarginRight: "-15px",
+    imgMarginTop: "-15px",
   },
 ];
 
@@ -98,24 +105,28 @@ const backend = [
     role: "파트장",
     department: "컴퓨터공학과 21",
     img: `${images.남민지}`,
-    imgWidth: "130px",
-    imgHeight: "130px",
+    imgWidth: "115px",
+    imgHeight: "115px",
+    imgMarginRight: "-15px",
   },
   {
     name: "문호주",
     role: "운영진",
     department: "컴퓨터공학과 19",
     img: `${images.문호주}`,
-    imgWidth: "150px",
-    imgHeight: "150px",
+    imgWidth: "140px",
+    imgHeight: "140px",
+    imgMarginRight: "-10px",
   },
   {
     name: "한민규",
     role: "운영진",
     department: "컴퓨터공학과 21",
     img: `${images.한민규}`,
-    imgWidth: "150px",
-    imgHeight: "150px",
+    imgWidth: "140px",
+    imgHeight: "140px",
+    imgMarginRight: "-10px",
+    imgMarginTop: "-10px",
   },
 ];
 
@@ -127,5 +138,6 @@ const management = [
     img: `${images.오한솔}`,
     imgWidth: "130px",
     imgHeight: "130px",
+    imgMarginRight: "-10px",
   },
 ];
