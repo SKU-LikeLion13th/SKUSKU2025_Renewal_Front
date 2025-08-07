@@ -224,7 +224,7 @@ export default function CCHeader() {
                 >
                   |
                 </div>
-                <button onClick={logout} className="text-xs">
+                <button onClick={logout} className="text-xs cursor-pointer">
                   LOGOUT
                 </button>
               </div>

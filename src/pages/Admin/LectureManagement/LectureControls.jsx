@@ -72,7 +72,7 @@ const LectureControls = ({
             />
             <button
               onClick={handlePageChange}
-              className="sm:w-[60px] w-[50px] sm:py-1.25 sm:px-3 px-1 py-0.5 text-center sm:text-[13.5px] text-[8px] border-[#D8D8D8] border-[1.8px] rounded-[5.14px]"
+              className="sm:w-[60px] w-[50px] sm:py-1.25 sm:px-3 px-1 py-0.5 text-center sm:text-[13.5px] text-[8px] border-[#D8D8D8] border-[1.8px] rounded-[5.14px] cursor-pointer"
             >
               보기
             </button>
