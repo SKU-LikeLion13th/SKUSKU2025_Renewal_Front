@@ -37,7 +37,7 @@ export default function Footer() {
             </Link>
           </div>
           {/* contact */}
-          <div>
+          <div className="flex flex-col">
             <Link to="/" className="text-[#2D5ABB] fontBold mb-2">
               CONTACT
             </Link>

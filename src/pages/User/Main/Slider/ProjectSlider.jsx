@@ -79,7 +79,7 @@ export default function ProjectSlider() {
                   title={project.title}
                   subtitle={project.subTitle}
                   image={project.imageUrl}
-                  url={project.url}
+                  url={project.projectUrl}
                 />
               </SwiperSlide>
             ))}
