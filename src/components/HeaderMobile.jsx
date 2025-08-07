@@ -44,7 +44,7 @@ export default function HeaderMobile() {
           </Link>
 
           <button
-            className="flex"
+            className="flex cursor-pointer"
             onClick={() => {
               const newState = !isMenuOpen;
               setIsMenuOpen(newState);

@@ -9,7 +9,7 @@ export default function Main1() {
   const { user, logout } = useAuth();
 
   const { ref, inView } = useInView({
-    triggerOnce: false,  // 여러 번 화면에 들어올 때마다 애니메이션 실행
+    triggerOnce: false, // 여러 번 화면에 들어올 때마다 애니메이션 실행
     threshold: 0.3,
   });
 
@@ -108,7 +108,7 @@ export default function Main1() {
                     <span className="fontBold">{user.name}님</span>
                   </div>
                   <div className="px-1 sm:px-2 text-[gray]">|</div>
-                  <button onClick={logout} className="">
+                  <button onClick={logout} className="cursor-pointer">
                     LOGOUT
                   </button>
                 </div>

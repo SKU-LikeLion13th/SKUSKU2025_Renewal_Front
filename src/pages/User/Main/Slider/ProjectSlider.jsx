@@ -7,7 +7,7 @@ import "swiper/css";
 const ProjectItem = ({ title, subtitle, image, url }) => (
   <a
     href={url}
-    className="flex justify-center items-center w-full"
+    className="flex justify-center items-center w-full cursor-pointer"
     target="_blank"
     rel="noopener noreferrer"
   >
@@ -74,7 +74,7 @@ export default function ProjectSlider() {
             }}
           >
             {projects.map((project) => (
-              <SwiperSlide key={project.id} className="h-auto">
+              <SwiperSlide key={project.id} className="h-auto ">
                 <ProjectItem
                   title={project.title}
                   subtitle={project.subTitle}

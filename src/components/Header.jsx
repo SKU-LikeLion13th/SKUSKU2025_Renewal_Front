@@ -214,7 +214,7 @@ export default function Header() {
                 <span className="font-bold">{user.name}님</span>
               </div>
               <div className="px-2 text-[gray]">|</div>
-              <button onClick={logout} className="text-xs">
+              <button onClick={logout} className="text-xs cursor-pointer">
                 LOGOUT
               </button>
             </div>

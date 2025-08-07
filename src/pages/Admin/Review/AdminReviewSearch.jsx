@@ -52,11 +52,13 @@ export default function AdminReviewSearch({
       <div className="flex justify-between w-full p-2 items-center sm:text-[14px] text-[10px]">
         <div className="flex sm:flex-row flex-col items-start">
           <div className="flex mr-3">
-            전체 게시물: <span className="text-[#3B79FF] ml-1">{totalPosts}</span>
+            전체 게시물:{" "}
+            <span className="text-[#3B79FF] ml-1">{totalPosts}</span>
           </div>
 
           <div className="flex mr-3 sm:mb-0 mb-0.5">
-            전체 페이지: <span className="text-[#FF7816] ml-1">{totalPages}</span>
+            전체 페이지:{" "}
+            <span className="text-[#FF7816] ml-1">{totalPages}</span>
           </div>
 
           <div className="flex">
@@ -70,7 +72,7 @@ export default function AdminReviewSearch({
             />
             <button
               onClick={handlePageChange}
-              className="sm:w-[60px] w-[50px] sm:py-1.25 sm:px-3 px-1 py-0.5 items-center text-center sm:text-[13.5px] text-[8px] border-[#D8D8D8] border-[1.8px] rounded-[5.14px]"
+              className="sm:w-[60px] w-[50px] sm:py-1.25 sm:px-3 px-1 py-0.5 items-center text-center sm:text-[13.5px] text-[8px] border-[#D8D8D8] border-[1.8px] rounded-[5.14px] cursor-pointer"
             >
               보기
             </button>
@@ -98,7 +100,10 @@ export default function AdminReviewSearch({
             placeholder="검색어를 입력하세요."
             className="flex w-[50%] sm:w-fit sm:px-4 px-2 text-[#C2C2C2]"
           />
-          <FiSearch className="sm:mx-2 mx-1 text-[#D8D8D8]" onClick={handleSearch} />
+          <FiSearch
+            className="sm:mx-2 mx-1 text-[#D8D8D8]"
+            onClick={handleSearch}
+          />
         </div>
       </div>
     </div>
