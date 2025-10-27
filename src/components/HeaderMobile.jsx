@@ -14,7 +14,21 @@ export default function HeaderMobile() {
   ];
 
   const handleAlertClick = () => {
-    alert("내년 상반기에 다시 모집할 예정입니다. 다음 기회에 지원해주세요!");
+    const currentTime = new Date();
+    const deadline = new Date("2025-11-02T23:59:00+09:00"); // 한국 시간 기준
+
+    if (currentTime < deadline) {
+      const confirmMove = window.confirm(
+        "LIKELION SKU 14기 운영진 모집 폼으로 이동합니다. 계속하시겠습니까?"
+      );
+      if (confirmMove) {
+        window.open("https://forms.gle/grv1Yv54BEcEVGu89", "_blank");
+      }
+    } else {
+      alert(
+        "14기 운영진 모집이 마감되었습니다.\n내년 상반기에 다시 모집할 예정이오니 다음 기회에 지원해주세요!"
+      );
+    }
   };
 
   return (

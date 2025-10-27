@@ -22,7 +22,7 @@ export default function TeamSection({ title, members, isCompact = false }) {
         {title}
       </h2>
       <div className="bg-[#1B1B1B] px-4 py-8 rounded-lg">
-        <div className="flex flex-wrap justify-around gap-8 sm:gap-0">
+        <div className="flex flex-wrap justify-around gap-8 md:gap-8 lg:gap-0">
           {members.map((member) => (
             <div
               key={member.name}
